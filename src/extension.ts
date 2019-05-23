@@ -26,12 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        const position = textEditor.selection.active;
         const document = textEditor.document;
-        let nextLineNo = 0;
         let i = 0;
         let line: string;
-        let codeRowIndex = -1;
         
         let handle_comment = (i) => {
             return i+1;
@@ -105,7 +102,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // find non empty
         let j = i -1;
-        while(1) {
+        while(1 && j >= 0) {
             line = document.lineAt(j).text;
             if(!Object.is("", line.trim())) {
                 break;
@@ -116,8 +113,6 @@ export function activate(context: vscode.ExtensionContext) {
         edit.replace(selection, "");
         let nextLine = document.lineAt(j+1);
         edit.replace(nextLine.range, text+"\n"+nextLine.text);
-
-
 
 
     })
