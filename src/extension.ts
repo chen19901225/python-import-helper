@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     //     // Display a message box to the user
     //     vscode.window.showInformationMessage('Hello World!');
     // });
-    let disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.import-upgrade", (textEditor, edit) => {
+    let disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.import-upgrade", async (textEditor, edit) => {
         if (!(textEditor.selection)) {
             vscode.window.showErrorMessage("You must select a content to convert");
             return;
@@ -113,6 +113,8 @@ export function activate(context: vscode.ExtensionContext) {
         edit.replace(selection, "");
         let nextLine = document.lineAt(j+1);
         edit.replace(nextLine.range, text+"\n"+nextLine.text);
+        // excute python sort import
+        await vscode.commands.executeCommand("python.sortImports"); 
 
 
     })

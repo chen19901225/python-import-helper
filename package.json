@@ -33,7 +33,7 @@
                     "group": "cqh-python-import"
                 }
             ]
-}
+        }
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
