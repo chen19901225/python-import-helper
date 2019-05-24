@@ -29,9 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
         const document = textEditor.document;
         let i = 0;
         let line: string;
-        
+
         let handle_comment = (i) => {
-            return i+1;
+            return i + 1;
         }
 
         let handle_empty = (i) => {
@@ -44,9 +44,9 @@ export function activate(context: vscode.ExtensionContext) {
         let handle_multiple_string = (i) => {
             i = i + 1;
             let line;
-            while (1){
+            while (1) {
                 line = document.lineAt(i).text;
-                if(line== '"""') {
+                if (line == '"""') {
                     break;
                 } else {
                     i = i + 1;
@@ -57,9 +57,9 @@ export function activate(context: vscode.ExtensionContext) {
         let handle_multiple_single_string = (i) => {
             i = i + 1;
             let line;
-            while (1){
+            while (1) {
                 line = document.lineAt(i).text;
-                if(line== "'''") {
+                if (line == "'''") {
                     break;
                 } else {
                     i = i + 1;
@@ -68,9 +68,9 @@ export function activate(context: vscode.ExtensionContext) {
             return i + 1;
         }
 
-        let handle_line = (i) =>  {
+        let handle_line = (i) => {
             let line = document.lineAt(i).text;
-            if (Object.is("", line.trim())){
+            if (Object.is("", line.trim())) {
                 return [false, handle_empty(i)];
             }
             if (line.startsWith('#')) {
@@ -81,40 +81,101 @@ export function activate(context: vscode.ExtensionContext) {
                 return [false, handle_string(i)];
             }
 
-            if(line.startsWith('"""') ) {
+            if (line.startsWith('"""')) {
                 return [false, handle_multiple_string(i)];
             }
 
-            if(line.startsWith("'''")){
+            if (line.startsWith("'''")) {
                 return [false, handle_multiple_single_string(i)];
             }
             return [true, i];
-            
+
         }
 
-        while(1) {
+        while (1) {
             let [is_ok, new_i] = handle_line(i);
             i = new_i;
-            if(is_ok){
+            if (is_ok) {
                 break;
             }
         }
 
         // find non empty
-        let j = i -1;
-        while(1 && j >= 0) {
-            line = document.lineAt(j).text;
-            if(!Object.is("", line.trim())) {
-                break;
+        // let j = i - 1;
+        // while (1 && j >= 0) {
+        //     line = document.lineAt(j).text;
+        //     if (!Object.is("", line.trim())) {
+        //         break;
+        //     }
+        // }
+
+
+        let textAppendToEmpty = async (text: string, i: number) => {
+            // append text after empty
+            let j = i - 1;
+            while (1 && j >= 0) {
+                line = document.lineAt(j).text;
+                if (!Object.is("", line.trim())) {
+                    break;
+                }
+                j --;
             }
+            edit.replace(selection, "");
+            let nextLine = document.lineAt(j + 1);
+            edit.replace(nextLine.range, text + "\n" + nextLine.text);
+            await vscode.commands.executeCommand("editor.action.deleteLines");
         }
+
         const selection = textEditor.selection;
         const text = textEditor.document.getText(selection);
-        edit.replace(selection, "");
-        let nextLine = document.lineAt(j+1);
-        edit.replace(nextLine.range, text+"\n"+nextLine.text);
+        if (text.startsWith("import")) {
+            await textAppendToEmpty(text, i);
+        } else {
+            // find insert line or insert the last
+            let the_same_from_row_index = -1;
+            let walk_row_index = i;
+            let words = text.split(" ");
+            let compare_line;
+            while (1) {
+                compare_line = document.lineAt(walk_row_index);
+                if(!compare_line.text.startsWith("from") && !compare_line.text.startsWith("import")) {
+                    let [is_ok, new_i] = handle_line(walk_row_index);
+                    if(is_ok) {
+                        break;
+                    } else {
+                        walk_row_index = new_i;
+                        continue;
+                    }
+                    // break;
+                }
+                let line_words: Array<string> = compare_line.text.split(" ");
+                if (Object.is(line_words[1], words[1])) {
+                    the_same_from_row_index = walk_row_index;
+                    edit.replace(selection, "");
+                    
+                    if(line_words.indexOf(words[3]) > -1) {
+
+                    } else {
+                        edit.replace(compare_line.range, compare_line.text + ", " + words[3]);
+                    }
+                    await vscode.commands.executeCommand("editor.action.deleteLines");
+                    break;
+                } else {
+                    walk_row_index += 1;
+                }
+                
+            }
+
+            if(the_same_from_row_index==-1) {
+                await textAppendToEmpty(text, i);
+            } 
+        }
+
         // excute python sort import
-        await vscode.commands.executeCommand("python.sortImports"); 
+        // await vscode.commands.executeCommand("python.sortImports"); 
+        // python.sortImports seem unreliable
+
+
 
 
     })
