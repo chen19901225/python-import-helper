@@ -118,8 +118,8 @@ export function activate(context: vscode.ExtensionContext) {
             
             let nextLine = document.lineAt(j + 1);
             edit.replace(nextLine.range, text + "\n" + nextLine.text);
-            edit.replace(remove_selection, "");
-            // await vscode.commands.executeCommand("editor.action.deleteLines");
+            // edit.replace(remove_selection, "");
+            await vscode.commands.executeCommand("editor.action.deleteLines");
         }
 
         
