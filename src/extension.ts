@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -92,7 +93,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         }
 
-        // find import line or code line
+        // 获取到行号， 改行是import 语句，或者正式代码
+        
         while (1) {
             let [is_ok, new_i] = handle_line(i);
             i = new_i;
@@ -103,14 +105,6 @@ export function activate(context: vscode.ExtensionContext) {
 
         const selection = textEditor.selection;
         const text = textEditor.document.getText(selection);
-        const nextLineIndex = selection.end.line + 1;
-        const nextLine = document.lineAt(nextLineIndex);
-        //下一行 第一个非空的位置
-        let nextFirstCol = 0;
-        if(nextLine.firstNonWhitespaceCharacterIndex>1) {
-            nextFirstCol = nextLine.firstNonWhitespaceCharacterIndex -1;
-        }
-        // const remove_selection = new vscode.Selection(selection.start, new vscode.Position(nextLineIndex, nextFirstCol));
 
         let textAppendToEmpty =  (text: string, i: number) => {
             // append text after empty
@@ -122,16 +116,47 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 j --;
             }
-            edit.replace(selection, "");
+            
             let nextLine = document.lineAt(j + 1);
             edit.replace(nextLine.range, text + "\n" + nextLine.text);
             
             // vscode.commands.executeCommand("editor.action.deleteLines");
         }
 
+        let getCodeLineNoFunc = (startLineNo: number) => {
+            let currentLineNo = startLineNo;
+            // let currentLine;
+            while(1) {
+                let currentLine = document.lineAt(currentLineNo);
+                // 寻找 非空行， 也不是`from`, `import` 开头的行
+                if(handle_line[currentLineNo][0] && !currentLine.text.startsWith("from") && !currentLine.text.startsWith("import")) {
+                    break;
+                }
+                currentLineNo += 1;
+            }
+            return currentLineNo;
+        }
+        let CodeLineNo = getCodeLineNoFunc(i);
+
+        let documentLinesAnyEqualFunc= (start: number, end:number, searchText: string)=> {
+            let contains = false;
+            for(let i=start;i <= end ;i++) {
+                let line = document.lineAt(i); 
+                if(line.text.trim()===searchText) {
+                    contains = true;
+                    break;
+                }
+            }
+            return contains
+        }
         
+
+        edit.replace(selection, ""); // 移除现在的位置
         if (text.startsWith("import")) {
-             textAppendToEmpty(text, i);
+            if(!documentLinesAnyEqualFunc(i, CodeLineNo, text)) { // import 语句，不重复
+                textAppendToEmpty(text, i);
+            }
+             
         } else {
             // find insert line or insert the last
             let the_same_from_row_index = -1;
