@@ -180,13 +180,14 @@ export function activate(context: vscode.ExtensionContext) {
                 let line_words: Array<string> = compare_line.text.split(" ");
                 if (Object.is(line_words[1], words[1]) && line_words[0] == "from") { // only merge `from` import
                     the_same_from_row_index = walk_row_index;
-                    edit.replace(selection, "");
+                    // edit.replace(selection, "");
                     
                     if(line_words.indexOf(words[3]) > -1) {
 
                     } else {
                         edit.replace(compare_line.range, compare_line.text + ", " + words[3]);
                     }
+                   
                     // await vscode.commands.executeCommand("editor.action.deleteLines");
                     break;
                 } else {
@@ -199,6 +200,8 @@ export function activate(context: vscode.ExtensionContext) {
                  textAppendToEmpty(text, i);
             } 
         }
+
+        vscode.commands.executeCommand("editor.action.deleteLines");
 
        
 
