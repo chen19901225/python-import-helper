@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     //     // Display a message box to the user
     //     vscode.window.showInformationMessage('Hello World!');
     // });
-    let disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.import-upgrade", async (textEditor, edit) => {
+    let disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.import-upgrade",(textEditor, edit) => {
         if (!(textEditor.selection)) {
             vscode.window.showErrorMessage("You must select a content to convert");
             return;
@@ -110,9 +110,9 @@ export function activate(context: vscode.ExtensionContext) {
         if(nextLine.firstNonWhitespaceCharacterIndex>1) {
             nextFirstCol = nextLine.firstNonWhitespaceCharacterIndex -1;
         }
-        const remove_selection = new vscode.Selection(selection.start, new vscode.Position(nextLineIndex, nextFirstCol));
+        // const remove_selection = new vscode.Selection(selection.start, new vscode.Position(nextLineIndex, nextFirstCol));
 
-        let textAppendToEmpty = async (text: string, i: number) => {
+        let textAppendToEmpty =  (text: string, i: number) => {
             // append text after empty
             let j = i - 1;
             while (1 && j >= 0) {
@@ -122,16 +122,16 @@ export function activate(context: vscode.ExtensionContext) {
                 }
                 j --;
             }
-            
+            edit.replace(selection, "");
             let nextLine = document.lineAt(j + 1);
             edit.replace(nextLine.range, text + "\n" + nextLine.text);
-            edit.replace(remove_selection, "");
+            
             // await vscode.commands.executeCommand("editor.action.deleteLines");
         }
 
         
         if (text.startsWith("import")) {
-            await textAppendToEmpty(text, i);
+             textAppendToEmpty(text, i);
         } else {
             // find insert line or insert the last
             let the_same_from_row_index = -1;
@@ -171,7 +171,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             if(the_same_from_row_index==-1) {
-                await textAppendToEmpty(text, i);
+                 textAppendToEmpty(text, i);
             } 
         }
 
