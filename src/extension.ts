@@ -106,7 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
         const nextLineIndex = selection.end.line + 1;
         const nextLine = document.lineAt(nextLineIndex);
         //下一行 第一个非空的位置
-        const nextFirstCol = 0;
+        let nextFirstCol = 0;
         if(nextLine.firstNonWhitespaceCharacterIndex>1) {
             nextFirstCol = nextLine.firstNonWhitespaceCharacterIndex -1;
         }
