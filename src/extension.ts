@@ -103,7 +103,14 @@ export function activate(context: vscode.ExtensionContext) {
 
         const selection = textEditor.selection;
         const text = textEditor.document.getText(selection);
-        const remove_selection = new vscode.Selection(selection.start, new vscode.Position(selection.end.line, selection.end.character + 1))
+        const nextLineIndex = selection.end.line + 1;
+        const nextLine = document.lineAt(nextLineIndex);
+        //下一行 第一个非空的位置
+        const nextFirstCol = 0;
+        if(nextLine.firstNonWhitespaceCharacterIndex>1) {
+            nextFirstCol = nextLine.firstNonWhitespaceCharacterIndex -1;
+        }
+        const remove_selection = new vscode.Selection(selection.start, new vscode.Position(nextLineIndex, nextFirstCol));
 
         let textAppendToEmpty = async (text: string, i: number) => {
             // append text after empty
@@ -118,8 +125,8 @@ export function activate(context: vscode.ExtensionContext) {
             
             let nextLine = document.lineAt(j + 1);
             edit.replace(nextLine.range, text + "\n" + nextLine.text);
-            // edit.replace(remove_selection, "");
-            await vscode.commands.executeCommand("editor.action.deleteLines");
+            edit.replace(remove_selection, "");
+            // await vscode.commands.executeCommand("editor.action.deleteLines");
         }
 
         
