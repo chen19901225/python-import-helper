@@ -130,6 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
             let the_same_from_row_index = -1;
             let walk_row_index = i;
             let words = text.split(" ");
+            // iter walk line
             let compare_line;
             while (1) {
                 compare_line = document.lineAt(walk_row_index);
@@ -143,8 +144,9 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                     // break;
                 }
+                
                 let line_words: Array<string> = compare_line.text.split(" ");
-                if (Object.is(line_words[1], words[1])) {
+                if (Object.is(line_words[1], words[1]) && line_words[0] == "from") { // only merge `from` import
                     the_same_from_row_index = walk_row_index;
                     edit.replace(selection, "");
                     
