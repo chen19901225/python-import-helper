@@ -129,7 +129,7 @@ export function activate(context: vscode.ExtensionContext) {
             while(1) {
                 let currentLine = document.lineAt(currentLineNo);
                 // 寻找 非空行， 也不是`from`, `import` 开头的行
-                if(handle_line[currentLineNo][0] && !currentLine.text.startsWith("from") && !currentLine.text.startsWith("import")) {
+                if(handle_line(currentLineNo)[0] && !currentLine.text.startsWith("from") && !currentLine.text.startsWith("import")) {
                     break;
                 }
                 currentLineNo += 1;
