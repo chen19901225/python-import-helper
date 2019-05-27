@@ -202,19 +202,22 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         vscode.commands.executeCommand("editor.action.deleteLines");
-
-       
-
-
-        
-        
-        
-
-
-
-
     })
 
+    let selectCurrentLineDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-help.select-current-line",(textEditor, edit) => {
+        // 第一步获取当前鼠标位置
+        const editor = vscode.window.activeTextEditor;
+        const position = editor.selection.active;
+        const currentLine = editor.document.lineAt(position.line);
+
+
+        // var newPosition = position.with(position.line, currentLine.firstNonWhitespaceCharacterIndex);
+        let newPosition= new vscode.Position(position.line, currentLine.firstNonWhitespaceCharacterIndex)
+        var newSelection = new vscode.Selection(newPosition, new vscode.Position(position.line, currentLine.range.end.character));
+        editor.selection = newSelection;
+
+    });
+    context.subscriptions.push(selectCurrentLineDisposable);
     context.subscriptions.push(disposable);
 }
 

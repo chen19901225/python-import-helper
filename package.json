@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -19,10 +19,21 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "keybindings": [
+			{
+				"command": "cqh-python-import-help.select-current-line",
+				"key": "Ctrl+L",
+				"when": "editorTextFocus"
+			}
+        ],
         "commands": [
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "title": "cqh python import import upgrade"
+            },
+            {
+                "command": "cqh-python-import-help.select-current-line",
+                "title": "cqh python import select current line"
             }
         ],
         "menus": {
