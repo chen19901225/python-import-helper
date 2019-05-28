@@ -27,6 +27,17 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
+        // 自动获取鼠标位置
+        const editor = vscode.window.activeTextEditor;
+        const position = editor.selection.active;
+        const currentLine = editor.document.lineAt(position.line);
+
+
+        // var newPosition = position.with(position.line, currentLine.firstNonWhitespaceCharacterIndex);
+        let newPosition= new vscode.Position(position.line, currentLine.firstNonWhitespaceCharacterIndex)
+        var newSelection = new vscode.Selection(newPosition, new vscode.Position(position.line, currentLine.range.end.character));
+        editor.selection = newSelection;
+
         const document = textEditor.document;
         let i = 0;
         let line: string;
