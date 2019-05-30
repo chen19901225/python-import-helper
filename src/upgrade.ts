@@ -28,6 +28,9 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
     let handle_string = (i) => {
         return i + 1;
     }
+    let handle_single_string = (i) => {
+        return i + 1;
+    }
     let handle_multiple_string = (i) => {
         i = i + 1;
         let line;
@@ -64,9 +67,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             return [false, handle_comment(i)];
         }
 
-        if (line.startsWith('"')) {
-            return [false, handle_string(i)];
-        }
+        
 
         if (line.startsWith('"""')) {
             return [false, handle_multiple_string(i)];
@@ -74,6 +75,12 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
 
         if (line.startsWith("'''")) {
             return [false, handle_multiple_single_string(i)];
+        }
+        if (line.startsWith('"')) {
+            return [false, handle_string(i)];
+        }
+        if (line.startsWith("'")) {
+            return [false, handle_single_string(i)];
         }
         return [true, i];
 
