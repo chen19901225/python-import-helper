@@ -87,9 +87,12 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
     }
 
     // 获取到行号， 改行是import 语句，或者正式代码
-
+    let currentLineNo = textEditor.selection.active.line;
     while (1) {
         let [is_ok, new_i] = handle_line(i);
+        if(new_i >= currentLineNo) { // current import statement is in the front part, so stop upgrade
+            return;
+        }
         i = new_i;
         if (is_ok) {
             break;
@@ -130,6 +133,10 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
         return currentLineNo;
     }
     let CodeLineNo = getCodeLineNoFunc(i);
+    if(CodeLineNo >= currentLineNo){
+        return;
+    }
+
 
     let documentLinesAnyEqualFunc = (start: number, end: number, searchText: string) => {
         let contains = false;
