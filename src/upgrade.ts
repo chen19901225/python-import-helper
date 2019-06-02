@@ -180,11 +180,20 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             let line_words: Array<string> = compare_line.text.split(" ");
             if (Object.is(line_words[1], words[1]) && line_words[0] == "from") { // only merge `from` import
                 the_same_from_row_index = walk_row_index;
+                let child_imports = line_words.slice(3);
+                child_imports = child_imports.map((value) => {
+                    value = value.trim();
+                    if(value.endsWith(",")) {
+                        return value.substring(value.length-1);
+                    } else {
+                        return value;
+                    }
+                })
                 // edit.replace(selection, "");
 
-                if (line_words.indexOf(words[3]) > -1) {
+                if (child_imports.indexOf(words[3]) > -1) { // 如果当前import 存在
 
-                } else {
+                } else { // 确保当前import不存在
                     edit.replace(compare_line.range, compare_line.text + ", " + words[3]);
                 }
 
