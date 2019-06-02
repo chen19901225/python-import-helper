@@ -184,7 +184,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
                 child_imports = child_imports.map((value) => {
                     value = value.trim();
                     if(value.endsWith(",")) {
-                        return value.substring(value.length-1);
+                        return value.substring(0, value.length-1);
                     } else {
                         return value;
                     }
