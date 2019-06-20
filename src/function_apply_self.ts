@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let currentPosition = textEditor.selection.active;
+    let document = textEditor.document;
     // 当前行的缩进
     let currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
     let defLineNo = -1;
@@ -18,12 +19,18 @@ export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.
     // 找到defLineNo之后， 开始找def的结束
     let defEndLineNo=-1;
     for(let i=defLineNo;i<=currentPosition.line;i++) {
+        let iterLine = document.lineAt(i);
+        if(iterLine.text.match(")[ \w,\[\]]*:$")) {
+            defEndLineNo=i;
+            break;
+        }
 
     }
     if(defEndLineNo === -1) {
         throw Error("cannot find def end line");
     }
     
+
 
 
     const definition =
