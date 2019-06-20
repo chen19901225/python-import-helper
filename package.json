@@ -23,8 +23,13 @@
         "commands": [
             {
                 "command": "cqh-python-import-helper.import-upgrade",
-                "title": "cqh python import import upgrade"
+                "title": "cqh python import import upgrade",
+            },
+            {
+                "command": "cqh-python-import-helper.function_apply_self",
+                "title": "cqh python import function apply self"
             }
+
         ],
         "menus": {
             "editor/context": [

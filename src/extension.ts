@@ -3,6 +3,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import {upgradeDelegate} from "./upgrade";
+import {function_apply_self} from "./function_apply_self";
 
 
 // this method is called when your extension is activated
@@ -57,6 +58,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(selectCurrentLineDisposable);
     context.subscriptions.push(disposable);
+
+    let functionApplySelfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.function_apply_self", 
+    (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) => {
+        function_apply_self(textEditor, edit);
+    })
+    context.subscriptions.push(functionApplySelfDisposable);
 }
 
 // this method is called when your extension is deactivated
