@@ -43,11 +43,11 @@ export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.
     const definition = document.getText(new vscode.Range(defStartPosition,
         defEndPosition));
     const parseResult = parse_function(definition);
-    generate_apply_statement(parseResult);
+    generate_apply_statement(parseResult, currentPosition);
     
 }
 
-function generate_apply_statement(parseResult) {
+function generate_apply_statement(parseResult, currentPosition: vscode.Position) {
     
 }
 
