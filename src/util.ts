@@ -21,7 +21,7 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     let defLineNo = -1;
     for (let i = currentPosition.line; i >= 0; i--) {
         let warkLine = textEditor.document.lineAt(i);
-        let contentWithoutIndent = warkLine.text.substr(currentLineIndent - 4).trim();
+        let contentWithoutIndent = warkLine.text.trim();
         if (contentWithoutIndent.startsWith("def ")) {
             defLineNo = i;
             break;
