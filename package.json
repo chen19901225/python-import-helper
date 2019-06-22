@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.22",
+    "version": "0.0.24",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -31,7 +31,7 @@
             },
             {
                 "command": "cqh-python-import-helper.function_apply_self",
-                "title": "cqh python import function apply self"
+                "title": "cqh python import def apply self"
             },
             {
                 "command": "cqh-python-import-helper.get_parent_args",
