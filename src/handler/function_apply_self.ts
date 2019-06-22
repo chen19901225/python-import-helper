@@ -5,17 +5,23 @@ export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.
     let currentPosition = textEditor.selection.active;
     let document = textEditor.document;
     // 当前行的缩进
-    let currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
+    let currentLine = document.lineAt(currentPosition.line);
+    let currentLineIndent;
+    if (currentLine.isEmptyOrWhitespace) {
+        currentLineIndent = currentPosition.character
+    } else {
+        currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
+    }
+
     if (currentLineIndent === 0) {
         return
     }
     const definition = try_get_definition(textEditor, edit);
     const parseResult = parse_function(definition);
     const insert_content = generate_apply_statement(parseResult, currentLineIndent);
-    let newSelection = new vscode.Selection(currentPosition.translate(0, -1 * currentPosition.character),
-        currentPosition.translate(0, -1 * currentPosition.character))
-    textEditor.selection = newSelection;
     edit.insert(currentPosition.translate(0, -1 * currentPosition.character), insert_content);
+    // let position = textEditor.selection.active;
+
     // const editor = vscode.window.activeTextEditor;
     // const afterInsertCusorPosition = editor.selection.active;
     // const AfterInsertLine = document.lineAt(afterInsertCusorPosition.line);
