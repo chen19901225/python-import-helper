@@ -1,18 +1,28 @@
 import * as vscode from 'vscode'
 
 export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+
     let currentPosition = textEditor.selection.active;
     let document = textEditor.document;
+    let currentLine = document.lineAt(currentPosition.line);
+    let currentLineIndent
+    if (currentLine.isEmptyOrWhitespace) {
+        //如果当前行为空
+        currentLineIndent = currentPosition.character
+    } else {
+        currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
+    }
+
     // 当前行的缩进
-    let currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
-    if(currentLineIndent === 0){
+
+    if (currentLineIndent === 0) {
         return
     }
     let defLineNo = -1;
     for (let i = currentPosition.line; i >= 0; i--) {
         let warkLine = textEditor.document.lineAt(i);
-        let contentWithoutIndent = warkLine.text.substr(currentLineIndent-4);
-        if (contentWithoutIndent.startsWith("def ") ) {
+        let contentWithoutIndent = warkLine.text.substr(currentLineIndent - 4);
+        if (contentWithoutIndent.startsWith("def ")) {
             defLineNo = i;
             break;
         }
