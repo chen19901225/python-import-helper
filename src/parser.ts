@@ -1,6 +1,45 @@
 
-export function parse_function(definition: string) {
+export class FunctionDef {
+    name: string
+    args: Array<string>
+    kwargs: Array<string>
+    star_args: string
+    star_kwargs: string
+}
 
+export function parse_function(definition: string): FunctionDef {
+    let function_name = parse_function_name(definition);
+    let param_list = parse_parse_params(definition);
+    let arg_list = parse_args(param_list);
+    let kwarg_list = parse_kwargs(param_list);
+    let star_args = parse_star_args(param_list);
+    let star_kwargs = parse_star_kwargs(param_list);
+    return {
+        'name': function_name,
+        'args': arg_list,
+        'kwargs': kwarg_list,
+        'star_args': star_args,
+        'star_kwargs': star_kwargs
+    }
+}
+
+export function parse_star_args(param_list: Array<string>): string {
+    for(let param of param_list) {
+        param = param.trim();
+        if(param.startsWith('*') && !param.startsWith('**')) {
+            return param.substr(1);
+        }
+    }
+    return ''
+}
+export function parse_star_kwargs(param_list: Array<string>): string {
+    for(let param of param_list) {
+        param = param.trim();
+        if(param.startsWith('**')) {
+            return param.substring(2);
+        }
+    }
+    return ''
 }
 
 export function parse_function_name(definition: string) {
@@ -51,10 +90,10 @@ export function parse_parse_params(definition: string) {
                 handle_position(current_index + 1, current_word + ch, expected_ch);
             } else {
                 if (ch == ',') {
-                    current_word=current_word.trim();
+                    current_word = current_word.trim();
                     out_list.push(current_word);
                     handle_position(current_index + 1, "", "");
-                }else {
+                } else {
                     handle_position(current_index + 1, current_word + ch, expected);
                 }
             }
@@ -67,11 +106,41 @@ export function parse_parse_params(definition: string) {
 
 }
 
-export function parse_args(params: Array<string>) {
 
+export function parse_args(params: Array<string>) {
+    let arg_list: Array<string> = [];
+
+    for (let i = 0; i < params.length; i++) {
+        let currentParam = params[i];
+        if(currentParam.startsWith('*')) {
+            continue;
+        }
+        if (currentParam.includes('=')) {
+            continue;
+        }
+        let other: Array<string>;
+        [currentParam, ...other] = currentParam.split(':');
+        arg_list.push(currentParam.trim());
+    }
+    return arg_list
 }
 export function parse_kwargs(params: Array<string>) {
+    let arg_list: Array<string> = [];
+    let other;
+    for (let i = 0; i < params.length; i++) {
+        let currentParam = params[i];
+        if(currentParam.startsWith('*')) {
+            continue;
+        }
+        if (!currentParam.includes('=')) {
+            continue;
+        }
+        [currentParam, ...other] = currentParam.split('=');
+        [currentParam, ...other] = currentParam.split(':');
+        arg_list.push(currentParam.trim());
 
+    }
+    return arg_list
 }
 
 let definition = `def hello_world_func(no_type, name: str,

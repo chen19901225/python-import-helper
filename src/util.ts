@@ -1,15 +1,18 @@
-import * as vscode from "vscode";
-import {parse_function} from './parser';
-export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+import * as vscode from 'vscode'
+
+export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let currentPosition = textEditor.selection.active;
     let document = textEditor.document;
     // 当前行的缩进
     let currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
+    if(currentLineIndent === 0){
+        return
+    }
     let defLineNo = -1;
     for (let i = currentPosition.line; i >= 0; i--) {
         let warkLine = textEditor.document.lineAt(i);
-        if (warkLine.text.startsWith("def ") &&
-            warkLine.firstNonWhitespaceCharacterIndex + 4 === currentLineIndent) {
+        let contentWithoutIndent = warkLine.text.substr(currentLineIndent-4);
+        if (contentWithoutIndent.startsWith("def ") ) {
             defLineNo = i;
             break;
         }
@@ -21,7 +24,7 @@ export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.
     let defEndLineNo = -1;
     for (let i = defLineNo; i <= currentPosition.line; i++) {
         let iterLine = document.lineAt(i);
-        if (iterLine.text.match(")[ \w,\[\]]*:$")) {
+        if (iterLine.text.match(/\)(->\s*[ \w,\[\]\.]*\s*)?:\s*$/)) {
             defEndLineNo = i;
             break;
         }
@@ -42,20 +45,5 @@ export function function_apply_self(textEditor: vscode.TextEditor, edit: vscode.
     // 获取到定义之后， 就应该parse定义了
     const definition = document.getText(new vscode.Range(defStartPosition,
         defEndPosition));
-    const parseResult = parse_function(definition);
-    generate_apply_statement(parseResult, currentPosition);
-    
-}
-
-function generate_apply_statement(parseResult, currentPosition: vscode.Position) {
-    
-}
-
-
-function getIndent(text: string) {
-    const match = text.match(/^\s+/);
-    if (!match) {
-        return 0;
-    }
-    return match[0].length;
+    return definition;
 }
