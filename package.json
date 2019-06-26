@@ -25,6 +25,28 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "keybindings":[
+            {
+				"command": "cqh-python-import-helper.function_apply_self",
+				"key": "alt + -",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.delegate_to_parent",
+				"key": "alt + =",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_name",
+				"key": "alt +[",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_args",
+				"key": "alt +]",
+				"when": "editorTextFocus && !editorHasSelection "
+            }
+        ],
         
         "commands": [
             {
