@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.29",
+    "version": "0.0.30",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -28,22 +28,22 @@
         "keybindings":[
             {
 				"command": "cqh-python-import-helper.function_apply_self",
-				"key": "alt + -",
+				"key": "alt+-",
 				"when": "editorTextFocus && !editorHasSelection "
             },
             {
 				"command": "cqh-python-import-helper.delegate_to_parent",
-				"key": "alt + =",
+				"key": "alt+=",
 				"when": "editorTextFocus && !editorHasSelection "
             },
             {
 				"command": "cqh-python-import-helper.get_parent_name",
-				"key": "alt +[",
+				"key": "alt+[",
 				"when": "editorTextFocus && !editorHasSelection "
             },
             {
 				"command": "cqh-python-import-helper.get_parent_args",
-				"key": "alt +]",
+				"key": "alt+]",
 				"when": "editorTextFocus && !editorHasSelection "
             }
         ],
