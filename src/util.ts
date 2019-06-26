@@ -5,25 +5,28 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     let currentPosition = textEditor.selection.active;
     let document = textEditor.document;
     let currentLine = document.lineAt(currentPosition.line);
-    let currentLineIndent
+    let currentMinIndent
     if (currentLine.isEmptyOrWhitespace) {
         //如果当前行为空
-        currentLineIndent = currentPosition.character
+        currentMinIndent = currentPosition.character
     } else {
-        currentLineIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
+        currentMinIndent = textEditor.document.lineAt(currentPosition.line).firstNonWhitespaceCharacterIndex;
     }
 
     // 当前行的缩进
 
-    if (currentLineIndent === 0) {
+    if (currentMinIndent === 0) {
         return
     }
     let defLineNo = -1;
     for (let i = currentPosition.line; i >= 0; i--) {
         let warkLine = textEditor.document.lineAt(i);
-        if(warkLine.firstNonWhitespaceCharacterIndex>=currentLineIndent) {
+        let warkLineIndex = warkLine.firstNonWhitespaceCharacterIndex;
+        
+        if(warkLine.firstNonWhitespaceCharacterIndex>=currentMinIndent) {
             continue;
         }
+        currentMinIndent=Math.min(warkLineIndex, currentMinIndent);
         let contentWithoutIndent = warkLine.text.trim();
         if (contentWithoutIndent.startsWith("def ")) {
             defLineNo = i;
