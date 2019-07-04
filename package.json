@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.31",
+    "version": "0.0.32",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -48,7 +48,7 @@
             },
             {
                 "command": "cqh-python-import-helper.dict_unpack",
-                "key": "alt + i",
+                "key": "alt+i",
                 "when": "editorTextFocus && !editorHasSelection "
             }
         ],
