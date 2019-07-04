@@ -20,13 +20,13 @@ suite("unpack Tests", () => {
     test("test source instance", () => {
         let line = "image, name=source";
         let out = generate_replace_upack_string(line);
-        assert.equal(out, "image, name = source.image, source.name")
+        assert.equal(out, ".image, source.name")
     });
 
     test("test source dict", () => {
         let line = "image, name=source_d";
         let out = generate_replace_upack_string(line);
-        assert.equal(out, 'image, name = source_d["image"], source_d["name"]')
+        assert.equal(out, '["image"], source_d["name"]')
     })
 
     

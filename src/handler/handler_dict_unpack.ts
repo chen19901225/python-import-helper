@@ -6,7 +6,8 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let replaceContent = generate_replace_upack_string(line.text);
-    edit.replace(line.range, replaceContent);
+    // edit.replace(line.range, replaceContent);
+    edit.insert(cursor, replaceContent);
 }
 
 export function generate_replace_upack_string(source: string) {
@@ -32,13 +33,26 @@ export function generate_replace_upack_string(source: string) {
     let out = [];
     let source_var: string = element_list.pop();
     let right_side_list = []
+    let is_first = true;
     for (let ele of element_list) {
         out.push(ele);
         if(source_var.endsWith("_d") || source_var.endsWith("_dict")) {
-            right_side_list.push(`${source_var}["${ele}"]`)
+            if(!is_first) {
+                right_side_list.push(`${source_var}["${ele}"]`)
+            } else {
+                is_first = false;
+                right_side_list.push(`["${ele}"]`)
+            }
+            
         } else {
-            right_side_list.push(`${source_var}.${ele}`)
+            if(!is_first) {
+                right_side_list.push(`${source_var}.${ele}`)
+            } else {
+                is_first = false;
+                right_side_list.push(`.${ele}`)
+            }
+            
         }
     }
-    return out.join(", ") + " = " + right_side_list.join(", ")
+    return right_side_list.join(", ")
 }
