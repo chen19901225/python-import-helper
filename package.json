@@ -45,6 +45,11 @@
 				"command": "cqh-python-import-helper.get_parent_args",
 				"key": "alt+]",
 				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+                "command": "cqh-python-import-helper.dict_unpack",
+                "key": "alt + i",
+                "when": "editorTextFocus && !editorHasSelection "
             }
         ],
         
@@ -68,6 +73,10 @@
             {
                 "command": "cqh-python-import-helper.delegate_to_parent",
                 "title": "cqh python import delegate to caller"
+            },
+            {
+                "command": "cqh-python-import-helper.dict_unpack",
+                "title": "cqh python import dict unpack"
             }
 
         ],
