@@ -8,6 +8,7 @@ import {get_parent_name} from './handler/handler_get_parent_name';
 import {get_parent_args} from './handler/get_parent_args'
 import {delegate_to_parent} from './handler/handler_delegate_to_parent'
 import {handler_dict_unpack} from './handler/handler_dict_unpack'
+import {get_original_parent_args} from "./handler/handler_get_original_parent_args"
 
 
 
@@ -70,10 +71,15 @@ export function activate(context: vscode.ExtensionContext) {
     })
     context.subscriptions.push(functionApplySelfDisposable);
 
-    let getParentArgsDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_args', (textEditor, edit) => {
+    let getParentArgsDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_args_dict', (textEditor, edit) => {
         get_parent_args(textEditor, edit);
     })
     context.subscriptions.push(getParentArgsDisposable);
+
+    let getOriginalParentArgsDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_original_args', (textEditor, edit) => {
+        get_original_parent_args(textEditor, edit);
+    })
+    context.subscriptions.push(getOriginalParentArgsDisposable)
 
     let getParentNameDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_name', (textEditor, edit) => {
         get_parent_name(textEditor, edit);

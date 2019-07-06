@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.34",
+    "version": "0.0.35",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -42,8 +42,13 @@
 				"when": "editorTextFocus && !editorHasSelection "
             },
             {
-				"command": "cqh-python-import-helper.get_parent_args",
+				"command": "cqh-python-import-helper.get_parent_args_dict",
 				"key": "alt+]",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_original_args",
+				"key": "alt+0",
 				"when": "editorTextFocus && !editorHasSelection "
             },
             {
@@ -77,6 +82,10 @@
             {
                 "command": "cqh-python-import-helper.dict_unpack",
                 "title": "cqh python import dict unpack"
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_original_args",
+				"title": "cqh python get parent original args kwargs"
             }
 
         ],
