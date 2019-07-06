@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.35",
+    "version": "0.0.36",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -17,9 +17,10 @@
     "activationEvents": [
         "onLanguage:python",
         "onCommand:cqh-python-import-helper.function_apply_self",
-        "onCommand:cqh-python-import-helper.get_parent_args",
+        "onCommand:cqh-python-import-helper.get_parent_args_dict",
         "onCommand:cqh-python-import-helper.get_parent_name",
-        "onCommand:cqh-python-import-helper.delegate_to_parent"
+        "onCommand:cqh-python-import-helper.delegate_to_parent",
+        "onCommand:cqh-python-import-helper.get_parent_original_args"
 
 
     ],
@@ -68,7 +69,7 @@
                 "title": "cqh python import def apply self"
             },
             {
-                "command": "cqh-python-import-helper.get_parent_args",
+                "command": "cqh-python-import-helper.get_parent_args_dict",
                 "title": "cqh python import get caller args"
             },
             {
