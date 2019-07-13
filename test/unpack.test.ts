@@ -29,5 +29,11 @@ suite("unpack Tests", () => {
         assert.equal(out, '["image"], source_d["name"]')
     })
 
+    test("test source prepend", () => {
+        let line = "image, name=source_";
+        let out = generate_replace_upack_string(line);
+        assert.equal(out, 'image, source_name')
+    })
+
     
 });

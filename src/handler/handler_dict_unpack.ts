@@ -44,7 +44,15 @@ export function generate_replace_upack_string(source: string) {
                 right_side_list.push(`["${ele}"]`)
             }
             
-        } else {
+        } else if (source_var.endsWith("_")) {
+            if(!is_first) {
+                right_side_list.push(`${source_var}${ele}`)
+            } else {
+                is_first = false;
+                right_side_list.push(`${ele}`)
+            }
+        }
+        else {
             if(!is_first) {
                 right_side_list.push(`${source_var}.${ele}`)
             } else {
