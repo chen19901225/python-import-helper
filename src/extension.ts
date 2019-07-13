@@ -3,6 +3,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import {upgradeDelegate} from "./upgrade";
+import {function_apply_self} from "./handler/function_apply_self";
+import {get_parent_name} from './handler/handler_get_parent_name';
+import {get_parent_args} from './handler/get_parent_args'
+import {delegate_to_parent} from './handler/handler_delegate_to_parent'
+import {handler_dict_unpack} from './handler/handler_dict_unpack'
+import {handler_dict_get_unpack} from './handler/handler_dict_get_unpack'
+import {get_original_parent_args} from "./handler/handler_get_original_parent_args"
+
 
 
 // this method is called when your extension is activated
@@ -57,6 +65,45 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(selectCurrentLineDisposable);
     context.subscriptions.push(disposable);
+
+    let functionApplySelfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.function_apply_self", 
+    (textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) => {
+        function_apply_self(textEditor, edit);
+    })
+    context.subscriptions.push(functionApplySelfDisposable);
+
+    let getParentArgsDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_args_dict', (textEditor, edit) => {
+        get_parent_args(textEditor, edit);
+    })
+    context.subscriptions.push(getParentArgsDisposable);
+
+    let getOriginalParentArgsDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_original_args', (textEditor, edit) => {
+        get_original_parent_args(textEditor, edit);
+    })
+    context.subscriptions.push(getOriginalParentArgsDisposable)
+
+    let getParentNameDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.get_parent_name', (textEditor, edit) => {
+        get_parent_name(textEditor, edit);
+    })
+    context.subscriptions.push(getParentNameDisposable);
+    let DelegateParentDisposable = vscode.commands.registerTextEditorCommand('cqh-python-import-helper.delegate_to_parent',
+    (textEditor, edit) => {
+        delegate_to_parent(textEditor,edit);
+    })
+    context.subscriptions.push(DelegateParentDisposable);
+
+    let DictUpackDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.dict_unpack",
+    (textEditor, edit) => {
+        handler_dict_unpack(textEditor, edit);
+    })
+    context.subscriptions.push(DictUpackDisposable);
+
+
+    let DictGetUpackDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.dict_get_unpack",
+    (textEditor, edit) => {
+        handler_dict_get_unpack(textEditor, edit);
+    })
+    context.subscriptions.push(DictGetUpackDisposable);
 }
 
 // this method is called when your extension is deactivated

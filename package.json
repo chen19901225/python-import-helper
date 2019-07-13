@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.13",
+    "version": "0.0.37",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -15,26 +15,89 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:python"
+        "onLanguage:python",
+        "onCommand:cqh-python-import-helper.function_apply_self",
+        "onCommand:cqh-python-import-helper.get_parent_args_dict",
+        "onCommand:cqh-python-import-helper.get_parent_name",
+        "onCommand:cqh-python-import-helper.delegate_to_parent",
+        "onCommand:cqh-python-import-helper.get_parent_original_args"
+
+
     ],
     "main": "./out/src/extension",
     "contributes": {
-        "keybindings": [
-			{
-				"command": "cqh-python-import-help.select-current-line",
-				"key": "Ctrl+L",
-				"when": "editorTextFocus"
-			}
+        "keybindings":[
+            {
+				"command": "cqh-python-import-helper.function_apply_self",
+				"key": "alt+-",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.delegate_to_parent",
+				"key": "alt+=",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_name",
+				"key": "alt+[",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_args_dict",
+				"key": "alt+]",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_original_args",
+				"key": "alt+0",
+				"when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+                "command": "cqh-python-import-helper.dict_unpack",
+                "key": "alt+i",
+                "when": "editorTextFocus && !editorHasSelection "
+            },
+            {
+                "command": "cqh-python-import-helper.dict_get_unpack",
+                "key": "alt+o",
+                "when": "editorTextFocus && !editorHasSelection "
+            }
         ],
+        
         "commands": [
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "title": "cqh python import import upgrade"
             },
             {
-                "command": "cqh-python-import-help.select-current-line",
-                "title": "cqh python import select current line"
+                "command": "cqh-python-import-helper.function_apply_self",
+                "title": "cqh python import def apply self"
+            },
+            {
+                "command": "cqh-python-import-helper.get_parent_args_dict",
+                "title": "cqh python import get caller args"
+            },
+            {
+                "command": "cqh-python-import-helper.get_parent_name",
+                "title": "cqh python import get caller function name"
+            },
+            {
+                "command": "cqh-python-import-helper.delegate_to_parent",
+                "title": "cqh python import delegate to caller"
+            },
+            {
+                "command": "cqh-python-import-helper.dict_unpack",
+                "title": "cqh python import dict unpack"
+            },
+            {
+                "command": "cqh-python-import-helper.dict_get_unpack",
+                "title": "cqh python import dict get unpack"
+            },
+            {
+				"command": "cqh-python-import-helper.get_parent_original_args",
+				"title": "cqh python get parent original args kwargs"
             }
+
         ],
         "menus": {
             "editor/context": [

@@ -10,5 +10,8 @@
         "activityBar.background": "#3B1374",
         "titleBar.activeBackground": "#521BA2",
         "titleBar.activeForeground": "#FDFCFF"
+    },
+    "terminal.integrated.env.windows": {
+        "PATH": "${env:PATH};${workspaceRoot}\\alias"
     }
 }

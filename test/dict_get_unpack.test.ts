@@ -10,15 +10,19 @@ import * as assert from 'assert';
 // as well as import your extension to test it
 import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
-
+// import * as parser from '../src/parser';
+import { setFlagsFromString } from 'v8';
+import {generate_replace_upack_string} from '../src/handler/handler_dict_get_unpack'
 // Defines a Mocha test suite to group tests of similar kind together
-suite("Extension Tests", () => {
+suite("unpack Tests", () => {
 
     // Defines a Mocha unit test
-    test("Something 1", () => {
+    
+    test("test source dict", () => {
+        let line = "image, name=source_d";
+        let out = generate_replace_upack_string(line);
+        assert.equal(out, '.get("image"), source_d.get("name")')
+    })
 
-        
-        assert.equal(-1, [1, 2, 3].indexOf(5));
-        assert.equal(-1, [1, 2, 3].indexOf(0));
-    });
+    
 });

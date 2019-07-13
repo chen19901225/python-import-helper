@@ -28,6 +28,9 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
     let handle_string = (i) => {
         return i + 1;
     }
+    let handle_single_string = (i) => {
+        return i + 1;
+    }
     let handle_multiple_string = (i) => {
         i = i + 1;
         let line;
@@ -64,9 +67,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             return [false, handle_comment(i)];
         }
 
-        if (line.startsWith('"')) {
-            return [false, handle_string(i)];
-        }
+        
 
         if (line.startsWith('"""')) {
             return [false, handle_multiple_string(i)];
@@ -75,14 +76,23 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
         if (line.startsWith("'''")) {
             return [false, handle_multiple_single_string(i)];
         }
+        if (line.startsWith('"')) {
+            return [false, handle_string(i)];
+        }
+        if (line.startsWith("'")) {
+            return [false, handle_single_string(i)];
+        }
         return [true, i];
 
     }
 
     // 获取到行号， 改行是import 语句，或者正式代码
-
+    let currentLineNo = textEditor.selection.active.line;
     while (1) {
         let [is_ok, new_i] = handle_line(i);
+        if(new_i >= currentLineNo) { // current import statement is in the front part, so stop upgrade
+            return;
+        }
         i = new_i;
         if (is_ok) {
             break;
@@ -123,6 +133,10 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
         return currentLineNo;
     }
     let CodeLineNo = getCodeLineNoFunc(i);
+    if(CodeLineNo >= currentLineNo){
+        return;
+    }
+
 
     let documentLinesAnyEqualFunc = (start: number, end: number, searchText: string) => {
         let contains = false;
@@ -166,11 +180,20 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             let line_words: Array<string> = compare_line.text.split(" ");
             if (Object.is(line_words[1], words[1]) && line_words[0] == "from") { // only merge `from` import
                 the_same_from_row_index = walk_row_index;
+                let child_imports = line_words.slice(3);
+                child_imports = child_imports.map((value) => {
+                    value = value.trim();
+                    if(value.endsWith(",")) {
+                        return value.substring(0, value.length-1);
+                    } else {
+                        return value;
+                    }
+                })
                 // edit.replace(selection, "");
 
-                if (line_words.indexOf(words[3]) > -1) {
+                if (child_imports.indexOf(words[3]) > -1) { // 如果当前import 存在
 
-                } else {
+                } else { // 确保当前import不存在
                     edit.replace(compare_line.range, compare_line.text + ", " + words[3]);
                 }
 
