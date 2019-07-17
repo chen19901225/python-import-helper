@@ -7,7 +7,7 @@ import {function_apply_self} from "./handler/function_apply_self";
 import {get_parent_name} from './handler/handler_get_parent_name';
 import {get_parent_args} from './handler/get_parent_args'
 import {delegate_to_parent} from './handler/handler_delegate_to_parent'
-import {handler_dict_unpack} from './handler/handler_dict_unpack'
+import {handler_dict_unpack, handler_dict_prepend} from './handler/handler_dict_unpack'
 import {handler_dict_get_unpack} from './handler/handler_dict_get_unpack'
 import {get_original_parent_args} from "./handler/handler_get_original_parent_args"
 
@@ -104,6 +104,11 @@ export function activate(context: vscode.ExtensionContext) {
         handler_dict_get_unpack(textEditor, edit);
     })
     context.subscriptions.push(DictGetUpackDisposable);
+    let DictGetPrependDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.dict_prepend",
+    (textEditor, edit) => {
+        handler_dict_prepend(textEditor, edit);
+    })
+    context.subscriptions.push(DictGetPrependDisposable);
 }
 
 // this method is called when your extension is deactivated
