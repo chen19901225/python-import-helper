@@ -43,6 +43,9 @@ export function generate_replace_string(source: string) {
     }
     let out = [];
     let prepend_ele: string = element_list.pop();
+    if(!prepend_ele.endsWith('_')) {
+        prepend_ele += "_";
+    }
     let right_side_list = []
     for (let ele of element_list) {
         ele = ele.trim();
@@ -85,9 +88,8 @@ export function generate_insert_string(source: string) {
     }
     let out = [];
     let source_var: string = element_list.pop();
-    if(!source_var.endsWith('_')) {
-        source_var += '_';
-    }
+    console.log("source_var:", source_var)
+    
     let right_side_list = []
     let is_first = true;
     for (let ele of element_list) {
