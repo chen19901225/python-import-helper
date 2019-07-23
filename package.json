@@ -26,45 +26,54 @@
     "contributes": {
         "keybindings": [
             {
-                "command": "cqh-python-import-helper.function_apply_self",
-                "key": "alt+-",
-                "when": "editorTextFocus && !editorHasSelection "
+				"command": "cqh-python-import-helper.function_apply_self",
+				"key": "alt+-",
+				"when": "editorTextFocus && !editorHasSelection && editorLangId==python "
             },
             {
-                "command": "cqh-python-import-helper.delegate_to_parent",
-                "key": "alt+=",
-                "when": "editorTextFocus && !editorHasSelection "
+				"command": "cqh-python-import-helper.delegate_to_parent",
+				"key": "alt+=",
+				"when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
-                "command": "cqh-python-import-helper.get_parent_name",
-                "key": "alt+[",
-                "when": "editorTextFocus && !editorHasSelection "
+				"command": "cqh-python-import-helper.get_parent_name",
+				"key": "alt+[",
+				"when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
-                "command": "cqh-python-import-helper.get_parent_args_dict",
-                "key": "alt+]",
-                "when": "editorTextFocus && !editorHasSelection "
+				"command": "cqh-python-import-helper.get_parent_args_dict",
+				"key": "alt+]",
+				"when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
-                "command": "cqh-python-import-helper.get_parent_original_args",
-                "key": "alt+0",
-                "when": "editorTextFocus && !editorHasSelection "
+				"command": "cqh-python-import-helper.get_parent_original_args",
+				"key": "alt+0",
+				"when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.dict_unpack",
                 "key": "alt+i",
-                "when": "editorTextFocus && !editorHasSelection "
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.dict_get_unpack",
                 "key": "alt+o",
-                "when": "editorTextFocus && !editorHasSelection "
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.dict_prepend",
+                "key": "alt+u",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "title": "cqh python import import upgrade"
+            },
+            {
+                "command": "cqh-python-import-helper.dict_prepend",
+                "title": "cqh python import dict prepend"
             },
             {
                 "command": "cqh-python-import-helper.function_apply_self",

@@ -12,27 +12,27 @@ import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
 // import * as parser from '../src/parser';
 import { setFlagsFromString } from 'v8';
-import {generate_replace_upack_string} from '../src/handler/handler_dict_unpack'
+import {generate_insert_string, generate_replace_string} from '../src/handler/handler_dict_unpack'
 // Defines a Mocha test suite to group tests of similar kind together
 suite("unpack Tests", () => {
 
     // Defines a Mocha unit test
     test("test source instance", () => {
         let line = "image, name=source";
-        let out = generate_replace_upack_string(line);
+        let out = generate_insert_string(line);
         assert.equal(out, ".image, source.name")
     });
 
     test("test source dict", () => {
         let line = "image, name=source_d";
-        let out = generate_replace_upack_string(line);
+        let out = generate_insert_string(line);
         assert.equal(out, '["image"], source_d["name"]')
     })
 
     test("test source prepend", () => {
         let line = "image, name=source_";
-        let out = generate_replace_upack_string(line);
-        assert.equal(out, 'image, source_name')
+        let out = generate_replace_string(line);
+        assert.equal(out, 'source_image, source_name = image, name')
     })
 
     
