@@ -10,6 +10,7 @@ import {delegate_to_parent} from './handler/handler_delegate_to_parent'
 import {handler_dict_unpack, handler_dict_prepend} from './handler/handler_dict_unpack'
 import {handler_dict_get_unpack} from './handler/handler_dict_get_unpack'
 import {get_original_parent_args} from "./handler/handler_get_original_parent_args"
+import {insert_left_pattern} from "./handler/handler_get_left_pattern"
 
 
 
@@ -109,6 +110,12 @@ export function activate(context: vscode.ExtensionContext) {
         handler_dict_prepend(textEditor, edit);
     })
     context.subscriptions.push(DictGetPrependDisposable);
+
+    let getLeftPatternDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_left_pattern",
+    (textEditor, edit) => {
+        insert_left_pattern(textEditor, edit);
+    });
+    context.subscriptions.push(getLeftPatternDisposable);
 }
 
 // this method is called when your extension is deactivated

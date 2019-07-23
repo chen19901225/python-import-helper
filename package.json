@@ -64,9 +64,18 @@
                 "command": "cqh-python-import-helper.dict_prepend",
                 "key": "alt+u",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_left_pattern",
+                "key": "alt+h",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.get_left_pattern",
+                "title": "cqh-python-import-helper.get_left_pattern"
+            },
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "title": "cqh python import import upgrade"
