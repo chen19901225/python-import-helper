@@ -47,8 +47,8 @@
             },
             {
                 "command": "cqh-python-import-helper.get_parent_original_args",
-                "key": "alt+0",
-                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+                "key": "alt+j",
+                "when": "editorTextFocus  && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.dict_unpack",
