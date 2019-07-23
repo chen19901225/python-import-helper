@@ -57,7 +57,7 @@
             },
             {
                 "command": "cqh-python-import-helper.dict_get_unpack",
-                "key": "alt+o",
+                "key": "alt+\\",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
