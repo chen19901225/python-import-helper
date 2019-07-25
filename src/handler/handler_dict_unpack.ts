@@ -59,7 +59,7 @@ export function generate_replace_string(source: string) {
 
 
 
-    return out.join(",") + " = " +  right_side_list.join(", ");
+    return out.join(",") + " = " + right_side_list.join(", ");
 
 }
 
@@ -85,9 +85,6 @@ export function generate_insert_string(source: string) {
     }
     let out = [];
     let source_var: string = element_list.pop();
-    if(!source_var.endsWith('_')) {
-        source_var += '_';
-    }
     let right_side_list = []
     let is_first = true;
     for (let ele of element_list) {
