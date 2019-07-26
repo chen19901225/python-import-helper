@@ -21,15 +21,15 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     let defLineNo = -1;
     for (let i = currentPosition.line; i >= 0; i--) {
         let warkLine = textEditor.document.lineAt(i);
-        if(warkLine.isEmptyOrWhitespace) {
+        if (warkLine.isEmptyOrWhitespace) {
             continue;
         }
         let warkLineIndex = warkLine.firstNonWhitespaceCharacterIndex;
-        
-        if(warkLine.firstNonWhitespaceCharacterIndex>=currentMinIndent) {
+
+        if (warkLine.firstNonWhitespaceCharacterIndex >= currentMinIndent) {
             continue;
         }
-        currentMinIndent=Math.min(warkLineIndex, currentMinIndent);
+        currentMinIndent = Math.min(warkLineIndex, currentMinIndent);
         let contentWithoutIndent = warkLine.text.trim();
         if (contentWithoutIndent.startsWith("def ")) {
             defLineNo = i;
@@ -65,4 +65,25 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     const definition = document.getText(new vscode.Range(defStartPosition,
         defEndPosition));
     return definition;
+}
+
+
+export function get_variable_list(line: string): Array<string> {
+    let element_list: Array<string> = [];
+    let run = "";
+    for (let ch of line) {
+        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
+            run += ch;
+        } else {
+            if (run && run.length > 0) {
+                element_list.push(run)
+                run = "";
+            }
+
+        }
+    }
+    if (run && run.length > 0) {
+        element_list.push(run);
+    }
+    return element_list
 }

@@ -69,12 +69,21 @@
                 "command": "cqh-python-import-helper.get_left_pattern",
                 "key": "alt+h",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_if_variable",
+                "key": "alt+\\",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
             {
                 "command": "cqh-python-import-helper.get_left_pattern",
                 "title": "cqh-python-import-helper.get_left_pattern"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_if_variable",
+                "title": "cqh-python-import get last if variable"
             },
             {
                 "command": "cqh-python-import-helper.import-upgrade",

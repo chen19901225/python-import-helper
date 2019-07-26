@@ -75,6 +75,11 @@ key: alt+h
 
 insert left pattern before "="
 
+### cqh-python-import-helper.get_last_if_varaible
+key: alt + \
+
+
+
 
 
 ## Features
