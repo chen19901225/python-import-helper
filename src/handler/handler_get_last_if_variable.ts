@@ -13,7 +13,12 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         content = content.trim();
         if (content.startsWith("if ") || content.startsWith("elif ")) {
             let vars = get_variable_list(content)
-            edit.insert(cursor, vars[1]);
+            if (vars[1] === "not") {
+                edit.insert(cursor, vars[2]);
+            } else {
+                edit.insert(cursor, vars[1]);
+            }
+
             break;
         }
     }
