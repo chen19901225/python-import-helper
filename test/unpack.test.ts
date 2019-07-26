@@ -12,7 +12,7 @@ import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
 // import * as parser from '../src/parser';
 import { setFlagsFromString } from 'v8';
-import {generate_insert_string, generate_replace_string} from '../src/handler/handler_dict_unpack'
+import { generate_insert_string, generate_replace_string } from '../src/handler/handler_dict_unpack'
 // Defines a Mocha test suite to group tests of similar kind together
 suite("unpack Tests", () => {
 
@@ -22,6 +22,13 @@ suite("unpack Tests", () => {
         let out = generate_insert_string(line);
         assert.equal(out, ".image, source.name")
     });
+
+    test("test source instance2", () => {
+        let line = "image, name=this.source";
+        let out = generate_insert_string(line);
+        assert.equal(out, ".image, this.source.name")
+    });
+
 
     test("test source dict", () => {
         let line = "image, name=source_d";
@@ -35,5 +42,5 @@ suite("unpack Tests", () => {
         assert.equal(out, 'source_image, source_name = image, name')
     })
 
-    
+
 });

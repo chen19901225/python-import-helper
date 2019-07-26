@@ -24,13 +24,14 @@ export function generate_replace_string(source: string) {
     let element_list: Array<string> = [];
     let run = "";
     for (let ch of source) {
-        if (ch.match(/[_a-zA-Z0-9]/)) {
+        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
             run += ch;
         } else {
             if (run && run.length > 0) {
                 element_list.push(run)
                 run = "";
             }
+
         }
     }
     if (run && run.length > 0) {
@@ -59,7 +60,7 @@ export function generate_replace_string(source: string) {
 
 
 
-    return out.join(",") + " = " + right_side_list.join(", ");
+    return out.join(", ") + " = " + right_side_list.join(", ");
 
 }
 
@@ -67,7 +68,7 @@ export function generate_insert_string(source: string) {
     let element_list = [];
     let run = "";
     for (let ch of source) {
-        if (ch.match(/[_a-zA-Z0-9]/)) {
+        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
             run += ch;
         } else {
             if (run && run.length > 0) {
