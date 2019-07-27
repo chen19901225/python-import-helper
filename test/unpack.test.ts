@@ -28,6 +28,11 @@ suite("unpack Tests", () => {
         let out = generate_insert_string(line);
         assert.equal(out, ".image, this.source.name")
     });
+    test("test source left varaible", () => {
+        let line = "self.image, self.name=this.source";
+        let out = generate_insert_string(line);
+        assert.equal(out, ".image, this.source.name")
+    })
 
 
     test("test source dict", () => {

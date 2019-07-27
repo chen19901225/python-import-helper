@@ -93,28 +93,29 @@ export function generate_insert_string(source: string) {
     let is_first = true;
     for (let ele of element_list) {
         out.push(ele);
+        let new_ele = ele.split(".").pop();
         if (source_var.endsWith("_d") || source_var.endsWith("_dict")) {
             if (!is_first) {
-                right_side_list.push(`${source_var}["${ele}"]`)
+                right_side_list.push(`${source_var}["${new_ele}"]`)
             } else {
                 is_first = false;
-                right_side_list.push(`["${ele}"]`)
+                right_side_list.push(`["${new_ele}"]`)
             }
 
         } else if (source_var.endsWith("_")) {
             if (!is_first) {
-                right_side_list.push(`${source_var}${ele}`)
+                right_side_list.push(`${source_var}${new_ele}`)
             } else {
                 is_first = false;
-                right_side_list.push(`${ele}`)
+                right_side_list.push(`${new_ele}`)
             }
         }
         else {
             if (!is_first) {
-                right_side_list.push(`${source_var}.${ele}`)
+                right_side_list.push(`${source_var}.${new_ele}`)
             } else {
                 is_first = false;
-                right_side_list.push(`.${ele}`)
+                right_side_list.push(`.${new_ele}`)
             }
 
         }
