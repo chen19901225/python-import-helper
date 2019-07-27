@@ -70,6 +70,15 @@ convert `name1, name2=obj_d` -> `name1, name2 = obj_d。。.get('name1'), obj_d.
 
 convert `name1, name2=source_` => `source_name1, source_name2 = name1, name2`
 
+### cqh-python-import-helper.get_left_pattern
+key: alt+h
+
+insert left pattern before "="
+
+### cqh-python-import-helper.get_last_if_varaible
+key: alt + \
+
+
 
 
 
