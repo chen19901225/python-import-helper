@@ -67,23 +67,93 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     return definition;
 }
 
+class LineExtractor {
+    index: number;
+    element_list: Array<string> = [];
+    run: string;
+    constructor(public line: string) {
+        this.index = 0;
+        this.run = "";
+    }
+    loop() {
+        while (1) {
+            if (this.index === this.line.length) {
+                if (this.run && this.run.length > 0) {
+                    this.element_list.push(this.run);
 
-export function get_variable_list(line: string): Array<string> {
-    let element_list: Array<string> = [];
-    let run = "";
-    for (let ch of line) {
-        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
-            run += ch;
-        } else {
-            if (run && run.length > 0) {
-                element_list.push(run)
-                run = "";
+                }
+                return;
             }
+            this.step()
 
         }
     }
-    if (run && run.length > 0) {
-        element_list.push(run);
+    step() {
+        let ch = this.line[this.index];
+        if (ch.match(/[_a-zA-Z0-9.]/)) {
+            this.run += ch;
+            this.index += 1;
+            return;
+        }
+        if (ch === '"' || ch === "'") {
+            this.run += ch;
+            this.index += 1;
+            this.walk_until(ch)
+            return;
+        }
+        if (ch === "[") {
+            this.run += ch;
+            this.index += 1;
+            this.walk_until("]")
+            return;
+        }
+        if (ch == "(") {
+            this.run += ch;
+            this.index += 1;
+            this.walk_until(")")
+            return;
+        }
+        if (this.run && this.run.length > 0) {
+            this.element_list.push(this.run)
+            this.run = ""
+        }
+        this.index += 1;
+
+
     }
-    return element_list
+
+    walk_until(search: string) {
+
+        while (1) {
+            let ch = this.line[this.index];
+            if (ch === undefined) {
+                return;
+            }
+            this.run += ch;
+            this.index += 1;
+
+            if (ch === search) {
+                break;
+            }
+
+        }
+
+
+
+    }
+}
+
+export function get_variable_list(line: string): Array<string> {
+    let obj = new LineExtractor(line);
+    obj.loop()
+    return obj.element_list;
+}
+
+export function getLineIndent(line: string) {
+    let i;
+    for (i = 0; i <= line.length; i++) {
+        if (line[i] != " ") {
+            return i;
+        }
+    }
 }

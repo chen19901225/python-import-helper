@@ -24,18 +24,18 @@ export function parse_function(definition: string): FunctionDef {
 }
 
 export function parse_star_args(param_list: Array<string>): string {
-    for(let param of param_list) {
+    for (let param of param_list) {
         param = param.trim();
-        if(param.startsWith('*') && !param.startsWith('**')) {
+        if (param.startsWith('*') && !param.startsWith('**')) {
             return param.substr(1);
         }
     }
     return ''
 }
 export function parse_star_kwargs(param_list: Array<string>): string {
-    for(let param of param_list) {
+    for (let param of param_list) {
         param = param.trim();
-        if(param.startsWith('**')) {
+        if (param.startsWith('**')) {
             return param.substring(2);
         }
     }
@@ -112,7 +112,7 @@ export function parse_args(params: Array<string>) {
 
     for (let i = 0; i < params.length; i++) {
         let currentParam = params[i];
-        if(currentParam.startsWith('*')) {
+        if (currentParam.startsWith('*')) {
             continue;
         }
         if (currentParam.includes('=')) {
@@ -129,7 +129,7 @@ export function parse_kwargs(params: Array<string>) {
     let other;
     for (let i = 0; i < params.length; i++) {
         let currentParam = params[i];
-        if(currentParam.startsWith('*')) {
+        if (currentParam.startsWith('*')) {
             continue;
         }
         if (!currentParam.includes('=')) {
@@ -143,12 +143,3 @@ export function parse_kwargs(params: Array<string>) {
     return arg_list
 }
 
-let definition = `def hello_world_func(no_type, name: str,
-    kw_no_type,
-    kw_no_type_and_default=10,
-    name2:str = "hello") -> List[str, str]:`;
-
-let function_name = parse_function_name(definition);
-console.log("function_name", function_name);
-let params_lines = parse_parse_params(definition);
-console.log("params_lines:", params_lines);
