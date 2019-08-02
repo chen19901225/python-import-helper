@@ -22,6 +22,7 @@ export function get_function_position_argument(textEditor: vscode.TextEditor, ed
     if (args[0] === "self" || args[0] === "cls") {
         args = args.slice(1);
     }
+    args = [...args, ...parseResult.kwargs];
     let variable;
     if (index >= args.length) {
         variable = args[args.length - 1]
