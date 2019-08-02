@@ -157,3 +157,15 @@ export function getLineIndent(line: string) {
         }
     }
 }
+
+export function extraVariablePart(var_and_function: string) {
+    let final_result = [];
+    for (let ele of var_and_function.split(".")) {
+        if (ele.includes("(") && ele.includes(")")) {
+            break;
+        } else {
+            final_result.push(ele);
+        }
+    }
+    return final_result.join(".")
+}
