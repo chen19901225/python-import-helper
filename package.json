@@ -87,7 +87,7 @@
             },
             {
                 "command": "cqh-python-import-helper.show_var_list",
-                "key": "alt+f8",
+                "key": "alt+8",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],

@@ -40,7 +40,9 @@ export function show_var_list(textEditor: vscode.TextEditor, edit: vscode.TextEd
     }
     vscode.window.showQuickPick(quickPickItem).then(item => {
         if (item) {
-            edit.insert(currentPosition, item.description);
+            let activeEditor = vscode.window.activeTextEditor;
+            activeEditor.insertSnippet(new vscode.SnippetString(item.description), currentPosition)
+            // edit.insert(currentPosition, item.description);
         }
     })
 
