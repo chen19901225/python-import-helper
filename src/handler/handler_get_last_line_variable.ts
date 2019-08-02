@@ -11,7 +11,8 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     for (let i = cursor.line - 1; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         content = content.trim();
-        if (content.includes("=")) {
+        let index = content.indexOf("=")
+        if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
             let vars = get_variable_list(content)
             edit.insert(cursor, extraVariablePart(vars[0]));
             break;
