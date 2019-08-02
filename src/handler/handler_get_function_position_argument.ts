@@ -19,9 +19,9 @@ export function get_function_position_argument(textEditor: vscode.TextEditor, ed
     const definition = try_get_definition(textEditor, edit);
     const parseResult = parse_function(definition);
     let args = parseResult.args;
-    if (args[0] === "self" || args[0] === "cls") {
-        args = args.slice(1);
-    }
+    // if (args[0] === "self" || args[0] === "cls") {
+    //     args = args.slice(1);
+    // }
     args = [...args, ...parseResult.kwargs];
     let variable;
     if (index >= args.length) {
