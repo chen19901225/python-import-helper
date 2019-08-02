@@ -74,6 +74,51 @@
                 "command": "cqh-python-import-helper.get_last_if_variable",
                 "key": "alt+\\",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
+                "key": "ctrl+numpad1",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_2",
+                "key": "ctrl+numpad2",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_3",
+                "key": "ctrl+numpad3",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_4",
+                "key": "ctrl+numpad4",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_5",
+                "key": "ctrl+numpad5",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_6",
+                "key": "ctrl+numpad6",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_7",
+                "key": "ctrl+numpad7",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_8",
+                "key": "ctrl+numpad8",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_9",
+                "key": "ctrl+numpad9",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
@@ -120,6 +165,42 @@
             {
                 "command": "cqh-python-import-helper.get_parent_original_args",
                 "title": "cqh python get parent original args kwargs"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
+                "title": "cqh python get_function_position_argument_1"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_2",
+                "title": "cqh python get_function_position_argument_2"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_3",
+                "title": "cqh python get_function_position_argument_3"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_4",
+                "title": "cqh python get_function_position_argument_4"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_5",
+                "title": "cqh python get_function_position_argument_5"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_6",
+                "title": "cqh python get_function_position_argument_6"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_7",
+                "title": "cqh python get_function_position_argument_7"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_8",
+                "title": "cqh python get_function_position_argument_8"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_9",
+                "title": "cqh python get_function_position_argument_9"
             }
         ],
         "menus": {

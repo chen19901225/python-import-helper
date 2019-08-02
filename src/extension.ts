@@ -11,7 +11,8 @@ import { handler_dict_unpack, handler_dict_prepend } from './handler/handler_dic
 import { handler_dict_get_unpack } from './handler/handler_dict_get_unpack'
 import { get_original_parent_args } from "./handler/handler_get_original_parent_args"
 import { insert_left_pattern } from "./handler/handler_get_left_pattern"
-import {get_last_if_variable} from "./handler/handler_get_last_if_variable"
+import { get_last_if_variable } from "./handler/handler_get_last_if_variable"
+import { get_function_position_argument } from "./handler/handler_get_function_position_argument"
 
 
 // this method is called when your extension is activated
@@ -122,6 +123,14 @@ export function activate(context: vscode.ExtensionContext) {
             get_last_if_variable(textEditor, edit);
         });
     context.subscriptions.push(getLastIfVariablePosable);
+
+
+    for (let i of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+        let getFunctionPositionVaraibleDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_function_position_argument_" + i,
+            (textEditor, edit) => {
+                get_function_position_argument(textEditor, edit, i);
+            })
+    }
 
 }
 
