@@ -77,47 +77,47 @@
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_1",
-                "key": "ctrl+k 1",
+                "key": "alt+1",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_2",
-                "key": "ctrl+k 2",
+                "key": "alt+2",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_3",
-                "key": "ctrl+k 3",
+                "key": "alt+3",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_4",
-                "key": "ctrl+k 4",
+                "key": "alt+4",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_5",
-                "key": "ctrl+k 5",
+                "key": "alt+5",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_6",
-                "key": "ctrl+k 6",
+                "key": "alt+6",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_7",
-                "key": "ctrl+k 7",
+                "key": "alt+7",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_8",
-                "key": "ctrl+k 8",
+                "key": "alt+8",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_9",
-                "key": "ctrl+k 9",
+                "key": "alt+9",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
