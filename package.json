@@ -76,7 +76,7 @@
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
-                "command": "cqh-python-import-helper.get_function_position_argument_9",
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
                 "key": "alt+9",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
