@@ -119,6 +119,11 @@
                 "command": "cqh-python-import-helper.get_function_position_argument_9",
                 "key": "alt+9",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_line_variable",
+                "key": "alt+`",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
@@ -201,6 +206,10 @@
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_9",
                 "title": "cqh python get_function_position_argument_9"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_line_variable",
+                "title": "cqh-python-import-helper.get_last_line_variable"
             }
         ],
         "menus": {

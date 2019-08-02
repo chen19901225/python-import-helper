@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { get_variable_list, extraVariablePart } from "../util"
-
-export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+import { parse_function, FunctionDef } from '../parser';
+import { get_variable_list, extraVariablePart } from '../util'
+export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
@@ -11,21 +11,11 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     for (let i = cursor.line; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         content = content.trim();
-        if (content.startsWith("if ") || content.startsWith("elif ")) {
+        if (content.includes("=")) {
             let vars = get_variable_list(content)
-            if (vars[1] === "not") {
-                edit.insert(cursor, extraVariablePart(vars[2]));
-            } else {
-                edit.insert(cursor, extraVariablePart(vars[1]));
-            }
-
+            edit.insert(cursor, extraVariablePart(vars[0]));
             break;
         }
     }
-
-}
-
-
-export function get_last_if_varible_from_lines(lines: Array<string>) {
 
 }

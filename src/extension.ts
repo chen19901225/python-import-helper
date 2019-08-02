@@ -13,6 +13,7 @@ import { get_original_parent_args } from "./handler/handler_get_original_parent_
 import { insert_left_pattern } from "./handler/handler_get_left_pattern"
 import { get_last_if_variable } from "./handler/handler_get_last_if_variable"
 import { get_function_position_argument } from "./handler/handler_get_function_position_argument"
+import { get_last_line_variable } from "./handler/handler_get_last_line_variable"
 
 
 // this method is called when your extension is activated
@@ -130,7 +131,14 @@ export function activate(context: vscode.ExtensionContext) {
             (textEditor, edit) => {
                 get_function_position_argument(textEditor, edit, i);
             })
+        context.subscriptions.push(getFunctionPositionVaraibleDisposable);
     }
+
+    let getLastLineVariableDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_line_variable",
+        (textEditor, edit) => {
+            get_last_line_variable(textEditor, edit);
+        })
+    context.subscriptions.push(getLastLineVariableDisposable);
 
 }
 
