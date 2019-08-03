@@ -7,9 +7,9 @@ import * as assert from 'assert';
 import * as vscode from 'vscode';
 // import * as parser from '../src/parser';
 import { setFlagsFromString } from 'v8';
-import { get_variable_list } from "../src/util"
+import { get_variable_list, extraVariablePart } from "../src/util"
 // Defines a Mocha test suite to group tests of similar kind together
-suite("util Tests", () => {
+suite("获取var 列表，从当前行", () => {
 
     // Defines a Mocha unit test
     test("single assign", () => {
@@ -28,6 +28,33 @@ suite("util Tests", () => {
         let line = "name,status=(1, 2)";
         let vars = get_variable_list(line);
         assert.deepEqual(vars, ["name", "status", "(1, 2)"])
+    })
+
+
+
+
+});
+
+
+suite("从方法调用里面获取变量", () => {
+
+    // Defines a Mocha unit test
+    test("single assign", () => {
+        let line = "name";
+        let vars = extraVariablePart(line);
+        assert.deepEqual(vars, "name");
+    });
+
+    test("multi assign", () => {
+        let line = "this.name";
+        let vars = extraVariablePart(line);
+        assert.deepEqual(vars, "this.name");
+    })
+
+    test("with method", () => {
+        let line = "this.stream.closed()";
+        let vars = extraVariablePart(line);
+        assert.deepEqual(vars, "this.stream");
     })
 
 

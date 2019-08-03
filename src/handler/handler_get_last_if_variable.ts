@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { get_variable_list } from "../util"
+import { get_variable_list, extraVariablePart } from "../util"
 
 export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
@@ -14,17 +14,14 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         if (content.startsWith("if ") || content.startsWith("elif ")) {
             let vars = get_variable_list(content)
             if (vars[1] === "not") {
-                edit.insert(cursor, vars[2]);
+                edit.insert(cursor, extraVariablePart(vars[2]));
             } else {
-                edit.insert(cursor, vars[1]);
+                edit.insert(cursor, extraVariablePart(vars[1]));
             }
 
             break;
         }
     }
-    // let replaceContent = generate_insert_string(line.text);
-    // // edit.replace(line.range, replaceContent);
-    // edit.insert(cursor, replaceContent);
 
 }
 

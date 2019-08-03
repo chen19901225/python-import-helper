@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.52",
+    "version": "0.0.64",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -74,6 +74,21 @@
                 "command": "cqh-python-import-helper.get_last_if_variable",
                 "key": "alt+\\",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
+                "key": "alt+9",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_line_variable",
+                "key": "alt+`",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.show_var_list",
+                "key": "f4",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
@@ -120,6 +135,18 @@
             {
                 "command": "cqh-python-import-helper.get_parent_original_args",
                 "title": "cqh python get parent original args kwargs"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_9",
+                "title": "cqh python get_function_position_argument_9"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_line_variable",
+                "title": "cqh-python-import-helper.get_last_line_variable"
+            },
+            {
+                "command": "cqh-python-import-helper.show_var_list",
+                "title": "cqh python import helper show var list"
             }
         ],
         "menus": {
@@ -139,10 +166,10 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
+        "@types/mocha": "^2.2.32",
         "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
+        "mocha": "^6.2.0",
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0"
     }
 }
