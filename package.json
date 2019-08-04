@@ -77,6 +77,46 @@
             },
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_1",
+                "key": "alt+1",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_2",
+                "key": "alt+2",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_3",
+                "key": "alt+3",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_4",
+                "key": "alt+4",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_5",
+                "key": "alt+5",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_6",
+                "key": "alt+6",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_7",
+                "key": "alt+7",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_8",
+                "key": "alt+8",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
                 "key": "alt+9",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
@@ -147,6 +187,42 @@
             {
                 "command": "cqh-python-import-helper.show_var_list",
                 "title": "cqh python import helper show var list"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_1",
+                "title": "cqh python get_function_position_argument_1"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_2",
+                "title": "cqh python get_function_position_argument_2"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_3",
+                "title": "cqh python get_function_position_argument_3"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_4",
+                "title": "cqh python get_function_position_argument_4"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_5",
+                "title": "cqh python get_function_position_argument_5"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_6",
+                "title": "cqh python get_function_position_argument_6"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_7",
+                "title": "cqh python get_function_position_argument_7"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_8",
+                "title": "cqh python get_function_position_argument_8"
+            },
+            {
+                "command": "cqh-python-import-helper.get_function_position_argument_9",
+                "title": "cqh python get_function_position_argument_9"
             }
         ],
         "menus": {
