@@ -38,13 +38,18 @@ export function show_var_list(textEditor: vscode.TextEditor, edit: vscode.TextEd
         })
         i += 1;
     }
-    vscode.window.showQuickPick(quickPickItem).then(item => {
-        if (item) {
-            let activeEditor = vscode.window.activeTextEditor;
-            activeEditor.insertSnippet(new vscode.SnippetString(item.description), currentPosition)
-            // edit.insert(currentPosition, item.description);
-        }
-    })
+    if (quickPickItem.length == 1) {
+        edit.insert(currentPosition, quickPickItem[0].description);
+    } else {
+        vscode.window.showQuickPick(quickPickItem).then(item => {
+            if (item) {
+                let activeEditor = vscode.window.activeTextEditor;
+                activeEditor.insertSnippet(new vscode.SnippetString(item.description), currentPosition)
+                // edit.insert(currentPosition, item.description);
+            }
+        })
+
+    }
 
 
     //const insert_content = generate_apply_statement(parseResult, currentLineIndent);
