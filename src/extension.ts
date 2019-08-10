@@ -15,7 +15,7 @@ import { get_last_if_variable } from "./handler/handler_get_last_if_variable"
 import { get_function_position_argument } from "./handler/handler_get_function_position_argument"
 import { get_last_line_variable } from "./handler/handler_get_last_line_variable"
 import { show_var_list } from "./handler/handler_show_var_list"
-
+import { file_name } from "./handler/handler_file_name"
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -146,6 +146,12 @@ export function activate(context: vscode.ExtensionContext) {
             show_var_list(textEditr, edit);
         });
     context.subscriptions.push(showVarListDisposable);
+
+    let getFileNameDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_current_filename",
+        (textEdit, edit) => {
+            file_name(textEdit, edit);
+        })
+    context.subscriptions.push(getFileNameDisposable);
 
 }
 

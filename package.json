@@ -129,6 +129,11 @@
                 "command": "cqh-python-import-helper.show_var_list",
                 "key": "f4",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_current_filename",
+                "key": "alt+f9",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
@@ -223,6 +228,10 @@
             {
                 "command": "cqh-python-import-helper.get_function_position_argument_9",
                 "title": "cqh python get_function_position_argument_9"
+            },
+            {
+                "command": "cqh-python-import-helper.get_current_filename",
+                "title": "cqh-python get current filename"
             }
         ],
         "menus": {
