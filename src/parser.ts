@@ -50,7 +50,7 @@ export function parse_function_name(definition: string) {
     return match[1];
 }
 export function parse_parse_params(definition: string) {
-    let match = definition.match(/def\s*(\w+)\s*\(([\s\S]+)\)\s*(->\s*[ \w\[\],]*)?\s*:/);
+    let match = definition.match(/def\s*(\w+)\s*\(([\s\S]*)\)\s*(->\s*[ \w\[\],]*)?\s*:/);
     if (!match) {
         throw Error(`cannot match ${definition}`);
     }

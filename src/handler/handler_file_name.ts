@@ -31,15 +31,7 @@ export function file_name(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             // edit.insert(currentPosition, item.description);
         }
     })
-    // let i = 1;
-    // for (let name of args) {
-    //     quickPickItem.push({
-    //         'label': `${i}.${name}`,
-    //         'description': name
-    //     })
-    //     i += 1;
-    // }
-    // console.log('docuement:', document);
+
 
 }
 
