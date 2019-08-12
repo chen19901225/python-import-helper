@@ -15,7 +15,23 @@ import { setFlagsFromString } from 'v8';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("parser Tests", () => {
+    test("test with no args", () => {
+        let definition = `def hello_world():`;
+        let func_name = parser.parse_function_name(definition);
+        assert.equal(func_name, "hello_world")
 
+        let param_lines = parser.parse_parse_params(definition);
+        assert.deepEqual(param_lines, [
+
+        ])
+        let arg_list = parser.parse_args(param_lines);
+        assert.deepEqual(arg_list, [
+
+        ])
+        let kwargs_list = parser.parse_kwargs(param_lines);
+        assert.deepEqual(kwargs_list, []);
+
+    })
     // Defines a Mocha unit test
     test("test hello_world_func", () => {
         let definition = `def hello_world_func(no_type, name: str,
