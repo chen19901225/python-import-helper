@@ -32,6 +32,33 @@ suite("parser Tests", () => {
         assert.deepEqual(kwargs_list, []);
 
     })
+    test("test hello_world_func with imported return type", () => {
+        let definition = `def hello_world_func(no_type, name: str,
+            kw_no_type,
+            kw_no_type_and_default=10,
+            name2:str = "hello") -> typing.List[str, str]:`;
+
+        let function_name = parser.parse_function_name(definition);
+        assert.equal(function_name, "hello_world_func");
+        let param_lines = parser.parse_parse_params(definition);
+        assert.deepEqual(param_lines, [
+            "no_type",
+            "name: str",
+            "kw_no_type",
+            "kw_no_type_and_default=10",
+            'name2:str = "hello"'
+        ])
+        let arg_list = parser.parse_args(param_lines);
+        assert.deepEqual(arg_list, [
+            "no_type",
+            "name",
+            "kw_no_type"
+        ])
+        let kwargs_list = parser.parse_kwargs(param_lines);
+        assert.deepEqual(kwargs_list, ['kw_no_type_and_default', 'name2']);
+        assert.equal(parser.parse_star_args(param_lines), '');
+        assert.equal(parser.parse_star_kwargs(param_lines), '');
+    })
     // Defines a Mocha unit test
     test("test hello_world_func", () => {
         let definition = `def hello_world_func(no_type, name: str,
