@@ -116,6 +116,11 @@ suite("parser Tests", () => {
         assert.equal(parser.parse_star_args(param_lines), '');
         assert.equal(parser.parse_star_kwargs(param_lines), 'kwargs');
     });
+    test("test one with return type", () => {
+        let definition = "def db_re_stop_app(self) -> DWReStopApp:";
+        let function_name = parser.parse_function_name(definition);
+        assert.equal(function_name, "db_re_stop_app");
+    })
     test("test test_star_args", () => {
         let definition = `def test_star_args(self, *args, **kwargs):`;
 
