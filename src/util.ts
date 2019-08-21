@@ -43,7 +43,7 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
     let defEndLineNo = -1;
     for (let i = defLineNo; i <= currentPosition.line; i++) {
         let iterLine = document.lineAt(i);
-        if (iterLine.text.match(/\)(->\s*[ \w,\[\]\.]*\s*)?:\s*$/)) {
+        if (iterLine.text.match(/\)(\s*->\s*[ \w,\[\]\.]*\s*)?:\s*$/)) {
             defEndLineNo = i;
             break;
         }
