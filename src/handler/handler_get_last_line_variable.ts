@@ -13,7 +13,7 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let line = document.lineAt(cursor.line);
     let beginLineNo = Math.max(cursor.line - 10, 0)
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
-        new vscode.Position(cursor.line, line.range.end.character))
+        new vscode.Position(cursor.line, 0))
     let lines = document.getText(range).split(/\r?\n/);
     let [found, vars] = find_last_vars(lines);
     if (found) {
