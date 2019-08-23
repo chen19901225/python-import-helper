@@ -10,12 +10,18 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     edit.insert(cursor, replaceContent);
 }
 export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+    // 插入前缀
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let replaceContent = generate_replace_string(line.text);
     let newPosition = new vscode.Position(cursor.line, line.range.start.character + replaceContent.length);
-    edit.replace(new vscode.Range(new vscode.Position(cursor.line, line.firstNonWhitespaceCharacterIndex), line.range.end), replaceContent);
+    textEditor.edit((builder) => {
+        builder.replace(new vscode.Range(new vscode.Position(cursor.line, line.firstNonWhitespaceCharacterIndex), line.range.end), replaceContent);
+    }).then((success) => {
+        textEditor.selection = new vscode.Selection(newPosition, newPosition);
+    })
+    
     textEditor.selection = new vscode.Selection(newPosition, newPosition);
     // edit.replace(line.range, replaceContent);
 }
@@ -44,9 +50,6 @@ export function generate_replace_string(source: string) {
     }
     let out = [];
     let prepend_ele: string = element_list.pop();
-    if(!prepend_ele.endsWith('_')) {
-        prepend_ele += "_";
-    }
     let right_side_list = []
     for (let ele of element_list) {
         ele = ele.trim();
