@@ -42,7 +42,7 @@ function find_last_vars(lines: Array<string>): [boolean, string] {
 
         if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
             // 忽略 a== b 或者 a!=b 这种情况
-            let vars = content.split("=")[0]
+            let vars = content.split("=")[0].trim();
             return [true, vars]
         }
     }
