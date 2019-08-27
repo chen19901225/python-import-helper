@@ -13,7 +13,7 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let line = document.lineAt(cursor.line);
     let beginLineNo = Math.max(cursor.line - 10, 0)
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
-        new vscode.Position(cursor.line, line.range.end.character))
+        new vscode.Position(cursor.line, 0))
     let lines = document.getText(range).split(/\r?\n/);
     let [found, vars] = find_last_vars(lines);
     if (found) {
@@ -42,7 +42,7 @@ function find_last_vars(lines: Array<string>): [boolean, string] {
 
         if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
             // 忽略 a== b 或者 a!=b 这种情况
-            let vars = content.split("=")[0]
+            let vars = content.split("=")[0].trim();
             return [true, vars]
         }
     }

@@ -1,6 +1,19 @@
 import * as vscode from "vscode";
 import { get_variable_list, extraVariablePart } from "../util"
 
+export function _extraVar(var_str: string) {
+    let converted;
+    if (var_str.startsWith("isinstance(")) {
+        converted = var_str.substring("isinstance(".length, var_str.indexOf(","));
+    }
+    else {
+        converted = extraVariablePart(var_str)
+    }
+    return converted
+
+}
+
+
 export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
@@ -14,9 +27,9 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         if (content.startsWith("if ") || content.startsWith("elif ")) {
             let vars = get_variable_list(content)
             if (vars[1] === "not") {
-                edit.insert(cursor, extraVariablePart(vars[2]));
+                edit.insert(cursor, _extraVar(vars[2]));
             } else {
-                edit.insert(cursor, extraVariablePart(vars[1]));
+                edit.insert(cursor, _extraVar(vars[1]));
             }
 
             break;
