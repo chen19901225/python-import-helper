@@ -2,10 +2,11 @@ import * as vscode from "vscode";
 import { get_variable_list, extraVariablePart } from "../util"
 
 export function _extraVar(var_str: string) {
-    let converted ;
+    let converted;
     if (var_str.startsWith("isinstance(")) {
         converted = var_str.substring("isinstance(".length, var_str.indexOf(","));
-    } else {
+    }
+    else {
         converted = extraVariablePart(var_str)
     }
     return converted
