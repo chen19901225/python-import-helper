@@ -34,6 +34,12 @@ suite("unpack Tests", () => {
         assert.equal(out, ".image, this.source.name")
     })
 
+    test("test left with brace sqare", () => {
+        let line = "item['name'], item['age']=self.request";
+        let out = generate_insert_string(line)
+        assert.equal(out, '["name"], self.request["age"]')
+    })
+
 
     test("test source dict", () => {
         let line = "image, name=source_d";
