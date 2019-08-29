@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { error } from "util";
+import { get_variable_list } from "../util";
 
 export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
@@ -21,7 +22,7 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
     }).then((success) => {
         textEditor.selection = new vscode.Selection(newPosition, newPosition);
     })
-    
+
     textEditor.selection = new vscode.Selection(newPosition, newPosition);
     // edit.replace(line.range, replaceContent);
 }
@@ -29,20 +30,8 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
 export function generate_replace_string(source: string) {
     let element_list: Array<string> = [];
     let run = "";
-    for (let ch of source) {
-        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
-            run += ch;
-        } else {
-            if (run && run.length > 0) {
-                element_list.push(run)
-                run = "";
-            }
+    element_list = get_variable_list(source);
 
-        }
-    }
-    if (run && run.length > 0) {
-        element_list.push(run);
-    }
     if (element_list.length == 0) {
         console.error("element_list is null");
         vscode.window.showErrorMessage("element_list is zero length");
@@ -73,55 +62,63 @@ export function generate_replace_string(source: string) {
 export function generate_insert_string(source: string) {
     let element_list = [];
     let run = "";
-    for (let ch of source) {
-        if (ch.match(/[_a-zA-Z0-9.\[\]"'\(\)]/)) {
-            run += ch;
-        } else {
-            if (run && run.length > 0) {
-                element_list.push(run)
-                run = "";
-            }
-        }
-    }
-    if (run && run.length > 0) {
-        element_list.push(run);
-    }
-    if (element_list.length == 0) {
-        console.error("element_list is null");
-        return "";
-    }
+
+    // 第一步分割变量
+    element_list = get_variable_list(source);
+
     let out = [];
-    let source_var: string = element_list.pop();
+    let source_var: string = element_list.pop(); // 右边第一个变量
     let right_side_list = []
     let is_first = true;
+    let handle_dict = (source_var, new_ele, is_first) => {
+        if (is_first) {
+            right_side_list.push(`["${new_ele}"]`);
+            return false;
+        } else {
+            right_side_list.push(`${source_var}["${new_ele}"]`)
+            return false;
+        }
+    }
+    let handle_instance = (source_var, new_ele, is_first) => {
+        if (!is_first) {
+            right_side_list.push(`${source_var}.${new_ele}`)
+            return false;
+        } else {
+            // is_first = false;
+            right_side_list.push(`.${new_ele}`)
+            return !is_first
+        }
+    }
     for (let ele of element_list) {
         out.push(ele);
-        let new_ele = ele.split(".").pop();
-        if (source_var.endsWith("_d") || source_var.endsWith("_dict")) {
-            if (!is_first) {
-                right_side_list.push(`${source_var}["${new_ele}"]`)
-            } else {
-                is_first = false;
-                right_side_list.push(`["${new_ele}"]`)
-            }
-
-        } else if (source_var.endsWith("_")) {
-            if (!is_first) {
-                right_side_list.push(`${source_var}${new_ele}`)
-            } else {
-                is_first = false;
-                right_side_list.push(`${new_ele}`)
-            }
+        let new_ele: string = ele;
+        let current_handle = handle_instance;
+        if (new_ele.includes("[") && new_ele.includes(']')) {
+            new_ele = new_ele.split('[')[1];
+            new_ele = new_ele.slice(0, new_ele.length - 1);
+            new_ele = new_ele.slice(1, new_ele.length - 1);
+            current_handle = handle_dict;
+        } else if (new_ele.includes(".")) {
+            new_ele = new_ele.split(".").pop();
+            current_handle = handle_instance
+        } else if (source_var.endsWith("_d") || source_var.endsWith("_dict")) {
+            current_handle = handle_dict;
         }
-        else {
-            if (!is_first) {
-                right_side_list.push(`${source_var}.${new_ele}`)
-            } else {
-                is_first = false;
-                right_side_list.push(`.${new_ele}`)
-            }
+        is_first = current_handle(source_var, new_ele, is_first);
 
-        }
+        // if () { // dict添加
+        //     if (!is_first) {
+        //         right_side_list.push(`${source_var}["${new_ele}"]`)
+        //     } else {
+        //         is_first = false;
+        //         right_side_list.push(`["${new_ele}"]`)
+        //     }
+
+        // }
+        // else {
+
+
+        // }
     }
     return right_side_list.join(", ")
 }
