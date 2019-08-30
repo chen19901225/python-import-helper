@@ -31,7 +31,7 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
         }
         currentMinIndent = Math.min(warkLineIndex, currentMinIndent);
         let contentWithoutIndent = warkLine.text.trim();
-        if (contentWithoutIndent.startsWith("def ")) {
+        if (contentWithoutIndent.startsWith("def ") || contentWithoutIndent.startsWith("async def")) {
             defLineNo = i;
             break;
         }
