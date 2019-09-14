@@ -24,7 +24,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     for (let i = cursor.line; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         content = content.trim();
-        if (content.startsWith("if ") || content.startsWith("elif ")) {
+        if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
             let vars = get_variable_list(content)
             if (vars[1] === "not") {
                 edit.insert(cursor, _extraVar(vars[2]));
