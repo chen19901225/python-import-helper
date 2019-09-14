@@ -32,6 +32,23 @@ suite("parser Tests", () => {
         assert.deepEqual(kwargs_list, []);
 
     })
+    test("test with async ", () => {
+        let definition = `async def hello_world():`;
+        let func_name = parser.parse_function_name(definition);
+        assert.equal(func_name, "hello_world")
+
+        let param_lines = parser.parse_parse_params(definition);
+        assert.deepEqual(param_lines, [
+
+        ])
+        let arg_list = parser.parse_args(param_lines);
+        assert.deepEqual(arg_list, [
+
+        ])
+        let kwargs_list = parser.parse_kwargs(param_lines);
+        assert.deepEqual(kwargs_list, []);
+
+    });
     test("test hello_world_func with imported return type", () => {
         let definition = `def hello_world_func(no_type, name: str,
             kw_no_type,

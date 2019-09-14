@@ -43,14 +43,14 @@ export function parse_star_kwargs(param_list: Array<string>): string {
 }
 
 export function parse_function_name(definition: string) {
-    let match = definition.match(/def \s*(\w+)\s*\(/);
+    let match = definition.match(/(?:async\s*)?def \s*(\w+)\s*\(/);
     if (!match) {
         return "";
     }
     return match[1];
 }
 export function parse_parse_params(definition: string) {
-    let match = definition.match(/def\s*(\w+)\s*\(([\s\S]*)\)\s*(->\s*[ \w\[\],.]*)?\s*:/);
+    let match = definition.match(/(?:async\s*)?def\s*(\w+)\s*\(([\s\S]*)\)\s*(->\s*[ \w\[\],.]*)?\s*:/);
     if (!match) {
         throw Error(`cannot match ${definition}`);
     }
