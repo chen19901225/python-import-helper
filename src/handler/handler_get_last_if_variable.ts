@@ -33,7 +33,12 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
             }
 
             break;
+        } else if(content.startsWith("# generated_by_dict_unpack:")) {
+            let last_var = content.split(":").pop()
+            last_var = last_var.trim()
+            edit.insert(cursor, last_var)
         }
+
     }
 
 }

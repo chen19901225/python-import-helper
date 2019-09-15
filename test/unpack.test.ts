@@ -21,6 +21,7 @@ suite("unpack Tests alt + i", () => {
         let line = "image, name=source";
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
+            "# generated_by_dict_unpack: source",
             "image = source.image",
             "name = source.name"
         ])
@@ -30,6 +31,7 @@ suite("unpack Tests alt + i", () => {
         let line = "image, name=this.source";
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
+            "# generated_by_dict_unpack: this.source",
             "image = this.source.image",
             "name = this.source.name"
         ])
@@ -38,6 +40,7 @@ suite("unpack Tests alt + i", () => {
         let line = "self.image, self.name=this.source";
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
+            "# generated_by_dict_unpack: this.source",
             "self.image = this.source.image",
             "self.name = this.source.name"
         ])
@@ -47,6 +50,7 @@ suite("unpack Tests alt + i", () => {
         let line = "item['name'], item['age']=self.request";
         let out = generate_insert_string(line)
         assert.deepEqual(out, [
+            "# generated_by_dict_unpack: self.request",
             "item['name'] = self.request[\"name\"]",
             "item['age'] = self.request[\"age\"]"
         ])
@@ -57,6 +61,7 @@ suite("unpack Tests alt + i", () => {
         let line = "image, name=source_d";
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
+            "# generated_by_dict_unpack: source_d",
             'image = source_d["image"]',
             'name = source_d["name"]'
         ])
@@ -66,6 +71,7 @@ suite("unpack Tests alt + i", () => {
         let line = "image, name=source_d";
         let out = generate_insert_string(line, 2);
         assert.deepEqual(out, [
+            "  # generated_by_dict_unpack: source_d",
             '  image = source_d["image"]',
             '  name = source_d["name"]'
         ])

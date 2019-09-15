@@ -123,7 +123,7 @@ export function generate_insert_string(source: string,
         is_first = current_handle(source_var, new_ele, is_first);
     }
     // let final_str =  right_side_list.join(", \\\n")
-    let out_list = [];
+    let out_list = [`${indent_string}# generated_by_dict_unpack: ${source_var}`];
     for (let i = 0; i < left_side_list.length; i++) {
         let left_part = left_side_list[i];
         let right_part = right_side_list[i];
