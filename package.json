@@ -132,7 +132,7 @@
             },
             {
                 "command": "cqh-python-import-helper.insert_self",
-                "key": "f4"
+                "key": "alt+m"
             },
             {
                 "command": "cqh-python-import-helper.get_left_last_part",
