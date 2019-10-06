@@ -16,7 +16,9 @@ import { get_function_position_argument } from "./handler/handler_get_function_p
 import { get_last_line_variable } from "./handler/handler_get_last_line_variable"
 import { show_var_list } from "./handler/handler_show_var_list"
 import { file_name } from "./handler/handler_file_name"
-
+import {insert_self} from "./handler/handler_insert_self"
+import {get_last_used_variable} from "./handler/handler_get_last_used_variable"
+import {get_left_last_part} from "./handler/handler_get_left_last_part"
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -152,6 +154,27 @@ export function activate(context: vscode.ExtensionContext) {
             file_name(textEdit, edit);
         })
     context.subscriptions.push(getFileNameDisposable);
+
+    // insert self
+    let insertSelfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_self", 
+    (textEdit, edit) => {
+        insert_self(textEdit, edit);
+    })
+    context.subscriptions.push(insertSelfDisposable);
+
+    // get last used var
+    let getLastUsedVariableDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_used_variable",
+    (textEdit, edit) => {
+        get_last_used_variable(textEdit, edit);
+    })
+    context.subscriptions.push(getLastUsedVariableDisposable)
+
+    // get left last part 
+    let getLeftLastPart = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_left_last_part",
+    (textEdit, edit) => {
+        get_left_last_part(textEdit, edit);
+    })
+    context.subscriptions.push(getLeftLastPart);
 
 }
 

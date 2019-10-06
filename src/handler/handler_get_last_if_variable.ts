@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
 import { get_variable_list, extraVariablePart } from "../util"
+import {update_last_used_variable} from './handler_get_last_used_variable'
+import { insert_self } from "./handler_insert_self";
 
 export function _extraVar(var_str: string) {
     let converted;
@@ -11,6 +13,10 @@ export function _extraVar(var_str: string) {
     }
     return converted
 
+}
+function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: string) {
+    update_last_used_variable(context);
+    edit.insert(cusor, context);
 }
 
 
@@ -27,16 +33,17 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
             let vars = get_variable_list(content)
             if (vars[1] === "not") {
-                edit.insert(cursor, _extraVar(vars[2]));
+
+                _insert(edit, cursor, _extraVar(vars[2]));
             } else {
-                edit.insert(cursor, _extraVar(vars[1]));
+                _insert(edit, cursor, _extraVar(vars[1]));
             }
 
             break;
         } else if(content.startsWith("# generated_by_dict_unpack:")) {
             let last_var = content.split(":").pop()
             last_var = last_var.trim()
-            edit.insert(cursor, last_var)
+            _insert(edit, cursor, last_var)
         }
 
     }
