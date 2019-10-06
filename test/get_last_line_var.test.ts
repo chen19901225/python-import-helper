@@ -8,8 +8,6 @@ import * as assert from 'assert';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
-import * as vscode from 'vscode';
-import * as myExtension from '../src/extension';
 import { setFlagsFromString } from 'v8';
 import {find_last_vars} from '../src/handler/handler_get_last_line_variable'
 // Defines a Mocha test suite to group tests of similar kind together
