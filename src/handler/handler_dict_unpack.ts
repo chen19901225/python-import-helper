@@ -6,9 +6,28 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
-    let replaceContent = generate_insert_string(line.text);
+    let indent = line.firstNonWhitespaceCharacterIndex;
+    let replace_list = generate_insert_string(line.text, indent);
+    let replaceContent = replace_list.join('\n');
+    let endLine = cursor.line + replace_list.length - 1;
+    let endCol = replace_list[replace_list.length - 1].length - 1;
+    let newPosition = new vscode.Position(endLine,
+        endCol);
+
+    // 现在这个也是replaced string
+    //理由就是太长的话，需要格式化
+    // 但是这样有个问题，replace之后的鼠标在哪里呢？
+    // 算了还是insert吧
     // edit.replace(line.range, replaceContent);
-    edit.insert(cursor, replaceContent);
+    // edit.insert(cursor, replaceContent);
+
+    textEditor.edit(builder => {
+        builder.replace(line.range, replaceContent)
+
+
+    }).then(success => {
+        textEditor.selection = new vscode.Selection(newPosition, newPosition);
+    })
 }
 export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     // 插入前缀
@@ -59,7 +78,8 @@ export function generate_replace_string(source: string) {
 
 }
 
-export function generate_insert_string(source: string) {
+export function generate_insert_string(source: string,
+    indent: number = 0) {
     let element_list = [];
     let run = "";
 
@@ -69,28 +89,24 @@ export function generate_insert_string(source: string) {
     let out = [];
     let source_var: string = element_list.pop(); // 右边第一个变量
     let right_side_list = []
-    let is_first = true;
+    let left_side_list = []
+    let is_first = false;
+    let indent_string = ' '.repeat(indent);
     let handle_dict = (source_var, new_ele, is_first) => {
-        if (is_first) {
-            right_side_list.push(`["${new_ele}"]`);
-            return false;
-        } else {
-            right_side_list.push(`${source_var}["${new_ele}"]`)
-            return false;
-        }
+        right_side_list.push(`${source_var}["${new_ele}"]`)
+        return false;
     }
     let handle_instance = (source_var, new_ele, is_first) => {
-        if (!is_first) {
-            right_side_list.push(`${source_var}.${new_ele}`)
-            return false;
-        } else {
-            // is_first = false;
-            right_side_list.push(`.${new_ele}`)
-            return !is_first
-        }
+        right_side_list.push(`${source_var}.${new_ele}`)
+        return false;
+
     }
     for (let ele of element_list) {
-        out.push(ele);
+        // out.push(ele);
+        if (ele === '=') {
+            break;
+        }
+        left_side_list.push(ele.trim());
         let new_ele: string = ele;
         let current_handle = handle_instance;
         if (new_ele.includes("[") && new_ele.includes(']')) {
@@ -105,20 +121,15 @@ export function generate_insert_string(source: string) {
             current_handle = handle_dict;
         }
         is_first = current_handle(source_var, new_ele, is_first);
-
-        // if () { // dict添加
-        //     if (!is_first) {
-        //         right_side_list.push(`${source_var}["${new_ele}"]`)
-        //     } else {
-        //         is_first = false;
-        //         right_side_list.push(`["${new_ele}"]`)
-        //     }
-
-        // }
-        // else {
-
-
-        // }
     }
-    return right_side_list.join(", ")
+    // let final_str =  right_side_list.join(", \\\n")
+    let out_list = [`${indent_string}# generated_by_dict_unpack: ${source_var}`];
+    for (let i = 0; i < left_side_list.length; i++) {
+        let left_part = left_side_list[i];
+        let right_part = right_side_list[i];
+        out_list.push(`${indent_string}${left_part} = ${right_part}`);
+    }
+    return out_list;
+    // return final_str
+
 }

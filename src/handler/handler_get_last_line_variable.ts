@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { parse_function, FunctionDef } from '../parser';
+import {update_last_used_variable} from './handler_get_last_used_variable'
 import { get_variable_list, extraVariablePart, getLineIndent } from '../util'
 /**
  * 
@@ -38,13 +39,14 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let lines = document.getText(range).split(/\r?\n/);
     let [found, vars] = find_last_vars(lines, currentIndent);
     if (found) {
+        update_last_used_variable(vars)
         edit.insert(cursor, vars);
     }
     
 
 }
 
-function find_last_vars(lines: Array<string>, indent: number): [boolean, string] {
+export function find_last_vars(lines: Array<string>, indent: number): [boolean, string] {
     for (let i = lines.length - 1; i >= 0; i--) {
         let content = lines[i];
         let lineIndent = getLineIndent(content);
@@ -52,6 +54,9 @@ function find_last_vars(lines: Array<string>, indent: number): [boolean, string]
             continue;
         }
         content = content.trim();
+        if(content[0] === '#') { // 注释
+            continue;
+        }
         let index = content.indexOf("=")
 
         if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {

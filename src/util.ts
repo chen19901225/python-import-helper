@@ -169,3 +169,14 @@ export function extraVariablePart(var_and_function: string) {
     }
     return final_result.join(".")
 }
+
+export function removeVarType(var_and_type: string):string {
+    // export function format(text: string): string {
+        
+    // }
+    if (var_and_type.includes(":")) {
+        return var_and_type.split(":").shift();
+    } else {
+        return var_and_type;
+    }
+}

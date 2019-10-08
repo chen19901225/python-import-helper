@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.79",
+    "version": "0.0.83",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -126,8 +126,22 @@
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
+                "command": "cqh-python-import-helper.get_last_used_variable",
+                "key": "alt+p",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.insert_self",
+                "key": "alt+m"
+            },
+            {
+                "command": "cqh-python-import-helper.get_left_last_part",
+                "key": "alt+b",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
                 "command": "cqh-python-import-helper.show_var_list",
-                "key": "f4",
+                "key": "alt+n",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
@@ -232,6 +246,18 @@
             {
                 "command": "cqh-python-import-helper.get_current_filename",
                 "title": "cqh-python get current filename"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_used_variable",
+                "title": "cqh python get last ued variable"
+            },
+            {
+                "command": "cqh-python-import-helper.insert_self",
+                "title": "insert self"
+            },
+            {
+                "command": "cqh-python-import-helper.get_left_last_part",
+                "title": "cqh python get  left last parts"
             }
         ],
         "menus": {
