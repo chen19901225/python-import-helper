@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { parse_function, FunctionDef } from '../parser';
 import {update_last_used_variable} from './handler_get_last_used_variable'
-import { get_variable_list, extraVariablePart, getLineIndent } from '../util'
+import { get_variable_list, extraVariablePart, getLineIndent, removeVarType } from '../util'
 /**
  * 
  * 支持的功能: 
@@ -62,7 +62,7 @@ export function find_last_vars(lines: Array<string>, indent: number): [boolean, 
         if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
             // 忽略 a== b 或者 a!=b 这种情况
             let vars = content.split("=")[0].trim();
-            return [true, vars]
+            return [true, removeVarType(vars)]
         }
     }
 

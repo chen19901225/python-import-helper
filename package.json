@@ -148,9 +148,19 @@
                 "command": "cqh-python-import-helper.get_current_filename",
                 "key": "alt+f9",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.move_op_end",
+                "key": "alt+.",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.move_op_end",
+                "title": "cqh-python-import-helper move op end"
+            },
             {
                 "command": "cqh-python-import-helper.get_left_pattern",
                 "title": "cqh-python-import-helper.get_left_pattern"
