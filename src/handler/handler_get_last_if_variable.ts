@@ -27,7 +27,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     let beginLineNo = Math.max(cursor.line - 10, 0)
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
         new vscode.Position(cursor.line, line.range.end.character))
-    for (let i = cursor.line; i >= beginLineNo; i--) {
+    for (let i = cursor.line - 1; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         content = content.trim();
         if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
