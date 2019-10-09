@@ -35,7 +35,7 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let replaceContent = generate_replace_string(line.text);
-    let newPosition = new vscode.Position(cursor.line, line.range.start.character + replaceContent.length);
+    let newPosition = new vscode.Position(cursor.line, line.range.start.character + replaceContent.length + 1);
     textEditor.edit((builder) => {
         builder.replace(new vscode.Range(new vscode.Position(cursor.line, line.firstNonWhitespaceCharacterIndex), line.range.end), replaceContent);
     }).then((success) => {
