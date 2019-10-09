@@ -42,7 +42,7 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
         textEditor.selection = new vscode.Selection(newPosition, newPosition);
     })
 
-    textEditor.selection = new vscode.Selection(newPosition, newPosition);
+    // textEditor.selection = new vscode.Selection(newPosition, newPosition);
     // edit.replace(line.range, replaceContent);
 }
 
