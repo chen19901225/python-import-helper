@@ -10,7 +10,7 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     let replace_list = generate_insert_string(line.text, indent);
     let replaceContent = replace_list.join('\n');
     let endLine = cursor.line + replace_list.length - 1;
-    let endCol = replace_list[replace_list.length - 1].length - 1;
+    let endCol = replace_list[replace_list.length - 1].length;
     let newPosition = new vscode.Position(endLine,
         endCol);
 
