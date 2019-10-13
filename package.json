@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.87",
+    "version": "0.0.88",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
