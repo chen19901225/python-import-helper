@@ -26,10 +26,12 @@ export function try_get_definition(textEditor: vscode.TextEditor, edit: vscode.T
         }
         let warkLineIndex = warkLine.firstNonWhitespaceCharacterIndex;
 
-        if (warkLine.firstNonWhitespaceCharacterIndex >= currentMinIndent) {
+        if (warkLineIndex >= currentMinIndent) {
             continue;
         }
-        currentMinIndent = Math.min(warkLineIndex, currentMinIndent);
+        // if (warkLineIndex)
+        // 为什么要min呢？
+        // currentMinIndent = Math.min(warkLineIndex, currentMinIndent);
         let contentWithoutIndent = warkLine.text.trim();
         if (contentWithoutIndent.startsWith("def ") || contentWithoutIndent.startsWith("async def")) {
             defLineNo = i;
@@ -170,9 +172,9 @@ export function extraVariablePart(var_and_function: string) {
     return final_result.join(".")
 }
 
-export function removeVarType(var_and_type: string):string {
+export function removeVarType(var_and_type: string): string {
     // export function format(text: string): string {
-        
+
     // }
     if (var_and_type.includes(":")) {
         return var_and_type.split(":").shift();
