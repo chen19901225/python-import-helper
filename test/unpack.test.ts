@@ -79,8 +79,8 @@ suite("unpack Tests alt + i", () => {
 
     test("test source prepend", () => {
         let line = "image, name=source_";
-        let out = generate_replace_string(line);
-        assert.equal(out, 'source_image, source_name = image, name')
+        let out = generate_replace_string(line, "source_");
+        assert.equal(out, 'source_image, source_name = source_')
     })
 
 

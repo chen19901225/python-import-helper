@@ -34,22 +34,38 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
-    let replaceContent = generate_replace_string(line.text);
-    let newPosition = new vscode.Position(cursor.line, line.range.start.character + replaceContent.length + 1);
-    textEditor.edit((builder) => {
-        builder.replace(new vscode.Range(new vscode.Position(cursor.line, line.firstNonWhitespaceCharacterIndex), line.range.end), replaceContent);
-    }).then((success) => {
-        textEditor.selection = new vscode.Selection(newPosition, newPosition);
+    vscode.window.showInputBox({
+        password: false, 
+        placeHolder: "prefix",
+        prompt: "请输入prefix",
+
+    }).then((msg) => {
+        if(!msg) {
+            return;
+        }
+        msg = msg.trim();
+        if(!msg) {
+            return;
+        }
+        let replaceContent = generate_replace_string(line.text, msg);
+        let newPosition = new vscode.Position(cursor.line, line.range.start.character + replaceContent.length + 1);
+        textEditor.edit((builder) => {
+            builder.replace(new vscode.Range(new vscode.Position(cursor.line, line.firstNonWhitespaceCharacterIndex), line.range.end), replaceContent);
+        }).then((success) => {
+            textEditor.selection = new vscode.Selection(newPosition, newPosition);
+        })
     })
+    
 
     // textEditor.selection = new vscode.Selection(newPosition, newPosition);
     // edit.replace(line.range, replaceContent);
 }
 
-export function generate_replace_string(source: string) {
+export function generate_replace_string(source: string, prefix: string) {
     let element_list: Array<string> = [];
     let run = "";
-    element_list = get_variable_list(source);
+    let [left, right] = source.split("=")
+    element_list = get_variable_list(left);
 
     if (element_list.length == 0) {
         console.error("element_list is null");
@@ -57,24 +73,30 @@ export function generate_replace_string(source: string) {
         throw new error("element_list is 0 length");
     }
     let out = [];
-    let prepend_ele: string = element_list.pop();
-    let right_side_list = []
+    // let prepend_ele: string = element_list.pop();
     for (let ele of element_list) {
         ele = ele.trim();
         if (!ele) {
             continue;
         }
-        if (ele === "=") {
-            out.push(ele);
-            continue;
-        }
-        out.push(prepend_ele + ele);
-        right_side_list.push(ele)
+        // if (ele === "=") {
+        //     is_left = false;
+        //     out.push(ele);
+        //     continue;
+        // }
+        out.push(prefix + ele);
+        // if (is_left) {
+            
+        // } else {
+        //     right_side_list.push(ele)
+        // }
+        
+        
     }
 
 
 
-    return out.join(", ") + " = " + right_side_list.join(", ");
+    return out.join(", ") + " = " + right;
 
 }
 
