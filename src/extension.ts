@@ -20,6 +20,7 @@ import {insert_self} from "./handler/handler_insert_self"
 import {get_last_used_variable} from "./handler/handler_get_last_used_variable"
 import {get_left_last_part} from "./handler/handler_get_left_last_part"
 import {move_op_end} from "./handler/handler_move_op_end"
+import {get_current_class_name} from './handler/handler_get_current_class_name'
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -183,6 +184,15 @@ export function activate(context: vscode.ExtensionContext) {
         move_op_end(textEdit, edit);
     })
     context.subscriptions.push(moveOpEndDisposable);
+
+    // get crrent class name
+    let getCurrentClassNameDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_current_classname",
+    (textEdit, edit) => {
+        get_current_class_name(textEdit, edit);
+    });
+
+    context.subscriptions.push(getCurrentClassNameDisposable);
+
 
 }
 

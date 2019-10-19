@@ -150,6 +150,11 @@
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
+                "command": "cqh-python-import-helper.get_current_classname",
+                "key": "alt+f10",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
                 "command": "cqh-python-import-helper.move_op_end",
                 "key": "alt+.",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
@@ -267,6 +272,10 @@
             {
                 "command": "cqh-python-import-helper.get_left_last_part",
                 "title": "cqh python get  left last parts"
+            },
+            {
+                "command": "cqh-python-import-helper.get_current_classname",
+                "title": "cqh python get current handler name"
             }
         ],
         "menus": {
