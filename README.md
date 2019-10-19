@@ -75,8 +75,27 @@ key: alt+h
 
 insert left pattern before "="
 
+
+### cqh-python-import-helper.get_left_last_pattern
+key: alt+b
+`self.name=` insert `name`
+
+
 ### cqh-python-import-helper.get_last_if_varaible
 key: alt + \
+
+
+### insert self
+key alt + m
+insert `self`
+
+### move op end
+key: alt + .
+move to ", ', ], ), }
+
+### show var list
+key: alt + m
+show function params list
 
 
 
