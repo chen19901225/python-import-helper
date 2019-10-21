@@ -72,10 +72,10 @@ function save_content_to_path(save_path: string, lines: Array<[string, string]>)
     let alls = []
     let content_lines = []
     for (let line of lines) {
-        content_lines.push(line[0]);
+        content_lines.push(startText + line[0]);
         content_lines.push(line[1]);
         let all_ele = line[0].split('||')[1];
-        alls.push(`  '${all_ele}'`);
+        alls.push(`    '${all_ele}'`);
     }
     content_lines.push("__all__ = [")
     let i = 0;
@@ -106,7 +106,7 @@ export function export_class_to_module(textEditor: vscode.TextEditor, edit: vsco
             return;
         }
     }
-    parsed_lines.push([startText + key, import_statement]);
+    parsed_lines.push([key, import_statement]);
     save_content_to_path(initPath, parsed_lines);
     vscode.window.showInformationMessage('success to export');
 
