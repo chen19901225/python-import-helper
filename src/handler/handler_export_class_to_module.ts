@@ -87,7 +87,7 @@ function save_content_to_path(save_path: string, lines: Array<[string, string]>)
         }
     }
     content_lines.push("]")
-    let final_content = content_lines.join("\r\n");
+    let final_content = content_lines.join("\r\n") + "\r\n";
     fs.writeFileSync(save_path, final_content, "utf-8");
 }
 
