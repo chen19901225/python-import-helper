@@ -16,11 +16,14 @@ import { get_function_position_argument } from "./handler/handler_get_function_p
 import { get_last_line_variable } from "./handler/handler_get_last_line_variable"
 import { show_var_list } from "./handler/handler_show_var_list"
 import { file_name } from "./handler/handler_file_name"
-import {insert_self} from "./handler/handler_insert_self"
-import {get_last_used_variable} from "./handler/handler_get_last_used_variable"
-import {get_left_last_part} from "./handler/handler_get_left_last_part"
-import {move_op_end} from "./handler/handler_move_op_end"
-import {get_current_class_name} from './handler/handler_get_current_class_name'
+import { insert_self } from "./handler/handler_insert_self"
+import { get_last_used_variable } from "./handler/handler_get_last_used_variable"
+import { get_left_last_part } from "./handler/handler_get_left_last_part"
+import { move_op_end } from "./handler/handler_move_op_end"
+import { get_current_class_name } from './handler/handler_get_current_class_name'
+import { insert_base } from "./handler/handler_insert_base"
+import { export_class_to_module } from "./handler/handler_export_class_to_module"
+import {get_last_func} from "./handler/handler_get_last_func"
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -158,40 +161,62 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(getFileNameDisposable);
 
     // insert self
-    let insertSelfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_self", 
-    (textEdit, edit) => {
-        insert_self(textEdit, edit);
-    })
+    let insertSelfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_self",
+        (textEdit, edit) => {
+            insert_self(textEdit, edit);
+        })
     context.subscriptions.push(insertSelfDisposable);
 
     // get last used var
     let getLastUsedVariableDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_used_variable",
-    (textEdit, edit) => {
-        get_last_used_variable(textEdit, edit);
-    })
+        (textEdit, edit) => {
+            get_last_used_variable(textEdit, edit);
+        })
     context.subscriptions.push(getLastUsedVariableDisposable)
 
     // get left last part 
     let getLeftLastPart = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_left_last_part",
-    (textEdit, edit) => {
-        get_left_last_part(textEdit, edit);
-    })
+        (textEdit, edit) => {
+            get_left_last_part(textEdit, edit);
+        })
     context.subscriptions.push(getLeftLastPart);
 
     // move op end
-    let moveOpEndDisposable=vscode.commands.registerTextEditorCommand("cqh-python-import-helper.move_op_end", 
-    (textEdit, edit) => {
-        move_op_end(textEdit, edit);
-    })
+    let moveOpEndDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.move_op_end",
+        (textEdit, edit) => {
+            move_op_end(textEdit, edit);
+        })
     context.subscriptions.push(moveOpEndDisposable);
 
     // get crrent class name
     let getCurrentClassNameDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_current_classname",
-    (textEdit, edit) => {
-        get_current_class_name(textEdit, edit);
-    });
+        (textEdit, edit) => {
+            get_current_class_name(textEdit, edit);
+        });
 
     context.subscriptions.push(getCurrentClassNameDisposable);
+
+    // insert base
+    let insertBaseDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_base",
+        (textEdit, edit) => {
+            insert_base(textEdit, edit);
+        });
+
+    context.subscriptions.push(insertBaseDisposable);
+
+
+    let exportClassToModuleDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.export_class_to_module",
+        (textEdit, edit) => {
+            export_class_to_module(textEdit, edit);
+        });
+    context.subscriptions.push(exportClassToModuleDisposable);
+
+
+    let getLastFuncDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_func",
+    (textEdit, edit) => {
+        get_last_func(textEdit, edit);
+    })
+    context.subscriptions.push(getLastFuncDisposable);
 
 
 }

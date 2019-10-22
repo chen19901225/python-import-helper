@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.92",
+    "version": "0.0.94",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -158,9 +158,18 @@
                 "command": "cqh-python-import-helper.move_op_end",
                 "key": "alt+.",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_func",
+                "key": "alt+f11",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.get_last_func",
+                "title": "cqh python import helper get last func"
+            },
             {
                 "command": "cqh-python-import-helper.move_op_end",
                 "title": "cqh-python-import-helper move op end"
@@ -276,6 +285,14 @@
             {
                 "command": "cqh-python-import-helper.get_current_classname",
                 "title": "cqh python get current handler name"
+            },
+            {
+                "command": "cqh-python-import-helper.insert_base",
+                "title": "Cqh python import insert base"
+            },
+            {
+                "command": "cqh-python-import-helper.export_class_to_module",
+                "title": "Cqh python export class to module"
             }
         ],
         "menus": {
@@ -284,6 +301,16 @@
                     "when": "editorHasSelection && editorLangId == python",
                     "command": "cqh-python-import-helper.import-upgrade",
                     "group": "cqh-python-import"
+                },
+                {
+                    "when": "!inOutput && editorTextFocus && editorLangId == python",
+                    "command": "cqh-python-import-helper.insert_base",
+                    "group": "cqh-insert"
+                },
+                {
+                    "when": "!inOutput && editorTextFocus && editorLangId == python",
+                    "command": "cqh-python-import-helper.export_class_to_module",
+                    "group": "cqh-insert"
                 }
             ]
         }
