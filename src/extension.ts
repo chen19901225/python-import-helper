@@ -23,6 +23,7 @@ import { move_op_end } from "./handler/handler_move_op_end"
 import { get_current_class_name } from './handler/handler_get_current_class_name'
 import { insert_base } from "./handler/handler_insert_base"
 import { export_class_to_module } from "./handler/handler_export_class_to_module"
+import {get_last_func} from "./handler/handler_get_last_func"
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -209,6 +210,13 @@ export function activate(context: vscode.ExtensionContext) {
             export_class_to_module(textEdit, edit);
         });
     context.subscriptions.push(exportClassToModuleDisposable);
+
+
+    let getLastFuncDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_func",
+    (textEdit, edit) => {
+        get_last_func(textEdit, edit);
+    })
+    context.subscriptions.push(getLastFuncDisposable);
 
 
 }

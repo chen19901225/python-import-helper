@@ -158,9 +158,18 @@
                 "command": "cqh-python-import-helper.move_op_end",
                 "key": "alt+.",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_last_func",
+                "key": "alt+f11",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.get_last_func",
+                "title": "cqh python import helper get last func"
+            },
             {
                 "command": "cqh-python-import-helper.move_op_end",
                 "title": "cqh-python-import-helper move op end"
