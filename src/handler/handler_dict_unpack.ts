@@ -139,7 +139,7 @@ export function generate_insert_string(source: string,
         } else if (new_ele.includes(".")) {
             new_ele = new_ele.split(".").pop();
             current_handle = handle_instance
-        } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_")) {
+        } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {
             current_handle = handle_dict;
         }
         is_first = current_handle(source_var, new_ele, is_first);
