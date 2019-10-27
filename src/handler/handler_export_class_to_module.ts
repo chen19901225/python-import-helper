@@ -74,6 +74,7 @@ function save_content_to_path(save_path: string, lines: Array<[string, string]>)
     for (let line of lines) {
         content_lines.push(startText + line[0]);
         content_lines.push(line[1]);
+        content_lines.push('');
         let all_ele = line[0].split('||')[1];
         alls.push(`    '${all_ele}'`);
     }

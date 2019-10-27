@@ -35,16 +35,16 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     vscode.window.showInputBox({
-        password: false, 
+        password: false,
         placeHolder: "prefix",
         prompt: "请输入prefix",
 
     }).then((msg) => {
-        if(!msg) {
+        if (!msg) {
             return;
         }
         msg = msg.trim();
-        if(!msg) {
+        if (!msg) {
             return;
         }
         let replaceContent = generate_replace_string(line.text, msg);
@@ -55,7 +55,7 @@ export function handler_dict_prepend(textEditor: vscode.TextEditor, edit: vscode
             textEditor.selection = new vscode.Selection(newPosition, newPosition);
         })
     })
-    
+
 
     // textEditor.selection = new vscode.Selection(newPosition, newPosition);
     // edit.replace(line.range, replaceContent);
@@ -86,12 +86,12 @@ export function generate_replace_string(source: string, prefix: string) {
         // }
         out.push(prefix + ele);
         // if (is_left) {
-            
+
         // } else {
         //     right_side_list.push(ele)
         // }
-        
-        
+
+
     }
 
 
@@ -139,7 +139,7 @@ export function generate_insert_string(source: string,
         } else if (new_ele.includes(".")) {
             new_ele = new_ele.split(".").pop();
             current_handle = handle_instance
-        } else if (source_var.endsWith("_d") || source_var.endsWith("_dict")) {
+        } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {
             current_handle = handle_dict;
         }
         is_first = current_handle(source_var, new_ele, is_first);

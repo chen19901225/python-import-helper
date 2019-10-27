@@ -23,6 +23,11 @@ suite("unpack Tests", () => {
         let out = generate_replace_upack_string(line);
         assert.equal(out, '.get("image"), source_d.get("name")')
     })
+    test("test self.requests.headers", () => {
+        let line = "org = self.request.headers";
+        let out = generate_replace_upack_string(line);
+        assert.equal(out, '.get("org")')
+    })
 
     
 });
