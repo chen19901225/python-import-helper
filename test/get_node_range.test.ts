@@ -16,6 +16,29 @@ import { link } from 'fs';
 // Defines a Mocha test suite to group tests of similar kind together
 suite("get node range test", () => {
 
+    test("test double quote string call", () => {
+        let line = '"HEADER,GET,POST,PUT,PATCH,OPTION,DELETE".split(",")'
+        let [start, end] = getNodeRange(line, 2)
+        assert.equal(start, 0)
+        assert.equal(end, line.length);
+    })
+
+    test("test double quote string call in func callback", () => {
+        let line = '"HEADER,GET,POST,PUT,PATCH,OPTION,DELETE".split(",")'
+        let [start, end] = getNodeRange(line, line.length - 2)
+        assert.equal(start, 0)
+        assert.equal(end, line.length);
+    })
+
+
+    test("test single quote string call", () => {
+        let line = "'HEADER,GET,POST,PUT,PATCH,OPTION,DELETE'.split(',')"
+        let [start, end] = getNodeRange(line, 2)
+        assert.equal(start, 0)
+        assert.equal(end, line.length);
+    })
+
+
     // Defines a Mocha unit test
     test("test var", () => {
         let line = "show_me_the_money"
@@ -29,7 +52,7 @@ suite("get node range test", () => {
         let suffix = "show_me_the_money"
         let [start, end] = getNodeRange(prefix + suffix, prefix.length + 2);
         assert.equal(start, prefix.length);
-        assert.equal(end, prefix.length+suffix.length)
+        assert.equal(end, prefix.length + suffix.length)
     })
 
     test("test func ok", () => {
@@ -42,14 +65,17 @@ suite("get node range test", () => {
         assert.equal(end, line.length);
     })
 
+
+
     test("with func with =", () => {
         let prefix = "a = "
         let suffix = "showme(var1,var2)"
         let [start, end] = getNodeRange(prefix + suffix, prefix.length + "showme(var1,".length)
         assert.equal(start, prefix.length);
         assert.equal(end, prefix.length + suffix.length);
-    
+
     })
+
 
     // test("test fail with no =", () => {
     //     let lines = [

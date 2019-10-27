@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import * as ts from "typescript";
 import { error } from "util";
+import { start } from "repl";
 
 
 export function select_node(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
@@ -16,7 +17,39 @@ export function getNodeRange(text: string, col: number): [number, number] {
     // let cursor = textEditor.selection.active;
     let lineText = text;
     let open_parenthes_pos = text.indexOf("(");
+    let wordCount = (search: string, endIndex: number) => {
+        let count = 0
+        for (let ch of text.slice(0, endIndex - 1)) {
+            if (ch === search) {
+                count++
+            }
+        }
+        return count;
+    }
+    let fLastIndex = (source: string, search: string, lastPos: number): [boolean, number] => {
+        for (let i = lastPos; i >= 0; i--) {
+            let currentCh = source[i];
+            if (currentCh === search) {
+                return [true, i]
+            }
+        }
+        return [false, 0]
+    }
     let searchStart = (startCol) => {
+        for (let quote of ['"', "'"]) {
+            if (wordCount(quote, startCol) % 2 === 1) {
+                // let start = text.lastIndexOf('"', startCol)
+                // let reversed_text = text.
+                let [flag, index] = fLastIndex(text, quote, startCol);
+                if (!flag) {
+                    throw new error('cannot find ' + quote + ' for' + startCol);
+                }
+                return index;
+            }
+        }
+
+
+        // 其他
         for (let i = startCol; i >= 0; i--) {
             let ch = text[i]
             if (!/[.a-zA-Z0-9_]/.test(ch)) {
@@ -45,7 +78,7 @@ export function getNodeRange(text: string, col: number): [number, number] {
     if (end_square_pos == -1) {
         // 不是]调用
         end_pos = text.indexOf(' ', col);
-        if(end_pos == -1)  {
+        if (end_pos == -1) {
             end_pos = text.length;
         }
 
