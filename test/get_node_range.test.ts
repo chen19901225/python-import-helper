@@ -16,11 +16,13 @@ import { link } from 'fs';
 // Defines a Mocha test suite to group tests of similar kind together
 suite("get node range test", () => {
 
-    test("test double quote string call", () => {
-        let line = '"HEADER,GET,POST,PUT,PATCH,OPTION,DELETE".split(",")'
-        let [start, end] = getNodeRange(line, 2)
-        assert.equal(start, 0)
-        assert.equal(end, line.length);
+
+    test("test simple var with =", () => {
+        let prefix = "a = "
+        let suffix = "show_me_the_money"
+        let [start, end] = getNodeRange(prefix + suffix, prefix.length + 2);
+        assert.equal(start, prefix.length);
+        assert.equal(end, prefix.length + suffix.length)
     })
 
     test("test double quote string call in func callback", () => {
@@ -29,6 +31,16 @@ suite("get node range test", () => {
         assert.equal(start, 0)
         assert.equal(end, line.length);
     })
+
+
+    test("test double quote string call", () => {
+        let line = '"HEADER,GET,POST,PUT,PATCH,OPTION,DELETE".split(",")'
+        let [start, end] = getNodeRange(line, 2)
+        assert.equal(start, 0)
+        assert.equal(end, line.length);
+    })
+
+    
 
 
     test("test single quote string call", () => {
@@ -47,13 +59,7 @@ suite("get node range test", () => {
         assert.equal(end, line.length)
     })
 
-    test("test simple var with =", () => {
-        let prefix = "a = "
-        let suffix = "show_me_the_money"
-        let [start, end] = getNodeRange(prefix + suffix, prefix.length + 2);
-        assert.equal(start, prefix.length);
-        assert.equal(end, prefix.length + suffix.length)
-    })
+    
 
     test("test func ok", () => {
         let line = "showme(var, var2)"

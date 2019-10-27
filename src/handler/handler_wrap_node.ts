@@ -26,39 +26,92 @@ export function getNodeRange(text: string, col: number): [number, number] {
         }
         return count;
     }
-    let fLastIndex = (source: string, search: string, lastPos: number): [boolean, number] => {
-        for (let i = lastPos; i >= 0; i--) {
-            let currentCh = source[i];
-            if (currentCh === search) {
-                return [true, i]
-            }
-        }
-        return [false, 0]
-    }
+    // let fLastIndex = (source: string, search: string, lastPos: number): [boolean, number] => {
+    //     for (let i = lastPos; i >= 0; i--) {
+    //         let currentCh = source[i];
+    //         if (currentCh === search) {
+    //             return [true, i]
+    //         }
+    //     }
+    //     return [false, 0]
+    // }
     let searchStart = (startCol) => {
         for (let quote of ['"', "'"]) {
             if (wordCount(quote, startCol) % 2 === 1) {
                 // let start = text.lastIndexOf('"', startCol)
                 // let reversed_text = text.
-                let [flag, index] = fLastIndex(text, quote, startCol);
-                if (!flag) {
-                    throw new error('cannot find ' + quote + ' for' + startCol);
+                // let [flag, index] = fLastIndex(text, quote, startCol);
+                let sliceString = text.slice(0, startCol)
+                let index = sliceString.lastIndexOf(quote)
+                if (index === -1) {
+                    throw new error("cannot find " + quote + ' for string: ' + sliceString);
                 }
+                // if (!flag) {
+                //     throw new error('cannot find ' + quote + ' for' + startCol);
+                // }
                 return index;
             }
         }
+        let out_result = [-1];
+        let adapter = (col: number) => {
+            if (col == -1) {
+                out_result[0] = 0;
+                return;
+            }
+            let ch = text[col];
+            if (['"', "'"].indexOf(ch) > -1) {
+                let sliceStr = text.slice(0, col - 1);
+                let index = sliceStr.lastIndexOf(ch)
+                if (index === -1) {
+                    throw new error('cannot find ' + ch + ' for' + (col - 1));
+                }
+                // let [flag, index] = fLastIndex(text, ch, col - 1);
+                // if (!flag) {
+
+                // }
+                out_result[0] = index;
+                return;
+
+            }
+            if (!/[.a-zA-Z0-9_]/.test(ch)) {
+                // return i + 1;
+                // break;
+                // if (col === 0) {
+                //     out_result[0] = col;
+                //     return;
+                // }
+                out_result[0] = col + 1;
+                return;
+                // adapter(col - 1);
+            }
+
+            if(col === 0) {
+                out_result[0] = 0;
+                return;
+            }
+            adapter(col -1);
+
+        }
+
+
+        adapter(startCol);
+
+        if (out_result[0] == -1) {
+            throw new error("uncaught exception");
+        }
+        return out_result[0];
 
 
         // 其他
-        for (let i = startCol; i >= 0; i--) {
-            let ch = text[i]
-            if (!/[.a-zA-Z0-9_]/.test(ch)) {
-                return i + 1;
-                break;
-            }
-            // start_pos = i;
-        }
-        return 0;
+        // for (let i = startCol; i >= 0; i--) {
+        //     let ch = text[i]
+        //     if (!/[.a-zA-Z0-9_'"]/.test(ch)) {
+        //         return i + 1;
+        //         break;
+        //     }
+        //     // start_pos = i;
+        // }
+        // return 0;
     }
     if (open_parenthes_pos > -1) {
         if (open_parenthes_pos < col) {
