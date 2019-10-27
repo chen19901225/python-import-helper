@@ -67,6 +67,7 @@ export function wrap_node(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             cusor.character);
         startPos = new vscode.Position(cusor.line, startCol);
         endPos = new vscode.Position(cusor.line, endCol);
+        select_node(textEditor, edit);
     } else {
         let selection = textEditor.selections[0];
         startPos = selection.start
