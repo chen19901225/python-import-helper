@@ -14,7 +14,7 @@ export function select_node(textEditor: vscode.TextEditor, edit: vscode.TextEdit
 }
 function _wordCount(text: string, search: string, endIndex: number): number {
     let count = 0
-    for (let ch of text.slice(0, endIndex)) {
+    for (let ch of text.slice(0, endIndex + 1)) {
         if (ch === search) {
             count++
         }
@@ -23,11 +23,44 @@ function _wordCount(text: string, search: string, endIndex: number): number {
 }
 
 function _get_square_context(text: string, start: number, end: number): [number, number] {
+    let [ch, end_ch] = [text[start], text[end]]
+    // check start meet quote
+    if (start >= 0) {
+        // let ch = text[start]
+
+        for (let quote of ['"', "'"]) {
+            if (ch === quote) {
+                // let sliceString = text.slice(0, start)
+                // let startIndex = sliceString.lastIndexOf(ch)
+                // if (startIndex === -1) {
+                //     throw new error("cannot find start for " + ch + " for string:" + sliceString);
+                // }
+                return _get_square_context(text, start - 1, end)
+            }
+        }
+    }
+
+    // check end meet quote
+    if (end < text.length) {
+        // let end_ch = text[end]
+        for (let quote of ["'", '"']) {
+            if (end_ch === quote) {
+                // let endIndex = text.indexOf(quote, end + 1)
+                // if (endIndex === -1) {
+                //     throw new error("cannot find end for " + end_ch + " for string: " + text);
+                // }
+                return _get_square_context(text, start, end + 1);
+            }
+        }
+    }
+
     // 检查 start  in quote
+    let sliceString = text.slice(0, start + 1)
+    let endString = text.slice(0, end + 1);
     if (start >= 0) {
         for (let quote of ["'", '"']) {
             if (_wordCount(text, quote, start) % 2 === 1) {
-                let sliceString = text.slice(0, start)
+
                 let index = sliceString.lastIndexOf(quote)
                 if (index === -1) {
                     throw new error("cannot find " + quote + ' for string: ' + sliceString);
@@ -55,38 +88,43 @@ function _get_square_context(text: string, start: number, end: number): [number,
         }
     }
 
-    // check start meet quote
-    if (start >= 0) {
-        let ch = text[start]
 
-        for (let quote of ['"', "'"]) {
-            if (ch === quote) {
-                let sliceString = text.slice(0, start)
-                let startIndex = sliceString.lastIndexOf(ch)
-                if (startIndex === -1) {
-                    throw new error("cannot find start for " + ch + " for string:" + sliceString);
-                }
-                return _get_square_context(text, startIndex - 1, end)
-            }
-        }
-    }
 
-    // check end meet quote
-    if (end < text.length) {
-        let end_ch = text[end]
-        for (let quote of ["'", '"']) {
-            if (end_ch === quote) {
-                let endIndex = text.indexOf(quote, end + 1)
-                if (endIndex === -1) {
-                    throw new error("cannot find end for " + end_ch + " for string: " + text);
-                }
-                return _get_square_context(text, start, endIndex + 1);
-            }
-        }
-    }
-
-    let sliceString = text.slice(0, start)
+    // let sliceString = text.slice(0, start)
     let pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+
+
+    // check start meet )
+    if (start >= 0) {
+        for (let [search_start, search_end] of pairs) {
+            let ch = text[start]
+            if ([search_start, search_end].indexOf(ch) > -1) {
+                // let startIndex = sliceString.lastIndexOf(search_start)
+                // if (startIndex === -1) {
+                //     throw new error("cannot find start" + search_start + " for string " + sliceString);
+                // }
+                return _get_square_context(text, start - 1, end)
+            }
+
+        }
+    }
+
+
+    // check end meet (
+    if (end < text.length) {
+        for (let [search_start, search_end] of pairs) {
+            let end_ch = text[end]
+            if ([search_start, search_end].indexOf(end_ch) > -1) {
+                // let startIndex = text.indexOf(search_end, end + 1);
+                // if (startIndex === -1) {
+                //     throw new error("cannot find start" + search_start + " for string " + sliceString);
+                // }
+                return _get_square_context(text, start, end + 1)
+            }
+
+        }
+    }
+
 
     // check start in ()
     if (start >= 0) {
@@ -105,7 +143,7 @@ function _get_square_context(text: string, start: number, end: number): [number,
     // check end in ()
     if (end < text.length) {
         for (let [search_start, search_end] of pairs) {
-            if (_wordCount(text, search_start, start) > _wordCount(text, search_end, start)) {
+            if (_wordCount(text, search_start, end) > _wordCount(text, search_end, end)) {
                 let lastIndex = text.indexOf(search_end, end + 1)
                 if (lastIndex === -1) {
                     throw new error("cannot find end" + search_end + " for " + text)
@@ -116,36 +154,7 @@ function _get_square_context(text: string, start: number, end: number): [number,
         }
     }
 
-    // check start meet )
-    if (start >= 0) {
-        for (let [search_start, search_end] of pairs) {
-            let ch = text[start]
-            if (ch === search_end) {
-                let startIndex = sliceString.lastIndexOf(search_start)
-                if (startIndex === -1) {
-                    throw new error("cannot find start" + search_start + " for string " + sliceString);
-                }
-                return _get_square_context(text, startIndex - 1, end)
-            }
 
-        }
-    }
-
-
-    // check end meet (
-    if (end < text.length) {
-        for (let [search_start, search_end] of pairs) {
-            let end_ch = text[end]
-            if (end_ch === search_start) {
-                let startIndex = text.indexOf(search_end, end + 1);
-                if (startIndex === -1) {
-                    throw new error("cannot find start" + search_start + " for string " + sliceString);
-                }
-                return _get_square_context(text, start, end + 1)
-            }
-
-        }
-    }
 
 
 
@@ -214,45 +223,48 @@ function _get_square_context(text: string, start: number, end: number): [number,
 // }
 
 export function getNodeRange(text: string, col: number): [number, number] {
-    // let cursor = textEditor.selection.active;
-    let lineText = text;
-    let open_parenthes_pos = text.indexOf("(");
-    let wordCount = (search: string, endIndex: number) => {
-        let count = 0
-        for (let ch of text.slice(0, endIndex - 1)) {
-            if (ch === search) {
-                count++
+    let [start, end] = [col, col]
+
+    while (true) {
+        [start, end] = _get_square_context(text, start, end);
+        let _search_start = (startCol: number): number => {
+            if (startCol <= 0) {
+                return startCol;
             }
+            let ch = text[startCol];
+            if (!/[._a-zA-Z0-9]/.test(ch)) {
+                return startCol;
+            }
+            return _search_start(startCol - 1);
         }
-        return count;
+
+        let _search_end = (startCol: number): number => {
+            if (startCol >= text.length) {
+                return startCol
+            }
+            let ch = text[startCol]
+            if (!/[._a-zA-Z0-9]/.test(ch)) {
+                return startCol;
+            }
+            return _search_end(startCol + 1);
+
+        }
+        let new_start = _search_start(start)
+        let new_end = _search_end(end)
+        if (new_start === start && new_end === new_end) {
+            if (new_start < 0) {
+                new_start = 0;
+            }
+            if (new_end > text.length) {
+                new_end = text.length
+            }
+            return [new_start, new_end]
+        }
+        // return getNodeRange()
+        // return [start, end]
+        [start, end] = [new_start, new_end]
     }
 
-    let [start, end] = _get_square_context(text, col, col);
-    let _search_start = (startCol: number): number => {
-        if (startCol == 0) {
-            return startCol;
-        }
-        let ch = text[startCol];
-        if (!/[._a-zA-Z0-9]/.test(ch)) {
-            return startCol + 1;
-        }
-        return _search_start(startCol - 1);
-    }
-
-    let _search_end = (startCol: number): number => {
-        if (startCol === text.length) {
-            return startCol
-        }
-        let ch = text[startCol]
-        if (!/[._a-zA-Z0-9]/.test(ch)) {
-            return startCol;
-        }
-        return _search_end(startCol + 1);
-
-    }
-    start = _search_start(start)
-    end = _search_end(end)
-    return [start, end]
     // if (open_parenthes_pos > -1) {
     //     if (open_parenthes_pos < col) {
     //         let end_parenthes_pos = text.indexOf(")", col)
