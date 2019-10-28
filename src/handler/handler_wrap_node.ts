@@ -14,7 +14,7 @@ export function select_node(textEditor: vscode.TextEditor, edit: vscode.TextEdit
 }
 function _wordCount(text: string, search: string, endIndex: number): number {
     let count = 0
-    for (let ch of text.slice(0, endIndex - 1)) {
+    for (let ch of text.slice(0, endIndex)) {
         if (ch === search) {
             count++
         }
@@ -43,7 +43,7 @@ function _get_square_context(text: string, start: number, end: number): [number,
         for (let quote of ['"', "'"]) {
             if (_wordCount(text, quote, end) % 2 === 1) {
                 // let endString = text.slice(end);
-                let quoteIndex = text.indexOf(quote, end + 1)
+                let quoteIndex = text.indexOf(quote, end)
                 if (quoteIndex === -1) {
                     throw new error("cannot find  end" + quote + ' for string: ' + text);
                 }
