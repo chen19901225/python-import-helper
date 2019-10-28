@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.99",
+    "version": "0.0.100",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -163,9 +163,27 @@
                 "command": "cqh-python-import-helper.get_last_func",
                 "key": "alt+f11",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.wrap_node",
+                "key": "alt+q",
+                "when": "editorTextFocus && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.select_node",
+                "key": "alt+v",
+                "when": "editorTextFocus && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.select_node",
+                "title": "cqh python import helper select node"
+            },
+            {
+                "command": "cqh-python-import-helper.wrap_node",
+                "title": "cqh python import helper warp node"
+            },
             {
                 "command": "cqh-python-import-helper.get_last_func",
                 "title": "cqh python import helper get last func"

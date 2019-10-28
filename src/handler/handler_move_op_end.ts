@@ -61,7 +61,7 @@ export function move_op_end(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     }
     vscode.window.showQuickPick(quickItemList).then((item) => {
         if(item) {
-            moveForEnd(quickItemList[0]);
+            moveForEnd(item);
             // let activeEditor = vscode.window.activeTextEditor;
             // let insertedText = getInsertedContent(item.description);
             // activeEditor.insertSnippet(new vscode.SnippetString(insertedText), currentPosition)

@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-
+import {get_variable_list} from "../util"
 export function handler_dict_get_unpack(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
@@ -12,25 +12,10 @@ export function handler_dict_get_unpack(textEditor: vscode.TextEditor, edit: vsc
 export function generate_replace_upack_string(source: string) {
     let element_list = [];
     let run = "";
-    for (let ch of source) {
-        if (ch.match(/[_a-zA-Z0-9]/)) {
-            run += ch;
-        } else {
-            if (run && run.length > 0) {
-                element_list.push(run)
-                run = "";
-            }
-        }
-    }
-    if (run && run.length > 0) {
-        element_list.push(run);
-    }
-    if (element_list.length == 0) {
-        console.error("element_list is null");
-        return "";
-    }
+    let [left, right] = source.split("=")
+    element_list = get_variable_list(left);
     let out = [];
-    let source_var: string = element_list.pop();
+    let source_var: string = right;
     let right_side_list = []
     let is_first = true;
     for (let ele of element_list) {
