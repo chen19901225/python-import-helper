@@ -18,4 +18,13 @@ suite("format apply line ", () => {
         let lines = format_apply_line(line, col)
         assert.deepEqual(lines, [line])
     })
+    test("one apply", () => {
+        let line = "dict(name=name, age=age"
+        let col = 4
+        let lines = format_apply_line(line, col)
+        assert.deepEqual(lines, [
+            "name=name,",
+            "age=age"
+        ])
+    })
 })
