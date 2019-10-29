@@ -19,12 +19,54 @@ suite("format apply line ", () => {
         assert.deepEqual(lines, [line])
     })
     test("one apply", () => {
-        let line = "dict(name=name, age=age"
-        let col = 4
+        let line = "dict(name=name, age=age)"
+        let col = 0
+        let lines = format_apply_line(line, col)
+        let prefix = " ".repeat("dict(".length)
+        assert.deepEqual(lines, [
+            "dict(",
+            prefix + "name=name,",
+            prefix + "age=age",
+            ")"
+        ])
+    })
+
+    test("def and with apply", () => {
+        let line = "def fn(self, name=none, method='GET'):"
+        let col = 0
+        let lines = format_apply_line(line, col)
+        let prefix = " ".repeat(4)
+        assert.deepEqual(lines, [
+            "def fn(",
+            prefix + "self,",
+            prefix + "name=none,",
+            prefix + "method='GET'",
+            "):"
+        ])
+    })
+
+    test("def apply with partial", () => {
+        let line = "def fn(self, name=none, method='GET'"
+        let col = 0
+        let lines = format_apply_line(line, col)
+        let prefix = " ".repeat(4)
+        assert.deepEqual(lines, [
+            "def fn(",
+            prefix + "self,",
+            prefix + "name=none,",
+            prefix + "method='GET'",
+
+        ])
+    })
+
+    test("test simple apply one", () => {
+        let line = "name=none, method='GET'"
+        let col = 0
         let lines = format_apply_line(line, col)
         assert.deepEqual(lines, [
-            "name=name,",
-            "age=age"
+            "name=none,",
+            "method='GET'",
+
         ])
     })
 })
