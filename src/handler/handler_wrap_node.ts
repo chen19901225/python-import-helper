@@ -223,77 +223,74 @@ function _get_square_context(text: string, start: number, end: number): [number,
 // }
 
 export function getNodeRange(text: string, col: number): [number, number] {
-    let [start, end] = [col, col]
+    // let [start, end] = [col, col]
 
-    while (true) {
-        [start, end] = _get_square_context(text, start, end);
-        let _search_start = (startCol: number): number => {
-            if (startCol <= 0) {
-                return startCol;
+    // while (true) {
+    //     [start, end] = _get_square_context(text, start, end);
+    //     let _search_start = (startCol: number): number => {
+    //         if (startCol <= 0) {
+    //             return startCol;
+    //         }
+    //         let ch = text[startCol];
+    //         if (!/[._a-zA-Z0-9]/.test(ch)) {
+    //             return startCol;
+    //         }
+    //         return _search_start(startCol - 1);
+    //     }
+
+    //     let _search_end = (startCol: number): number => {
+    //         if (startCol >= text.length) {
+    //             return startCol
+    //         }
+    //         let ch = text[startCol]
+    //         if (!/[._a-zA-Z0-9]/.test(ch)) {
+    //             return startCol;
+    //         }
+    //         return _search_end(startCol + 1);
+
+    //     }
+    //     let new_start = _search_start(start)
+    //     let new_end = _search_end(end)
+    //     if (new_start === start && new_end === new_end) {
+    //         if (new_start < 0) {
+    //             new_start = 0;
+    //         }
+    //         if (new_end > text.length) {
+    //             new_end = text.length
+    //         }
+    //         return [new_start, new_end]
+    //     }
+    //     // return getNodeRange()
+    //     // return [start, end]
+    //     [start, end] = [new_start, new_end]
+    // }
+    let equal_index = text.indexOf('=')
+    let search_start = (col: number): number => {
+        for (let index = col; index < text.length; index++) {
+            let ch = text[index]
+            if (!/\s/.test(ch)) {
+                return index;
             }
-            let ch = text[startCol];
-            if (!/[._a-zA-Z0-9]/.test(ch)) {
-                return startCol;
-            }
-            return _search_start(startCol - 1);
         }
 
-        let _search_end = (startCol: number): number => {
-            if (startCol >= text.length) {
-                return startCol
-            }
-            let ch = text[startCol]
-            if (!/[._a-zA-Z0-9]/.test(ch)) {
-                return startCol;
-            }
-            return _search_end(startCol + 1);
-
-        }
-        let new_start = _search_start(start)
-        let new_end = _search_end(end)
-        if (new_start === start && new_end === new_end) {
-            if (new_start < 0) {
-                new_start = 0;
-            }
-            if (new_end > text.length) {
-                new_end = text.length
-            }
-            return [new_start, new_end]
-        }
-        // return getNodeRange()
-        // return [start, end]
-        [start, end] = [new_start, new_end]
+        // return search_start(co)
     }
 
-    // if (open_parenthes_pos > -1) {
-    //     if (open_parenthes_pos < col) {
-    //         let end_parenthes_pos = text.indexOf(")", col)
-    //         if (end_parenthes_pos == -1) {
-    //             throw error("cannot find ) after " + col);
-    //         }
-    //         let startPos = searchStart(open_parenthes_pos - 1);
-    //         return [startPos, end_parenthes_pos + 1];
-    //     }
-    // }
-    // // 没有(, 或者(在col之后
-    // // 也就是
-    // // let open_square_pos =
-    // let end_square_pos = text.indexOf("]")
-    // let end_pos;
-    // if (end_square_pos == -1) {
-    //     // 不是]调用
-    //     end_pos = text.indexOf(' ', col);
-    //     if (end_pos == -1) {
-    //         end_pos = text.length;
-    //     }
-
-    // } else {
-    //     end_pos = end_square_pos;
-    // }
-    // let start_pos = searchStart(col);
-
-    // return [start_pos, end_pos]
-    // return [-1, -1]
+    let search_end = (col: number): number => {
+        for (let i = col; i >= 0; i--) {
+            let ch = text[i];
+            if (!/\s/.test(ch)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+    let end = search_end(text.length - 1);
+    let start = search_start(0);
+    if (equal_index > -1) {
+        start = search_start(equal_index + 1);
+    }
+    return [start, end + 1]
 }
 
 export function wrap_node(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
