@@ -8,11 +8,8 @@ import * as assert from 'assert';
 
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
-import { setFlagsFromString } from 'v8';
 // import {find_last_vars} from '../src/handler/handler_get_last_line_variable'
 import { getNodeRange } from "../src/handler/handler_wrap_node"
-import { isPropertyAccessOrQualifiedName } from 'typescript';
-import { link } from 'fs';
 // Defines a Mocha test suite to group tests of similar kind together
 suite("get node range test", () => {
     test("test dict with =", () => {

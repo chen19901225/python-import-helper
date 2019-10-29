@@ -23,8 +23,9 @@ import { move_op_end } from "./handler/handler_move_op_end"
 import { get_current_class_name } from './handler/handler_get_current_class_name'
 import { insert_base } from "./handler/handler_insert_base"
 import { export_class_to_module } from "./handler/handler_export_class_to_module"
-import {get_last_func} from "./handler/handler_get_last_func"
-import {wrap_node, select_node} from "./handler/handler_wrap_node"
+import { get_last_func } from "./handler/handler_get_last_func"
+import { wrap_node, select_node } from "./handler/handler_wrap_node"
+import { node_format } from "./handler/handler_node_format"
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -214,24 +215,31 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     let getLastFuncDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_func",
-    (textEdit, edit) => {
-        get_last_func(textEdit, edit);
-    })
+        (textEdit, edit) => {
+            get_last_func(textEdit, edit);
+        })
     context.subscriptions.push(getLastFuncDisposable);
 
 
-    let wrapNodeDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.wrap_node", 
-    (textEdit, edit) => {
-        wrap_node(textEdit, edit);
-    });
+    let wrapNodeDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.wrap_node",
+        (textEdit, edit) => {
+            wrap_node(textEdit, edit);
+        });
 
     context.subscriptions.push(wrapNodeDisposable);
 
     let SelectNodeDiposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.select_node",
-    (textEdit, edit) => {
-        select_node(textEdit, edit);
-    });
+        (textEdit, edit) => {
+            select_node(textEdit, edit);
+        });
     context.subscriptions.push(SelectNodeDiposable);
+
+
+    let nodeFormatDiposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.node-format",
+        (textEdit, edit) => {
+            node_format(textEdit, edit);
+        })
+    context.subscriptions.push(nodeFormatDiposable);
 
 
 }

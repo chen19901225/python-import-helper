@@ -173,9 +173,18 @@
                 "command": "cqh-python-import-helper.select_node",
                 "key": "alt+v",
                 "when": "editorTextFocus && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.node-format",
+                "key": "alt+numpad0",
+                "when": "editorTextFocus && editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.node-format",
+                "title": "cqh python import helper node format"
+            },
             {
                 "command": "cqh-python-import-helper.select_node",
                 "title": "cqh python import helper select node"
