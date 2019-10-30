@@ -5,11 +5,22 @@ import { start } from "repl";
 
 
 export function select_node(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
-    let cusor = textEditor.selection.active;
-    let [startCol, endCol] = getNodeRange(textEditor.document.lineAt(cusor.line).text,
-        cusor.character);
-    let startPos = new vscode.Position(cusor.line, startCol);
-    let endPos = new vscode.Position(cusor.line, endCol);
+    let startPos: vscode.Position, endPos: vscode.Position
+    if (textEditor.selection.isEmpty) {
+        let cusor = textEditor.selection.active;
+        let [startCol, endCol] = getNodeRange(textEditor.document.lineAt(cusor.line).text,
+            cusor.character);
+        startPos = new vscode.Position(cusor.line, startCol);
+        endPos = new vscode.Position(cusor.line, endCol);
+    } else {
+        let selection = textEditor.selections[0];
+        endPos = selection.end;
+        let line = textEditor.document.lineAt(selection.start.line);
+        startPos = new vscode.Position(selection.start.line,
+            line.text.indexOf("("))
+    }
+
+
     textEditor.selection = new vscode.Selection(startPos, endPos);
 }
 function _wordCount(text: string, search: string, endIndex: number): number {
