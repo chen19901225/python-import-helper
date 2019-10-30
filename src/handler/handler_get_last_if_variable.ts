@@ -5,12 +5,22 @@ import { insert_self } from "./handler_insert_self";
 
 export function _extraVar(var_str: string) {
     let converted;
-    if (var_str.startsWith("isinstance(")) {
-        converted = var_str.substring("isinstance(".length, var_str.indexOf(","));
+    let startswith_elements = ["isinstance(", "hasattr"]
+    for (let ele of startswith_elements) {
+        if (var_str.startsWith(ele)) {
+            converted = var_str.substring(ele.length, var_str.indexOf(","))
+            return converted;
+        }
     }
-    else {
-        converted = extraVariablePart(var_str)
-    }
+    // if (var_str.startsWith("isinstance(")) {
+    //     converted = var_str.substring("isinstance(".length, var_str.indexOf(","));
+    // }
+    // else if (var_str.startsWith("hasattr(")) {
+    //     converted = var_str.substring("hasattr(".length, var_str.indexOf(","));
+    // }
+    // else {
+    converted = extraVariablePart(var_str)
+    // }
     return converted
 
 }
