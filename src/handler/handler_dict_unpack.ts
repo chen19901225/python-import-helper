@@ -2,12 +2,33 @@ import * as vscode from "vscode";
 import { error } from "util";
 import { get_variable_list } from "../util";
 
+function has_comment(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+    let cursor = textEditor.selection.active;
+    let document = textEditor.document;
+    let line = document.lineAt(cursor.line);
+    let indent = line.firstNonWhitespaceCharacterIndex;
+    for (let i = 0; i < 100; i++) {
+        let lineIndex = cursor.line - i;
+        // let lineText = document.lineAt(lineIndex).text.trim();
+        let walkLine = document.lineAt(lineIndex);
+        let walkLineText = walkLine.text.trim();
+        if (walkLine.firstNonWhitespaceCharacterIndex > indent) {
+            continue
+        }
+        if (walkLineText.startsWith("# generated_by_dict_unpack")) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let indent = line.firstNonWhitespaceCharacterIndex;
-    let replace_list = generate_insert_string(line.text, indent);
+    let has_insert_comment = has_comment(textEditor, edit);
+    let replace_list = generate_insert_string(line.text, indent, has_insert_comment);
     let replaceContent = replace_list.join('\n');
     let endLine = cursor.line + replace_list.length - 1;
     let endCol = replace_list[replace_list.length - 1].length;
@@ -101,7 +122,7 @@ export function generate_replace_string(source: string, prefix: string) {
 }
 
 export function generate_insert_string(source: string,
-    indent: number = 0) {
+    indent: number = 0, has_insert_comment = false) {
     let element_list = [];
     let run = "";
 
@@ -145,7 +166,10 @@ export function generate_insert_string(source: string,
         is_first = current_handle(source_var, new_ele, is_first);
     }
     // let final_str =  right_side_list.join(", \\\n")
-    let out_list = [`${indent_string}# generated_by_dict_unpack: ${source_var}`];
+    let out_list = [];
+    if (!has_insert_comment) {
+        out_list.push(`${indent_string}# generated_by_dict_unpack: ${source_var}`);
+    }
     for (let i = 0; i < left_side_list.length; i++) {
         let left_part = left_side_list[i];
         let right_part = right_side_list[i];
