@@ -24,8 +24,14 @@ export function get_parent_name(textEditor: vscode.TextEditor, edit: vscode.Text
                 if (insertContent.startsWith("_")) {
                     insertContent = insertContent.slice(1)
                 }
-                let index = insertContent.indexOf("_")
-                insertContent = insertContent.slice(index + 1);
+                let double_under_index = insertContent.indexOf("__")
+                if (double_under_index > -1) {
+                    insertContent = insertContent.slice(double_under_index + 2);
+                } else {
+                    let index = insertContent.indexOf("_")
+                    insertContent = insertContent.slice(index + 1);
+                }
+
 
             }
             let convert_element = insertContent;
@@ -36,6 +42,6 @@ export function get_parent_name(textEditor: vscode.TextEditor, edit: vscode.Text
         }
     })
 
-    
+
 
 }
