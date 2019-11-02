@@ -25,6 +25,7 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
             let activeEditor = vscode.window.activeTextEditor;
             
             activeEditor.insertSnippet(new vscode.SnippetString(current_var), currentPosition)
+            update_last_used_variable(current_var);
         }
     })
     
