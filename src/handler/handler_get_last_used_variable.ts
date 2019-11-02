@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 let _last_used_variable: string = null;
 let used_variables: Array<string> = [];
+// let _max_length = 100;
+let _max_length = 1000;
 export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     if (used_variables.length === 0) {
         vscode.window.showErrorMessage("last_used_variable is null");
@@ -38,5 +40,8 @@ export function update_last_used_variable(current_var: string) {
         used_variables.splice(index, 1);
     }
     used_variables.push(current_var);
+    if(used_variables.length > _max_length) {
+        used_variables = used_variables.slice(used_variables.length - _max_length);
+    }
     // _last_used_variable = current_var
 }
