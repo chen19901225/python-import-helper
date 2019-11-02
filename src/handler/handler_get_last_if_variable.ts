@@ -35,10 +35,17 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let beginLineNo = Math.max(cursor.line - 10, 0)
+    let currentIndent = line.firstNonWhitespaceCharacterIndex;
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
         new vscode.Position(cursor.line, line.range.end.character))
     for (let i = cursor.line - 1; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
+        // if()
+        let walkLindex = document.lineAt(i);
+        if(walkLindex.firstNonWhitespaceCharacterIndex>=currentIndent) {
+            
+            continue;
+        }
         content = content.trim();
         if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
             let vars = get_variable_list(content)
