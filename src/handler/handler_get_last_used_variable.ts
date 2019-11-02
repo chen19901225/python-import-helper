@@ -6,8 +6,9 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
         vscode.window.showErrorMessage("last_used_variable is null");
         return;
     }
+    let currentPosition = textEditor.selection.active;
     if(used_variables.length === 1) {
-        edit.insert(position, used_variables[0]);
+        edit.insert(currentPosition, used_variables[0]);
     }
     let quickItems: vscode.QuickPickItem[] = []
     for(let i=used_variables.length -1; i>=0 ;i--) {
@@ -17,7 +18,7 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
             'description': current_var
         })
     }
-    let currentPosition = textEditor.selection.active;
+    
     vscode.window.showQuickPick(quickItems).then((item) => {
         if(item) {
             let current_var = item.label;
