@@ -7,7 +7,14 @@ export function get_left_last_part(textEditor: vscode.TextEditor, edit: vscode.T
     // if(/^[^=]+=.+$/.test())
     let match = /^\s*([^=]+)=.*$/.exec(text);
     if (match) {
-        let pattern = removeVarType(match[1]).split(".").pop();
+        let eleWithoutType = removeVarType(match[1])
+        let pattern = eleWithoutType
+        if(eleWithoutType.indexOf(".") > -1) {
+            pattern = eleWithoutType.split(".").pop();
+        } else if(eleWithoutType.indexOf("__") > -1) {
+            let index = eleWithoutType.indexOf("__")
+            pattern = eleWithoutType.slice(index+2)
+        }
         edit.insert(position, pattern.trim());
         return;
     }
