@@ -42,19 +42,51 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         let content = document.lineAt(i).text;
         // if()
         let walkLindex = document.lineAt(i);
-        if(walkLindex.firstNonWhitespaceCharacterIndex>=currentIndent) {
-            
+        if (walkLindex.firstNonWhitespaceCharacterIndex >= currentIndent) {
+
             continue;
         }
         content = content.trim();
         if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
-            let vars = get_variable_list(content)
-            if (vars[1] === "not") {
-
-                _insert(edit, cursor, _extraVar(vars[2]));
-            } else {
-                _insert(edit, cursor, _extraVar(vars[1]));
+            if (content.startsWith("(")) {
+                content = content.slice(1)
             }
+            let vars = get_variable_list(content)
+            if (vars.indexOf("in") > -1) {
+                let in_index = vars.indexOf("in");
+                let items: vscode.QuickPickItem[] = [];
+                items.push({
+                    'label': vars[in_index - 1],
+                    "description": vars[in_index - 1]
+                })
+                items.push({
+                    'label': vars[in_index + 1],
+                    "description": vars[in_index + 1]
+                })
+
+                vscode.window.showQuickPick(items).then((item) => {
+                    if(item) {
+                        let {label} = item;
+                        update_last_used_variable(label);
+                        let activeEditor = vscode.window.activeTextEditor;
+            
+                        activeEditor.insertSnippet(new vscode.SnippetString(label), cursor);
+
+                        // _insert(edit, cursor, _extraVar(vars[2]));    
+                    }
+                });
+
+            } else {
+                if (vars[1] === "not") {
+
+                    _insert(edit, cursor, _extraVar(vars[2]));
+                } else {
+
+                    _insert(edit, cursor, _extraVar(vars[1]));
+                }
+            }
+
+
 
             break;
         } else if (content.startsWith("# generated_by_dict_unpack:")) {
