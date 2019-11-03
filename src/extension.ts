@@ -26,6 +26,7 @@ import { export_class_to_module } from "./handler/handler_export_class_to_module
 import { get_last_func } from "./handler/handler_get_last_func"
 import { wrap_node, select_node } from "./handler/handler_wrap_node"
 import { node_format } from "./handler/handler_node_format"
+import {handle_var} from "./handler/handler_handle_var"
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -240,6 +241,13 @@ export function activate(context: vscode.ExtensionContext) {
             node_format(textEdit, edit);
         })
     context.subscriptions.push(nodeFormatDiposable);
+
+    let handlerVarDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.handler-var",
+    (textEdit, edit) => {
+        handle_var(textEdit, edit);
+    })
+
+    context.subscriptions.push(handlerVarDisposable);
 
 
 }
