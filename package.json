@@ -179,6 +179,7 @@
                 "key": "alt+numpad0",
                 "when": "editorTextFocus && editorHasSelection && editorLangId==python"
             }
+            
         ],
         "commands": [
             {
