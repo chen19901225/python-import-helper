@@ -9,6 +9,9 @@ function has_comment(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit)
     let indent = line.firstNonWhitespaceCharacterIndex;
     for (let i = 0; i < 100; i++) {
         let lineIndex = cursor.line - i;
+        if(lineIndex === 0) {
+            return false;
+        }
         // let lineText = document.lineAt(lineIndex).text.trim();
         let walkLine = document.lineAt(lineIndex);
         let walkLineText = walkLine.text.trim();
