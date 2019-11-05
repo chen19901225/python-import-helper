@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { get_variable_list, extraVariablePart } from "../util"
 import { update_last_used_variable } from './handler_get_last_used_variable'
 import { insert_self } from "./handler_insert_self";
+import { service_position_history_add_position } from "../service/service_position_history";
 
 export function _extraVar(var_str: string) {
     let converted;
@@ -32,6 +33,7 @@ function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: s
 
 export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
+    service_position_history_add_position(cursor);
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
     let beginLineNo = Math.max(cursor.line - 10, 0)
@@ -48,6 +50,9 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         }
         content = content.trim();
         if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
+            let emptyIndex = content.indexOf(" ")
+            content = content.slice(emptyIndex)
+            content = content.trim()
             if (content.startsWith("(")) {
                 content = content.slice(1)
             }
