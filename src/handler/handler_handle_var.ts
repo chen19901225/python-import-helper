@@ -2,27 +2,38 @@ import * as vscode from "vscode";
 import { error } from "util";
 import { service_position_history_add_position } from "../service/service_position_history";
 
-function handle_dict_var(selectedText:string) {
+function handle_dict_var(selectedText: string) {
     let index = selectedText.indexOf('[')
     return selectedText.slice(0, index);
 }
-function handle_dict_key_raw(selectedText:string) {
+function handle_dict_key_raw(selectedText: string) {
     let index = selectedText.indexOf("[")
     let text = selectedText.slice(index + 1);
-    return text.slice(0, text.length -1);
+    return text.slice(0, text.length - 1);
 }
 
-function handle_dict_key_unquote(selectedText:string){
+function handle_dict_key_unquote(selectedText: string) {
     let index = selectedText.indexOf("[")
     let text = selectedText.slice(index + 1);
-    text = text.slice(0, text.length -1);
-    if(text[0] === '"' || text[0] === "'") {
-        text = text.slice(1, text.length -1);
+    text = text.slice(0, text.length - 1);
+    if (text[0] === '"' || text[0] === "'") {
+        text = text.slice(1, text.length - 1);
     }
     return text;
     // return text.slice(0, text.length -1);
 }
 
+
+function handle_var_simple(selectedText: string) {
+    if (selectedText.endsWith("es")) {
+        return selectedText.slice(0, selectedText.length - 2)
+    }
+    if (selectedText.endsWith("s")) {
+        return selectedText.slice(0, selectedText.length - 1)
+    }
+
+    return selectedText;
+}
 
 
 function _handle_var_with_label(selectedText: string, label: string) {
@@ -38,6 +49,10 @@ function _handle_var_with_label(selectedText: string, label: string) {
 
     if (label == 'dict_key_unquote') {
         return handle_dict_key_unquote(selectedText)
+    }
+
+    if (label === 'var_simple') {
+        return handle_var_simple(selectedText);
     }
 }
 
@@ -63,6 +78,10 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     items.push({
         "label": 'dict_key_unquote',
         'description': 'dict_key_unquote'
+    })
+    items.push({
+        "label": "var_simple",
+        "description": "get var simple"
     })
 
     vscode.window.showQuickPick(items).then((item) => {
