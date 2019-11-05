@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { error } from "util";
+import { service_position_history_add_position } from "../service/service_position_history";
 
 function handle_dict_var(selectedText:string) {
     let index = selectedText.indexOf('[')
@@ -43,6 +44,7 @@ function _handle_var_with_label(selectedText: string, label: string) {
 
 export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let selection = textEditor.selections[0];
+    service_position_history_add_position(selection.start);
     let document = textEditor.document;
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];

@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
 import { removeVarType } from "../util"
+import { service_position_history_add_position } from "../service/service_position_history";
 export function get_left_last_part(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let position = textEditor.selection.active;
+    service_position_history_add_position(position);
     let currentLine = textEditor.document.lineAt(position.line);
     let text = currentLine.text.trim();
     // if(/^[^=]+=.+$/.test())
