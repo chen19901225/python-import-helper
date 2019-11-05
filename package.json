@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.107",
+    "version": "0.0.119",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -178,9 +178,19 @@
                 "command": "cqh-python-import-helper.node-format",
                 "key": "alt+numpad0",
                 "when": "editorTextFocus && editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.handler-var",
+                "key": "alt+k v",
+                "when": "editorTextFocus && editorHasSelection && editorLangId==python"
             }
+            
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.handler-var",
+                "title": "cqh python import helper handler var"
+            },
             {
                 "command": "cqh-python-import-helper.node-format",
                 "title": "cqh python import helper node format"

@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { error } from "util";
 import { removeVarType } from "../util"
+import { service_position_history_add_position } from "../service/service_position_history";
 
 function _format(text: string): string {
     let origin = removeVarType(text)
@@ -37,6 +38,7 @@ export function get_insert_context(text: string): [boolean, string] {
 export function insert_left_pattern(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
 
     let position = textEditor.selection.active;
+    service_position_history_add_position(position);
     let currentLine = textEditor.document.lineAt(position.line);
     let text = currentLine.text.trim();
     let [found, inserted_text] = get_insert_context(text);

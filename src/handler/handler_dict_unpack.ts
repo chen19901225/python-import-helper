@@ -9,6 +9,9 @@ function has_comment(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit)
     let indent = line.firstNonWhitespaceCharacterIndex;
     for (let i = 0; i < 100; i++) {
         let lineIndex = cursor.line - i;
+        if(lineIndex === 0) {
+            return false;
+        }
         // let lineText = document.lineAt(lineIndex).text.trim();
         let walkLine = document.lineAt(lineIndex);
         let walkLineText = walkLine.text.trim();
@@ -144,6 +147,10 @@ export function generate_insert_string(source: string,
         return false;
 
     }
+    let handle_remove_prefix = (source_var, new_ele, is_first) => {
+        right_side_list.push(`${source_var}${new_ele}`)
+        return false;
+    }
     for (let ele of element_list) {
         // out.push(ele);
         if (ele === '=') {
@@ -157,7 +164,14 @@ export function generate_insert_string(source: string,
             new_ele = new_ele.slice(0, new_ele.length - 1);
             new_ele = new_ele.slice(1, new_ele.length - 1);
             current_handle = handle_dict;
-        } else if (new_ele.includes(".")) {
+        }else if(source_var.endsWith("_")) { // 这种
+            //username, password = request.auth_
+            //expect 
+            // username = request.auth_username
+            // password = request.auth_password
+            current_handle = handle_remove_prefix
+        }
+         else if (new_ele.includes(".")) {
             new_ele = new_ele.split(".").pop();
             current_handle = handle_instance
         } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {

@@ -16,6 +16,24 @@ import { generate_insert_string, generate_replace_string } from '../src/handler/
 // Defines a Mocha test suite to group tests of similar kind together
 suite("unpack Tests alt + i", () => {
 
+    test("test with left instance 2", () => {
+        let line = "self.no_keep_alive=params";
+        let out = generate_insert_string(line);
+        assert.deepEqual(out,[
+            "# generated_by_dict_unpack: params",
+            "self.no_keep_alive = params.no_keep_alive"
+        ])
+    })
+
+    test("test with prefix", () => {
+        let line = "image, name=source_";
+        let out = generate_insert_string(line);
+        assert.deepEqual(out, [
+            "# generated_by_dict_unpack: source_",
+            "image = source_image",
+            "name = source_name"
+        ])
+    })
     // Defines a Mocha unit test
     test("test source instance", () => {
         let line = "image, name=source";
@@ -36,6 +54,7 @@ suite("unpack Tests alt + i", () => {
             "name = this.source.name"
         ])
     });
+    
     test("test source left varaible", () => {
         let line = "self.image, self.name=this.source";
         let out = generate_insert_string(line);
