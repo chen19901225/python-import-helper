@@ -70,11 +70,11 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                 })
 
                 vscode.window.showQuickPick(items).then((item) => {
-                    if(item) {
-                        let {label} = item;
+                    if (item) {
+                        let { label } = item;
                         update_last_used_variable(label);
                         let activeEditor = vscode.window.activeTextEditor;
-            
+
                         activeEditor.insertSnippet(new vscode.SnippetString(label), cursor);
 
                         // _insert(edit, cursor, _extraVar(vars[2]));    
@@ -84,10 +84,10 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
             } else {
                 if (vars[1] === "not") {
 
-                    _insert(edit, cursor, _extraVar(vars[2]));
+                    _insert(edit, cursor, _extraVar(vars[1]));
                 } else {
 
-                    _insert(edit, cursor, _extraVar(vars[1]));
+                    _insert(edit, cursor, _extraVar(vars[0]));
                 }
             }
 
