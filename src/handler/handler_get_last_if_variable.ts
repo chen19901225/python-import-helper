@@ -82,7 +82,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                 });
 
             } else {
-                if (vars[1] === "not") {
+                if (vars[0] === "not") {
 
                     _insert(edit, cursor, _extraVar(vars[1]));
                 } else {
