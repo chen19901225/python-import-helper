@@ -35,6 +35,29 @@ function handle_var_simple(selectedText: string) {
     return selectedText;
 }
 
+function handle_last_part(selected_text: string) {
+    return selected_text.split(".").pop()
+}
+
+function handle_remove_prefix(selectedText: string) {
+    let double_index = selectedText.indexOf('__')
+    if (double_index > 0) {
+        return selectedText.slice(double_index + 2)
+    }
+    let index = selectedText.indexOf("_")
+    if (index > 0) {
+        return selectedText.slice(index)
+    }
+}
+
+function handle_remove_private(selectedText: string) {
+    if (selectedText.startsWith('_')) {
+        return selectedText.slice(1)
+    }
+    return selectedText;
+
+}
+
 
 function _handle_var_with_label(selectedText: string, label: string) {
     if (label === 'raw') {
@@ -53,6 +76,15 @@ function _handle_var_with_label(selectedText: string, label: string) {
 
     if (label === 'var_simple') {
         return handle_var_simple(selectedText);
+    }
+    if (label == 'var_last_part') {
+        return handle_last_part(selectedText)
+    }
+    if (label == 'var_remove_prefix') {
+        return handle_remove_prefix(selectedText);
+    }
+    if (label == 'var_remove_private') {
+        return handle_remove_private(selectedText);
     }
 }
 
@@ -82,6 +114,15 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     items.push({
         "label": "var_simple",
         "description": "get var simple"
+    })
+    items.push({
+        'label': 'var_last_part',
+        'description': 'var_last_part'
+    })
+
+    items.push({
+        'label': 'var_remove_prefix',
+        'description': 'var_remove_prefix'
     })
 
     vscode.window.showQuickPick(items).then((item) => {
