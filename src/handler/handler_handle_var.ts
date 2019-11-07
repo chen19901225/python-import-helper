@@ -125,6 +125,11 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         'description': 'var_remove_prefix'
     })
 
+    items.push({
+        'label': 'var_remove_private',
+        'description': 'var_remove_private'
+    })
+
     vscode.window.showQuickPick(items).then((item) => {
         let { label } = item;
         let out = _handle_var_with_label(selected_text, label);
