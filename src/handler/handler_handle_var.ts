@@ -93,6 +93,14 @@ function handle_remove_private(selectedText: string) {
 
 }
 
+function handle_var_remove_last_part(selectedText: string) {
+    let index = selectedText.lastIndexOf(".")
+    if (index === -1) {
+        return selectedText;
+    }
+    return selectedText.slice(0, index);
+}
+
 
 function _handle_var_with_label(selectedText: string, label: string) {
     if (label === 'raw') {
@@ -123,6 +131,9 @@ function _handle_var_with_label(selectedText: string, label: string) {
     }
     if (label == 'var_last_part_and_remove_private') {
         return handle_remove_private(handle_last_part(selectedText));
+    }
+    if (label == 'var_remove_last_part') {
+        return handle_var_remove_last_part(selectedText);
     }
 }
 
