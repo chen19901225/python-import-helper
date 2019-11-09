@@ -81,7 +81,7 @@ function handle_remove_prefix(selectedText: string) {
     }
     let index = selectedText.indexOf("_")
     if (index > 0) {
-        return selectedText.slice(index)
+        return selectedText.slice(index+1,)
     }
 }
 
