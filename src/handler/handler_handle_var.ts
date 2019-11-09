@@ -156,10 +156,10 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     let document = textEditor.document;
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];
-    let [flag, last_item] = getLastItem();
-    if (flag) {
-        items.push(last_item);
-    }
+    // let [flag, last_item] = getLastItem();
+    // if (flag) {
+    //     items.push(last_item);
+    // }
 
 
     items.push({
