@@ -1,6 +1,38 @@
 import * as vscode from "vscode";
 import { error } from "util";
 import { service_position_history_add_position, service_position_history_get_last_position } from "../service/service_position_history";
+import { update_last_used_variable } from "./handler_get_last_used_variable";
+
+
+let itemHistory: vscode.QuickPickItem[] = []
+
+
+function addItemHistory(item: vscode.QuickPickItem) {
+    let index = -1;
+    if (itemHistory.length) {
+        for (let i = 0; i < itemHistory.length; i++) {
+            let walkItem = itemHistory[i];
+            if (walkItem.label === item.label) {
+                index = i;
+            }
+        }
+        if(index > -1) {
+            // itemHistory.indexOf()
+            itemHistory.splice(index ,1)
+        }
+    }
+    itemHistory.push(item);
+}
+
+
+function getLastItem(): [boolean, vscode.QuickPickItem | null] {
+    if (itemHistory.length) {
+        return [true, itemHistory[itemHistory.length - 1]]
+    }
+    return [false, null]
+}
+
+
 
 function handle_dict_var(selectedText: string) {
     let index = selectedText.indexOf('[')
@@ -104,6 +136,12 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     let document = textEditor.document;
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];
+    let [flag, last_item] = getLastItem();
+    if (flag) {
+        items.push(last_item);
+    }
+
+
     items.push({
         'label': 'raw',
         'description': 'raw'
@@ -142,6 +180,7 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     vscode.window.showQuickPick(items).then((item) => {
         let { label } = item;
         let out = _handle_var_with_label(selected_text, label);
+        update_last_used_variable(out);
         let newEndPost = new vscode.Position(selection.start.line, selection.start.character + out.length);
         // let
         textEditor.edit((builder) => {
