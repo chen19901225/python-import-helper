@@ -118,6 +118,9 @@ function _handle_var_with_label(selectedText: string, label: string) {
     if (label == 'var_remove_private') {
         return handle_remove_private(selectedText);
     }
+    if (label == 'var_last_part_and_remove_private') {
+        return handle_remove_private(handle_last_part(selectedText));
+    }
 }
 
 
