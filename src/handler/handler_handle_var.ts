@@ -54,6 +54,7 @@ function _handle_var_with_label(selectedText: string, label: string) {
     if (label === 'var_simple') {
         return handle_var_simple(selectedText);
     }
+    
 }
 
 
