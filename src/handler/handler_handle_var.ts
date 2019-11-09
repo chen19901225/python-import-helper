@@ -196,6 +196,20 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         'label': 'var_remove_private',
         'description': 'var_remove_private'
     })
+    items.push({
+        'label': 'var_last_part_and_remove_private',
+        'description': 'var_last_part_and_remove_private'
+    })
+    items.push({
+        'label': 'var_last_part_and_remove_prefix',
+        'description': 'var_last_part_and_remove_prefix'
+    })
+
+    items.push({
+        'label': 'var_remove_last_part',
+        'description': 'var_remove_last_part'
+    })
+
 
     vscode.window.showQuickPick(items).then((item) => {
         if (!item) {
