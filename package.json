@@ -182,7 +182,7 @@
             {
                 "command": "cqh-python-import-helper.handler-var",
                 "key": "alt+k v",
-                "when": "editorTextFocus && editorHasSelection && editorLangId==python"
+                "when": "editorTextFocus && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.select-history-cusor",
