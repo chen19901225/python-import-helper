@@ -76,6 +76,9 @@ function handle_remove_prefix(selectedText: string) {
     if (double_index > 0) {
         return selectedText.slice(double_index + 2)
     }
+    if (selectedText.startsWith("_")) {
+        selectedText = selectedText.slice(1);
+    }
     let index = selectedText.indexOf("_")
     if (index > 0) {
         return selectedText.slice(index)
