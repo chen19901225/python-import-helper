@@ -16,9 +16,9 @@ function addItemHistory(item: vscode.QuickPickItem) {
                 index = i;
             }
         }
-        if(index > -1) {
+        if (index > -1) {
             // itemHistory.indexOf()
-            itemHistory.splice(index ,1)
+            itemHistory.splice(index, 1)
         }
     }
     itemHistory.push(item);
@@ -178,9 +178,13 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     })
 
     vscode.window.showQuickPick(items).then((item) => {
+        if (!item) {
+            return;
+        }
         let { label } = item;
         let out = _handle_var_with_label(selected_text, label);
         update_last_used_variable(out);
+        addItemHistory(item);
         let newEndPost = new vscode.Position(selection.start.line, selection.start.character + out.length);
         // let
         textEditor.edit((builder) => {
