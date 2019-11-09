@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { error } from "util";
-import { service_position_history_add_position } from "../service/service_position_history";
+import { service_position_history_add_position, service_position_history_get_last_position } from "../service/service_position_history";
 
 function handle_dict_var(selectedText: string) {
     let index = selectedText.indexOf('[')
@@ -90,8 +90,17 @@ function _handle_var_with_label(selectedText: string, label: string) {
 
 
 export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
-    let selection = textEditor.selections[0];
-    service_position_history_add_position(selection.start);
+    let selection;
+    if (textEditor.selection.isEmpty) {
+        let cursor = textEditor.selection.active;
+        let start = service_position_history_get_last_position()
+        selection = new vscode.Selection(start, cursor);
+    } else {
+        selection = textEditor.selections[0];
+        service_position_history_add_position(selection.start);
+    }
+
+
     let document = textEditor.document;
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];
