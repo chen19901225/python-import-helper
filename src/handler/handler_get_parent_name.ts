@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { parse_function } from '../parser';
 import { try_get_definition } from '../util'
+import { service_position_history_add_position } from "../service/service_position_history";
+import { update_last_used_variable } from "./handler_get_last_used_variable";
 
 export function get_parent_name(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     const definition = try_get_definition(textEditor, edit);
@@ -9,39 +11,7 @@ export function get_parent_name(textEditor: vscode.TextEditor, edit: vscode.Text
     let insertContent = parseResult.name;
     let currentPosition = textEditor.selection.active;
     let quickItems: vscode.QuickPickItem[] = []
-    for (let name of ["raw", "raw_without_prefix"]) {
-        quickItems.push({
-            "label": name,
-            "description": name
-        })
-    }
-    vscode.window.showQuickPick(quickItems).then((item) => {
-        if (item) {
-            let { label } = item;
-            if (label === "raw") {
-                // edit.insert(currentPosition, insertContent);
-            } else {
-                if (insertContent.startsWith("_")) {
-                    insertContent = insertContent.slice(1)
-                }
-                let double_under_index = insertContent.indexOf("__")
-                if (double_under_index > -1) {
-                    insertContent = insertContent.slice(double_under_index + 2);
-                } else {
-                    let index = insertContent.indexOf("_")
-                    insertContent = insertContent.slice(index + 1);
-                }
-
-
-            }
-            let convert_element = insertContent;
-            let activeEditor = vscode.window.activeTextEditor;
-            activeEditor.insertSnippet(new vscode.SnippetString(convert_element), textEditor.selection.active)
-
-            // edit.insert(currentPosition, insertContent);
-        }
-    })
-
-
-
+    service_position_history_add_position(currentPosition);
+    update_last_used_variable(insertContent);
+    edit.insert(currentPosition, insertContent);
 }
