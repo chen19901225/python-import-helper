@@ -81,7 +81,7 @@ function handle_remove_prefix(selectedText: string) {
     }
     let index = selectedText.indexOf("_")
     if (index > 0) {
-        return selectedText.slice(index+1,)
+        return selectedText.slice(index + 1)
     }
 }
 
@@ -156,10 +156,10 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     let document = textEditor.document;
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];
-    // let [flag, last_item] = getLastItem();
-    // if (flag) {
-    //     items.push(last_item);
-    // }
+    let [flag, last_item] = getLastItem();
+    if (flag) {
+        items.push(last_item);
+    }
 
 
     items.push({
@@ -211,12 +211,18 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     })
 
 
+    for (let i = 0; i < items.length; i++) {
+        let currentItem = items[i];
+        currentItem[i].label = '' + (i + 1) + currentItem[i].label
+    }
+
+
     vscode.window.showQuickPick(items).then((item) => {
         if (!item) {
             return;
         }
-        let { label } = item;
-        let out = _handle_var_with_label(selected_text, label);
+        let { description } = item;
+        let out = _handle_var_with_label(selected_text, description);
         update_last_used_variable(out);
         addItemHistory(item);
         let newEndPost = new vscode.Position(selection.start.line, selection.start.character + out.length);
