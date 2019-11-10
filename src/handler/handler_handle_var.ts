@@ -210,10 +210,14 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         'description': 'var_remove_last_part'
     })
 
+    let length = items.length;
 
     for (let i = 0; i < items.length; i++) {
         let currentItem = items[i];
-        currentItem[i].label = '' + (i + 1) + currentItem[i].label
+        let prefix = "" + (i + 1) + "."
+        prefix = "0".repeat(length);
+        prefix = prefix.slice(prefix.length - length)
+        currentItem[i].label = prefix + currentItem[i].label
     }
 
 
