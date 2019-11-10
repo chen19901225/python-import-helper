@@ -61,8 +61,15 @@ export function find_last_vars(lines: Array<string>, indent: number): [boolean, 
 
         if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
             // 忽略 a== b 或者 a!=b 这种情况
-            let vars = content.split("=")[0].trim();
-            return [true, removeVarType(vars)]
+            let beforeCh = content[indent-1];
+            if(["-", '+'].indexOf(beforeCh) > -1) {
+                let varPart = content.slice(0, index -1).trim();
+                return [true, removeVarType(varPart)];
+            } else {
+                let vars = content.split("=")[0].trim();
+                return [true, removeVarType(vars)]
+            }
+           
         }
     }
 
