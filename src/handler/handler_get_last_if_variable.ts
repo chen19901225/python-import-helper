@@ -29,6 +29,72 @@ function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: s
     update_last_used_variable(context);
     edit.insert(cusor, context);
 }
+export function try_get_if_var(line: string): [boolean, Array<string>] {
+    let start_array = ["if ", "elif ", "for ", "while "]
+
+    for (let start_ele of start_array) {
+        if (line.startsWith(start_ele)) {
+            line = line.slice(start_ele.length);
+            line = line.trim();
+            if (line.endsWith(":")) {
+                line = line.slice(0, line.length - 1)
+            }
+            line = line.trim()
+            if (line.startsWith("(")) {
+                line = line.slice(1)
+                line = line.trim()
+                if (line.endsWith(")")) {
+                    line = line.slice(0, line.length - 1)
+                }
+            }
+
+            line = line.trim()
+            let pieces: Array<string> = []
+            if (line.indexOf(" and ") > -1) {
+                pieces = line.split(/\s+and\s+/)
+            } else {
+                pieces = [line];
+            }
+            let out = []
+            for (let piece of pieces) {
+                piece = piece.trim()
+                if (piece.startsWith("(")) {
+                    piece = piece.slice(1);
+                    if (piece.endsWith(")")) {
+                        piece = piece.slice(0, line.length - 1);
+                    }
+                }
+
+                piece = piece.trim()
+                if (piece.startsWith("not ")) {
+                    piece = piece.slice(4)
+                }
+                if (/.+\s+not\s+in\s+.+/.test(piece)) {
+                    let _arr = piece.split(/\s+not\s+in\s+/)
+                    for (let _ele of _arr) {
+                        out.push(_ele)
+                    }
+                } else {
+                    if (piece.indexOf(" in ") > 0) {
+                        let _arr = piece.split(/\s+in\s+/)
+                        for (let _ele of _arr) {
+                            out.push(_ele)
+                        }
+                    }
+                    else {
+                        out.push(piece)
+                    }
+                }
+
+            }
+
+            return [true, out]
+
+
+        }
+    }
+    return [false, []]
+}
 
 
 export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
@@ -49,27 +115,20 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
             continue;
         }
         content = content.trim();
-        if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
-            let emptyIndex = content.indexOf(" ")
-            content = content.slice(emptyIndex)
-            content = content.trim()
-            if (content.startsWith("(")) {
-                content = content.slice(1)
-            }
-            let vars = get_variable_list(content)
-            if (vars.indexOf("in") > -1) {
-                let in_index = vars.indexOf("in");
-                let items: vscode.QuickPickItem[] = [];
-                items.push({
-                    'label': vars[in_index - 1],
-                    "description": vars[in_index - 1]
-                })
-                items.push({
-                    'label': vars[in_index + 1],
-                    "description": vars[in_index + 1]
-                })
-
-                vscode.window.showQuickPick(items).then((item) => {
+        let [flag, arr] = try_get_if_var(content);
+        if (flag) {
+            if (arr.length == 1) {
+                // update_last_used_variable()
+                _insert(edit, cursor, arr[0]);
+            } else {
+                let quickItems: vscode.QuickPickItem[] = []
+                for (let var_name of arr) {
+                    quickItems.push({
+                        'label': var_name,
+                        'description': var_name
+                    })
+                }
+                vscode.window.showQuickPick(quickItems).then((item) => {
                     if (item) {
                         let { label } = item;
                         update_last_used_variable(label);
@@ -81,25 +140,60 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                     }
                 });
 
-            } else {
-                if (vars[0] === "not") {
-
-                    _insert(edit, cursor, _extraVar(vars[1]));
-                } else {
-
-                    _insert(edit, cursor, _extraVar(vars[0]));
-                }
             }
-
-
-
-            break;
-        } else if (content.startsWith("# generated_by_dict_unpack:")) {
-            let last_var = content.split(":").pop()
-            last_var = last_var.trim()
-            _insert(edit, cursor, last_var);
             break;
         }
+        // if (content.startsWith("if ") || content.startsWith("elif ") || content.startsWith("for")) {
+        //     let emptyIndex = content.indexOf(" ")
+        //     content = content.slice(emptyIndex)
+        //     content = content.trim()
+        //     if (content.startsWith("(")) {
+        //         content = content.slice(1)
+        //     }
+        //     let vars = get_variable_list(content)
+        //     if (vars.indexOf("in") > -1) {
+        //         let in_index = vars.indexOf("in");
+        //         let items: vscode.QuickPickItem[] = [];
+        //         items.push({
+        //             'label': vars[in_index - 1],
+        //             "description": vars[in_index - 1]
+        //         })
+        //         items.push({
+        //             'label': vars[in_index + 1],
+        //             "description": vars[in_index + 1]
+        //         })
+
+        //         vscode.window.showQuickPick(items).then((item) => {
+        //             if (item) {
+        //                 let { label } = item;
+        //                 update_last_used_variable(label);
+        //                 let activeEditor = vscode.window.activeTextEditor;
+
+        //                 activeEditor.insertSnippet(new vscode.SnippetString(label), cursor);
+
+        //                 // _insert(edit, cursor, _extraVar(vars[2]));    
+        //             }
+        //         });
+
+        //     } else {
+        //         if (vars[0] === "not") {
+
+        //             _insert(edit, cursor, _extraVar(vars[1]));
+        //         } else {
+
+        //             _insert(edit, cursor, _extraVar(vars[0]));
+        //         }
+        //     }
+
+
+
+        //     break;
+        // } else if (content.startsWith("# generated_by_dict_unpack:")) {
+        //     let last_var = content.split(":").pop()
+        //     last_var = last_var.trim()
+        //     _insert(edit, cursor, last_var);
+        //     break;
+        // }
 
     }
 
