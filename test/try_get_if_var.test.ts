@@ -26,6 +26,12 @@ suite("try get if var", () => {
             assert.equal(arr[0], "name")
         }
     })
+    test("test if hasattr", () => {
+        let line = "if hasattr(self.request_start_line, 'status')"
+        let [flag, arr] = try_get_if_var(line)
+        assert.equal(flag, true)
+        assert.deepEqual(arr, ["self.request_start_line", "status"])
+    })
 
     test("test if in", () => {
         let line = "if a in b"

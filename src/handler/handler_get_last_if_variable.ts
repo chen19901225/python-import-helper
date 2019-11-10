@@ -69,7 +69,49 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 if (piece.startsWith("not ")) {
                     piece = piece.slice(4)
                 }
-                if (/.+\s+not\s+in\s+.+/.test(piece)) {
+
+                let trim_quote = (ele: string): string => {
+                    if (ele.startsWith("'") && ele.endsWith("'")) {
+                        ele = ele.slice(1, ele.length - 1)
+                    }
+                    if (ele.startsWith('"') && ele.endsWith('"')) {
+                        ele = ele.slice(1, ele.length - 1)
+                    }
+                    return ele
+                }
+
+                // test hasattr
+                if (piece.startsWith("hasattr(")) {
+                    let content = piece.slice("hasattr(".length);
+                    content = content.slice(0, content.length - 1);
+                    let elements = content.split(",")
+                    for (let ele of elements) {
+                        ele = ele.trim();
+                        ele = trim_quote(ele)
+                        out.push(ele)
+                    }
+                }
+                else if(piece.startsWith("isinstance(")) {
+                    let content = piece.slice("isinstance(".length);
+                    content = content.slice(0, content.length - 1);
+                    let elements = content.split(",")
+                    for (let ele of elements) {
+                        ele = ele.trim();
+                        ele = trim_quote(ele)
+                        out.push(ele)
+                    }
+                }
+                else if(piece.startsWith("getattr(")) {
+                    let content = piece.slice("getattr(".length);
+                    content = content.slice(0, content.length - 1);
+                    let elements = content.split(",")
+                    for (let ele of elements) {
+                        ele = ele.trim();
+                        ele = trim_quote(ele)
+                        out.push(ele)
+                    }
+                }
+                else if (/.+\s+not\s+in\s+.+/.test(piece)) {
                     let _arr = piece.split(/\s+not\s+in\s+/)
                     for (let _ele of _arr) {
                         out.push(_ele)
@@ -83,12 +125,12 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                     }
                     else {
                         let firstIndex = piece.indexOf(" ")
-                        if(firstIndex == -1) {
+                        if (firstIndex == -1) {
                             out.push(piece)
                         } else {
                             out.push(piece.slice(0, firstIndex))
                         }
-                        
+
                     }
                 }
 
