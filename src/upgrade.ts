@@ -232,7 +232,7 @@ function upgradeForTypeHint(textEditor: vscode.TextEditor, edit: vscode.TextEdit
         if (lineWords[0] == "class") { // 找到了
             // search end
             classLineNo[0] = walk_index;
-            for (let endI = walk_index; endI < walk_index + 10; i++) {
+            for (let endI = walk_index; endI < walk_index + 10; endI++) {
                 let endLine = document.lineAt(endI).text;
                 endLine = endLine.trim()
                 if (endLine.endsWith("):")) {
