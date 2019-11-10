@@ -82,7 +82,13 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                         }
                     }
                     else {
-                        out.push(piece)
+                        let firstIndex = piece.indexOf(" ")
+                        if(firstIndex == -1) {
+                            out.push(piece)
+                        } else {
+                            out.push(piece.slice(0, firstIndex))
+                        }
+                        
                     }
                 }
 
