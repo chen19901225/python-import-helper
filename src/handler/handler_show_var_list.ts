@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { parse_function, FunctionDef } from '../parser';
 import { try_get_definition } from '../util'
+import { update_last_used_variable } from "./handler_get_last_used_variable";
 export function show_var_list(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let currentPosition = textEditor.selection.active;
     let document = textEditor.document;
@@ -39,11 +40,13 @@ export function show_var_list(textEditor: vscode.TextEditor, edit: vscode.TextEd
         i += 1;
     }
     if (quickPickItem.length == 1) {
+        update_last_used_variable(quickPickItem[0].description)
         edit.insert(currentPosition, quickPickItem[0].description);
     } else {
         vscode.window.showQuickPick(quickPickItem).then(item => {
             if (item) {
                 let activeEditor = vscode.window.activeTextEditor;
+                update_last_used_variable(item.description)
                 activeEditor.insertSnippet(new vscode.SnippetString(item.description), currentPosition)
                 // edit.insert(currentPosition, item.description);
             }
