@@ -211,13 +211,26 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     })
 
     let length = items.length;
+    if (length < 10) {
+        length = 1
+    } else {
+        let strCount = (length - (length % 10)).toString();
+        let _count = 1;
+        for (let ch of strCount) {
+            if (ch == '0') {
+                _count += 1;
+            }
+        }
+        length = _count
+
+    }
 
     for (let i = 0; i < items.length; i++) {
         let currentItem = items[i];
         let prefix = "" + (i + 1)
-        prefix = "0".repeat(length);
+        prefix = "0".repeat(length) + prefix;
         prefix = prefix.slice(prefix.length - length) + "."
-        currentItem[i].label = prefix + currentItem[i].label
+        currentItem.label = prefix + currentItem.label
     }
 
 
