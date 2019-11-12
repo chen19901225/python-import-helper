@@ -107,9 +107,9 @@ function handle_var_remove_last_part(selectedText: string) {
 
 
 
-function _handle_var_with_label(selectedText: string, label: string, routes: Array<[number, string, (text:string) => string, string]>) {
+function _handle_var_with_label(selectedText: string, command: string, routes: Array<[number, string, (text:string) => string, string]>) {
     for(let [index, description, func, label] of routes) {
-        if(description === selectedText) {
+        if(description === command) {
 
             return func(selectedText);
         }
@@ -163,7 +163,7 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     }
     for(let [index, description, func, label] of routes) {
         let formated_index = formatIndex(index);
-        label = formated_index + label
+        label = formated_index + "." + label
         items.push({
             label,
             description
