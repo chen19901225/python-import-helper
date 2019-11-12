@@ -67,7 +67,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
             return [false, handle_comment(i)];
         }
 
-        
+
 
         if (line.startsWith('"""')) {
             return [false, handle_multiple_string(i)];
@@ -90,7 +90,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
     let currentLineNo = textEditor.selection.active.line;
     while (1) {
         let [is_ok, new_i] = handle_line(i);
-        if(new_i >= currentLineNo) { // current import statement is in the front part, so stop upgrade
+        if (new_i >= currentLineNo) { // current import statement is in the front part, so stop upgrade
             return;
         }
         i = new_i;
@@ -133,7 +133,7 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
         return currentLineNo;
     }
     let CodeLineNo = getCodeLineNoFunc(i);
-    if(CodeLineNo >= currentLineNo){
+    if (CodeLineNo >= currentLineNo) {
         return;
     }
 
@@ -183,8 +183,8 @@ function upgradeForImport(textEditor: vscode.TextEditor, edit: vscode.TextEditor
                 let child_imports = line_words.slice(3);
                 child_imports = child_imports.map((value) => {
                     value = value.trim();
-                    if(value.endsWith(",")) {
-                        return value.substring(0, value.length-1);
+                    if (value.endsWith(",")) {
+                        return value.substring(0, value.length - 1);
                     } else {
                         return value;
                     }
@@ -219,18 +219,27 @@ function upgradeForTypeHint(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     2. 把当前的内容插入 line1后面
     3. 删除之前行
     */
-    let classLineNo = -1;
+    let classLineNo = [-1, -1];
     let currentPosition = textEditor.selection.active;
     let selection = textEditor.selection;
     let document = textEditor.document;
     let selectedText = document.getText(selection);
-    
+
     let walk_index = currentPosition.line;
     while (walk_index >= 0) {
         let line = document.lineAt(walk_index).text;
         let lineWords = line.trim().split(" ");
-        if (lineWords[0] == "class" && line[line.length - 1] === ":") { // 找到了
-            classLineNo = walk_index;
+        if (lineWords[0] == "class") { // 找到了
+            // search end
+            classLineNo[0] = walk_index;
+            for (let endI = walk_index; endI < walk_index + 10; endI++) {
+                let endLine = document.lineAt(endI).text;
+                endLine = endLine.trim()
+                if (endLine.endsWith("):")) {
+                    classLineNo[1] = endI;
+                    break;
+                }
+            }
             break;
         } else {
             walk_index--;
@@ -239,10 +248,13 @@ function upgradeForTypeHint(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     if (walk_index < 0) {
         throw new Error("没有找到class 定义行");
     }
-    let classLine = document.lineAt(classLineNo);
-    edit.replace(classLine.range, classLine.text + "\n" + " ".repeat(classLine.firstNonWhitespaceCharacterIndex + 4) + selectedText);
+    let classStartLine = document.lineAt(classLineNo[0]);
+    let classEndLine = document.lineAt(classLineNo[1])
+
+    edit.insert(classEndLine.range.end, "\n" + " ".repeat(classStartLine.firstNonWhitespaceCharacterIndex + 4) + selectedText)
+    // edit.replace(classLine.range, classLine.text + "\n" + );
     edit.replace(selection, "");
-    vscode.commands.executeCommand("editor.action.deleteLines");    
+    vscode.commands.executeCommand("editor.action.deleteLines");
 
 
 }
