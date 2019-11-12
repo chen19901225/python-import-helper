@@ -227,7 +227,7 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
 
     for (let i = 0; i < items.length; i++) {
         let currentItem = items[i];
-        let prefix = "" + (i + 1)
+        let prefix = "" + (i + 10)
         prefix = "0".repeat(length) + prefix;
         prefix = prefix.slice(prefix.length - length) + "."
         currentItem.label = prefix + currentItem.label
