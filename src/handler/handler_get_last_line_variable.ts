@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { parse_function, FunctionDef } from '../parser';
 import {update_last_used_variable} from './handler_get_last_used_variable'
 import { get_variable_list, extraVariablePart, getLineIndent, removeVarType } from '../util'
+import { service_position_history_add_position } from "../service/service_position_history";
 /**
  * 
  * 支持的功能: 
@@ -40,6 +41,7 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let [found, vars] = find_last_vars(lines, currentIndent);
     if (found) {
         update_last_used_variable(vars)
+        service_position_history_add_position(cursor);
         edit.insert(cursor, vars);
     }
     
