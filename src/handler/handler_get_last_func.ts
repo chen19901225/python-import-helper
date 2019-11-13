@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import { update_last_used_variable } from "./handler_get_last_used_variable";
+import { service_position_history_add_position } from "../service/service_position_history";
 
 export function get_last_func(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
 
@@ -14,6 +16,8 @@ export function get_last_func(textEditor: vscode.TextEditor, edit: vscode.TextEd
         if (content.startsWith("def")) {
             let func_part = content.split(/\s+/)[1]
             let func_name = func_part.split("(")[0];
+            update_last_used_variable(func_name);
+            service_position_history_add_position(cursor);
             edit.insert(cursor, func_name);
 
             break;

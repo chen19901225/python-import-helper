@@ -181,7 +181,7 @@
             },
             {
                 "command": "cqh-python-import-helper.handler-var",
-                "key": "alt+k v",
+                "key": "alt+c",
                 "when": "editorTextFocus && editorLangId==python"
             },
             {
