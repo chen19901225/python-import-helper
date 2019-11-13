@@ -186,7 +186,7 @@
             },
             {
                 "command": "cqh-python-import-helper.select-history-cusor",
-                "key": "alt+k s",
+                "key": "alt+s",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
