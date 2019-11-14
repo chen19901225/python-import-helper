@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+import { update_last_used_variable } from "./handler_get_last_used_variable";
+import { service_position_history_add_position } from "../service/service_position_history";
 // import { error } from "util";
 // import { get_variable_list } from "../util";
 
@@ -14,6 +16,8 @@ export function get_current_class_name(textEditor: vscode.TextEditor, edit: vsco
         if(content.startsWith("class ")) {
             let class_name = content.slice("class".length, content.indexOf("("));
             class_name = class_name.trim();
+            update_last_used_variable(class_name);
+            service_position_history_add_position(cursor);
             edit.insert(cursor, class_name);
             break;
         }

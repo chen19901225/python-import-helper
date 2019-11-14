@@ -139,8 +139,16 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     let selected_text = document.getText(selection);
     let items: vscode.QuickPickItem[] = [];
     let [flag, last_item] = getLastItem();
+    let indexLength = 2;
+    let formatIndex = (index: number): string => {
+        let prefix = '0'.repeat(indexLength) + index.toString()
+        return prefix.slice(prefix.length - indexLength);
+    }
     if (flag) {
-        items.push(last_item);
+        items.push({
+            'label': formatIndex(1) + last_item.label,
+            'description': last_item.description
+        });
     }
     let routes:Array<[number, string, (text:string) => string, string]> = [
         [10, 'raw', handle_raw, "保存原样"],
@@ -149,18 +157,14 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         [13, 'dict_key_unquote', handle_dict_key_unquote, "a['c']获取c"],
         [14, 'var_simple', handle_var_simple, '获取单数形式'],
         [15, 'var_last_part', handle_last_part, '获取最后一部分eg: a.b 获取 b'],
-        [16, 'var_remove_prefix', handle_remove_prefix, '去掉前缀,ab__c获取c'],
-        [17, 'var_remove_private', handle_remove_private, '去掉私有前缀, _a返回a'],
+        [16, 'var_remove_private', handle_remove_private, '去掉私有前缀, _a返回a'],
+        [17, 'var_remove_prefix', handle_remove_prefix, '去掉前缀,ab__c获取c'],
         [18, 'var_remove_last_part', handle_var_remove_last_part, '去掉最后一部分'],
         [50, 'var_last_part_and_remove_private', handle_var_last_part_and_remove_private, "先获取最后一部分，再去掉私有前缀"],
         [51, 'var_last_part_and_remove_prefix', handle_var_last_part_and_remove_prefix, '先获取最后一部分, 再去掉前缀']
     ]
 
-    let indexLength = 2;
-    let formatIndex = (index: number): string => {
-        let prefix = '0'.repeat(indexLength) + index.toString()
-        return prefix.slice(prefix.length - indexLength);
-    }
+    
     for(let [index, description, func, label] of routes) {
         let formated_index = formatIndex(index);
         label = formated_index + "." + label
