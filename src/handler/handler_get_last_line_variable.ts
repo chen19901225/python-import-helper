@@ -67,12 +67,12 @@ export function find_last_vars(lines: Array<string>, indent: number): [boolean, 
             if(["-", '+'].indexOf(beforeCh) > -1) {
                 let varPart = content.slice(0, index -1).trim();
                 varPart = removeVarType(varPart);
-                update_last_used_variable(varPart);
+                // update_last_used_variable(varPart);
                 return [true, removeVarType(varPart)];
             } else {
                 let vars = content.split("=")[0].trim();
                 vars = removeVarType(vars);
-                update_last_used_variable(vars);
+                // update_last_used_variable(vars);
                 return [true, removeVarType(vars)]
             }
            
