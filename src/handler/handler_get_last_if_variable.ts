@@ -31,7 +31,11 @@ function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: s
 }
 export function try_get_if_var(line: string): [boolean, Array<string>] {
     let start_array = ["if ", "elif ", "for ", "while "]
-
+    line = line.trim()
+    if (line.startsWith("# generated_by_dict_unpack:")) {
+        let ele = line.split(":").pop()
+        return [true, [ele]];
+    }
     for (let start_ele of start_array) {
         if (line.startsWith(start_ele)) {
             line = line.slice(start_ele.length);
@@ -91,7 +95,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                         out.push(ele)
                     }
                 }
-                else if(piece.startsWith("isinstance(")) {
+                else if (piece.startsWith("isinstance(")) {
                     let content = piece.slice("isinstance(".length);
                     content = content.slice(0, content.length - 1);
                     let elements = content.split(",")
@@ -101,7 +105,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                         out.push(ele)
                     }
                 }
-                else if(piece.startsWith("getattr(")) {
+                else if (piece.startsWith("getattr(")) {
                     let content = piece.slice("getattr(".length);
                     content = content.slice(0, content.length - 1);
                     let elements = content.split(",")
