@@ -209,6 +209,7 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         let out = _handle_var_with_label(selected_text, description, routes);
         update_last_used_variable(out);
         addItemHistory({ 'label': item.description, 'description': item.description });
+        
         let newEndPost = new vscode.Position(selection.start.line, selection.start.character + out.length);
         // let
         textEditor.edit((builder) => {

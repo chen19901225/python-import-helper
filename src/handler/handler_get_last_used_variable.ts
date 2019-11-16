@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { service_position_history_add_position } from "../service/service_position_history";
 let _last_used_variable: string = null;
 let used_variables: Array<string> = [];
 // let _max_length = 100;
@@ -9,6 +10,7 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
         return;
     }
     let currentPosition = textEditor.selection.active;
+    service_position_history_add_position(currentPosition);
     if(used_variables.length === 1) {
         edit.insert(currentPosition, used_variables[0]);
     }
