@@ -34,7 +34,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
     line = line.trim()
     if (line.startsWith("# generated_by_dict_unpack:")) {
         let ele = line.split(":").pop()
-        return [true, [ele]];
+        return [true, [ele.trim()]];
     }
     for (let start_ele of start_array) {
         if (line.startsWith(start_ele)) {
@@ -162,7 +162,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
         let content = document.lineAt(i).text;
         // if()
         let walkLindex = document.lineAt(i);
-        if (walkLindex.firstNonWhitespaceCharacterIndex >= currentIndent) {
+        if (walkLindex.firstNonWhitespaceCharacterIndex > currentIndent) {
 
             continue;
         }

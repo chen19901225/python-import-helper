@@ -10,6 +10,12 @@ import { try_get_if_var } from '../src/handler/handler_get_last_if_variable';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("try get if var", () => {
+    test("test by comment", () => {
+        let line = "# generated_by_dict_unpack: self"
+        let [flag, arr] = try_get_if_var(line)
+        assert.equal(flag, true)
+        assert.deepEqual(arr, ["self"])
+    })
     test("test if not in", () => {
         let line = "if content not in (None, 0) "
         let [flag, arr] = try_get_if_var(line)
@@ -40,7 +46,7 @@ suite("try get if var", () => {
         assert.deepEqual(arr, ['a', 'b'])
 
     })
-   
+
     test("test if and", () => {
         let line = "if a and b";
         let [flag, arr] = try_get_if_var(line)
