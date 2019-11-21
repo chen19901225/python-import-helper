@@ -151,17 +151,17 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         });
     }
     let routes:Array<[number, string, (text:string) => string, string]> = [
-        [10, 'raw', handle_raw, "保存原样"],
-        [11, 'dict_get_var', handle_dict_get_var, "a['c']获取a"],
-        [12, 'dict_get_key', handle_dict_get_key, "a['c']获取'c'"],
-        [13, 'dict_key_unquote', handle_dict_key_unquote, "a['c']获取c"],
-        [14, 'var_simple', handle_var_simple, '获取单数形式'],
-        [15, 'var_last_part', handle_last_part, '获取最后一部分eg: a.b 获取 b'],
-        [16, 'var_remove_private', handle_remove_private, '去掉私有前缀, _a返回a'],
-        [17, 'var_remove_prefix', handle_remove_prefix, '去掉前缀,ab__c获取c'],
-        [18, 'var_remove_last_part', handle_var_remove_last_part, '去掉最后一部分'],
-        [50, 'var_last_part_and_remove_private', handle_var_last_part_and_remove_private, "先获取最后一部分，再去掉私有前缀"],
-        [51, 'var_last_part_and_remove_prefix', handle_var_last_part_and_remove_prefix, '先获取最后一部分, 再去掉前缀']
+        [10, 'raw', handle_raw, "keep"],
+        [11, 'dict_get_var', handle_dict_get_var, "dict_var_get_var"],
+        [12, 'dict_get_key', handle_dict_get_key, "dict_var_get_key"],
+        [13, 'dict_key_unquote', handle_dict_key_unquote, "dict_var_key_unquote"],
+        [14, 'var_simple', handle_var_simple, 'var_simple'],
+        [15, 'var_last_part', handle_last_part, 'var_last_part'],
+        [16, 'var_remove_private', handle_remove_private, 'var_remove_private'],
+        [17, 'var_remove_prefix', handle_remove_prefix, 'var_remove_prefix'],
+        [18, 'var_remove_last_part', handle_var_remove_last_part, 'var_remove_last_part'],
+        [50, 'var_last_part_and_remove_private', handle_var_last_part_and_remove_private, "var_last_part_and_remove_private"],
+        [51, 'var_last_part_and_remove_prefix', handle_var_last_part_and_remove_prefix, 'var_last_part_and_remove_prefix']
     ]
 
     
@@ -209,6 +209,7 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
         let out = _handle_var_with_label(selected_text, description, routes);
         update_last_used_variable(out);
         addItemHistory({ 'label': item.description, 'description': item.description });
+        
         let newEndPost = new vscode.Position(selection.start.line, selection.start.character + out.length);
         // let
         textEditor.edit((builder) => {
