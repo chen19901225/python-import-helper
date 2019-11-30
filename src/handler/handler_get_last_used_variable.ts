@@ -11,38 +11,43 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
     }
     let currentPosition = textEditor.selection.active;
     service_position_history_add_position(currentPosition);
-    if(used_variables.length === 1) {
+    if (used_variables.length === 1) {
         edit.insert(currentPosition, used_variables[0]);
     }
     let quickItems: vscode.QuickPickItem[] = []
-    for(let i=used_variables.length -1; i>=0 ;i--) {
+    let leftPad = (ele: string, count: number) => {
+        let prefix = '0'.repeat(count);
+        let final_ele = prefix + ele
+        return final_ele.slice(final_ele.length - count)
+    }
+    for (let i = used_variables.length - 1; i >= 0; i--) {
         let current_var = used_variables[i];
         quickItems.push({
-            'label': current_var,
+            'label': leftPad(i.toString(), 2) + current_var,
             'description': current_var
         })
     }
-    
+
     vscode.window.showQuickPick(quickItems).then((item) => {
-        if(item) {
-            let current_var = item.label;
+        if (item) {
+            let current_var = item.description;
             let activeEditor = vscode.window.activeTextEditor;
-            
+
             activeEditor.insertSnippet(new vscode.SnippetString(current_var), currentPosition)
             update_last_used_variable(current_var);
         }
     })
-    
-    
+
+
 
 }
 export function update_last_used_variable(current_var: string) {
     let index = used_variables.indexOf(current_var);
-    if(index > -1) {
+    if (index > -1) {
         used_variables.splice(index, 1);
     }
     used_variables.push(current_var);
-    if(used_variables.length > _max_length) {
+    if (used_variables.length > _max_length) {
         used_variables = used_variables.slice(used_variables.length - _max_length);
     }
     // _last_used_variable = current_var
