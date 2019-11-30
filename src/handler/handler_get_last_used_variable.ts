@@ -3,7 +3,7 @@ import { service_position_history_add_position } from "../service/service_positi
 let _last_used_variable: string = null;
 let used_variables: Array<string> = [];
 // let _max_length = 100;
-let _max_length = 1000;
+let _max_length = 50;
 export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     if (used_variables.length === 0) {
         vscode.window.showErrorMessage("last_used_variable is null");
