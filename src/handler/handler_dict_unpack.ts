@@ -9,7 +9,7 @@ function has_comment(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit)
     let indent = line.firstNonWhitespaceCharacterIndex;
     for (let i = 0; i < 100; i++) {
         let lineIndex = cursor.line - i;
-        if(lineIndex === 0) {
+        if (lineIndex === 0) {
             return false;
         }
         // let lineText = document.lineAt(lineIndex).text.trim();
@@ -44,6 +44,7 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     // 算了还是insert吧
     // edit.replace(line.range, replaceContent);
     // edit.insert(cursor, replaceContent);
+
 
     textEditor.edit(builder => {
         builder.replace(line.range, replaceContent)
@@ -139,16 +140,31 @@ export function generate_insert_string(source: string,
     let is_first = false;
     let indent_string = ' '.repeat(indent);
     let handle_dict = (source_var, new_ele, is_first) => {
-        right_side_list.push(`${source_var}["${new_ele}"]`)
+        if (is_first) {
+            right_side_list.push(`["${new_ele}"]`);
+        } else {
+            right_side_list.push(`${source_var}["${new_ele}"]`)
+        }
+
         return false;
     }
     let handle_instance = (source_var, new_ele, is_first) => {
-        right_side_list.push(`${source_var}.${new_ele}`)
+        if (is_first) {
+            right_side_list.push(`${new_ele}`)
+        } else {
+            right_side_list.push(`${source_var}.${new_ele}`)
+        }
+
         return false;
 
     }
     let handle_remove_prefix = (source_var, new_ele, is_first) => {
-        right_side_list.push(`${source_var}${new_ele}`)
+        if (is_first) {
+            right_side_list.push(`${new_ele}`)
+        } else {
+            right_side_list.push(`${source_var}${new_ele}`)
+        }
+
         return false;
     }
     for (let ele of element_list) {
@@ -164,14 +180,14 @@ export function generate_insert_string(source: string,
             new_ele = new_ele.slice(0, new_ele.length - 1);
             new_ele = new_ele.slice(1, new_ele.length - 1);
             current_handle = handle_dict;
-        }else if(source_var.endsWith("_")) { // 这种
+        } else if (source_var.endsWith("_")) { // 这种
             //username, password = request.auth_
             //expect 
             // username = request.auth_username
             // password = request.auth_password
             current_handle = handle_remove_prefix
         }
-         else if (new_ele.includes(".")) {
+        else if (new_ele.includes(".")) {
             new_ele = new_ele.split(".").pop();
             current_handle = handle_instance
         } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {
@@ -184,11 +200,13 @@ export function generate_insert_string(source: string,
     if (!has_insert_comment) {
         out_list.push(`${indent_string}# generated_by_dict_unpack: ${source_var}`);
     }
-    for (let i = 0; i < left_side_list.length; i++) {
-        let left_part = left_side_list[i];
-        let right_part = right_side_list[i];
-        out_list.push(`${indent_string}${left_part} = ${right_part}`);
-    }
+    let current_line = indent_string +  left_side_list.join(", ") + " = " + right_side_list.join(", ")
+    out_list.push(current_line)
+    // for (let i = 0; i < left_side_list.length; i++) {
+    //     let left_part = left_side_list[i];
+    //     let right_part = right_side_list[i];
+    //     out_list.push(`${indent_string}${left_part} = ${right_part}`);
+    // }
     return out_list;
     // return final_str
 

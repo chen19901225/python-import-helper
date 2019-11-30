@@ -19,7 +19,7 @@ suite("unpack Tests alt + i", () => {
     test("test with left instance 2", () => {
         let line = "self.no_keep_alive=params";
         let out = generate_insert_string(line);
-        assert.deepEqual(out,[
+        assert.deepEqual(out, [
             "# generated_by_dict_unpack: params",
             "self.no_keep_alive = params.no_keep_alive"
         ])
@@ -30,8 +30,7 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: source_",
-            "image = source_image",
-            "name = source_name"
+            "image, name = source_image, source_name",
         ])
     })
     // Defines a Mocha unit test
@@ -40,8 +39,7 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: source",
-            "image = source.image",
-            "name = source.name"
+            "image, name = source.image, source.name",
         ])
     });
 
@@ -50,18 +48,16 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: this.source",
-            "image = this.source.image",
-            "name = this.source.name"
+            "image, name = this.source.image, this.source.name",
         ])
     });
-    
+
     test("test source left varaible", () => {
         let line = "self.image, self.name=this.source";
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: this.source",
-            "self.image = this.source.image",
-            "self.name = this.source.name"
+            "self.image, self.name = this.source.image, this.source.name",
         ])
     })
 
@@ -70,8 +66,7 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line)
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: self.request",
-            "item['name'] = self.request[\"name\"]",
-            "item['age'] = self.request[\"age\"]"
+            "item['name'], item['age'] = self.request[\"name\"], self.request[\"age\"]",
         ])
     })
 
@@ -81,8 +76,7 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line);
         assert.deepEqual(out, [
             "# generated_by_dict_unpack: source_d",
-            'image = source_d["image"]',
-            'name = source_d["name"]'
+            'image, name = source_d["image"], source_d["name"]',
         ])
     })
 
@@ -91,8 +85,7 @@ suite("unpack Tests alt + i", () => {
         let out = generate_insert_string(line, 2);
         assert.deepEqual(out, [
             "  # generated_by_dict_unpack: source_d",
-            '  image = source_d["image"]',
-            '  name = source_d["name"]'
+            '  image, name = source_d["image"], source_d["name"]',
         ])
     })
 
