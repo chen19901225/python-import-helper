@@ -16,6 +16,69 @@ import { generate_insert_string, generate_replace_string } from '../src/handler/
 // Defines a Mocha test suite to group tests of similar kind together
 suite("unpack Tests alt + i", () => {
 
+    test("test with call double quote, one var", () => {
+        let line = 'one=data.get("';
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            '# generated_by_dict_unpack: data.get("',
+            'one = data.get("one")'
+        ]
+        )
+    })
+    test("test with call single quote, two var", () => {
+        let line = 'one, two=data.get("';
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            '# generated_by_dict_unpack: data.get("',
+            'one, two = data.get("one"), data.get("two")'
+        ]
+        )
+    })
+
+    test("test with call single quote, one var", () => {
+        let line = "one=data.get('";
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            "# generated_by_dict_unpack: data.get('",
+            "one = data.get('one')"
+        ]
+        )
+    })
+    test("test with call single quote, two var", () => {
+        let line = "one, two=data.get('";
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            "# generated_by_dict_unpack: data.get('",
+            "one, two = data.get('one'), data.get('two')"
+        ]
+        )
+    })
+    
+    test("test with call, two var", () => {
+        let line = "one, two=data.get(";
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            "# generated_by_dict_unpack: data.get(",
+            "one, two = data.get(one), data.get(two)"
+        ]
+        )
+    })
+    test("test with call, one var", () => {
+        let line = "one=data.get(";
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            "# generated_by_dict_unpack: data.get(",
+            "one = data.get(one)"
+        ]
+        )
+    })
+
     test("test with left instance 2", () => {
         let line = "self.no_keep_alive=params";
         let out = generate_insert_string(line);
