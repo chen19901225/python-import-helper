@@ -151,7 +151,7 @@
             },
             {
                 "command": "cqh-python-import-helper.get_current_classname",
-                "key": "alt+f10",
+                "key": "alt+k f",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
@@ -188,9 +188,18 @@
                 "command": "cqh-python-import-helper.select-history-cusor",
                 "key": "alt+s",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.insert-last-import",
+                "key": "alt+k l",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python "
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.insert-last-import",
+                "title": "cqh-python-import-helper insert last import",
+            },
             {
                 "command": "cqh-python-import-helper.select-history-cusor",
                 "title": "cqh-python-import-helper.select-history-cusor"

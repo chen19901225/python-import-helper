@@ -26,8 +26,9 @@ import { export_class_to_module } from "./handler/handler_export_class_to_module
 import { get_last_func } from "./handler/handler_get_last_func"
 import { wrap_node, select_node } from "./handler/handler_wrap_node"
 import { node_format } from "./handler/handler_node_format"
-import {handle_var} from "./handler/handler_handle_var"
+import { handle_var } from "./handler/handler_handle_var"
 import { select_history_cusor } from './handler/handler_select_history_cusor';
+import { insert_last_import } from './handler/handler_insert_last_import';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -244,18 +245,24 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(nodeFormatDiposable);
 
     let handlerVarDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.handler-var",
-    (textEdit, edit) => {
-        handle_var(textEdit, edit);
-    })
+        (textEdit, edit) => {
+            handle_var(textEdit, edit);
+        })
 
     context.subscriptions.push(handlerVarDisposable);
 
 
     let handleSelectHistoryCusorDiposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.select-history-cusor",
-    (textEdit, edit) => {
-        select_history_cusor(textEdit, edit);
-    })
+        (textEdit, edit) => {
+            select_history_cusor(textEdit, edit);
+        })
     context.subscriptions.push(handleSelectHistoryCusorDiposable);
+
+    let insertLastImportDiposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert-last-import",
+        (textEdit, edit) => {
+            insert_last_import(textEdit, edit);
+        });
+    context.subscriptions.push(insertLastImportDiposable);
 
 
 }
