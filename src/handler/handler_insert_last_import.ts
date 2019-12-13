@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { error } from "util";
+import { update_last_used_variable } from "./handler_get_last_used_variable";
 
 export function insert_last_import(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
@@ -8,6 +9,7 @@ export function insert_last_import(textEditor: vscode.TextEditor, edit: vscode.T
         let lastLine = textEditor.document.lineAt(currentLineNum);
         let [flag, import_str] = get_last_import(lastLine.text);
         if (flag) {
+            update_last_used_variable(import_str);
             edit.insert(cursor, import_str);
             break;
         }
