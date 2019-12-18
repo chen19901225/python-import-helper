@@ -36,6 +36,47 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
         let ele = line.split(":").pop()
         return [true, [ele.trim()]];
     }
+    let trim_parenthes = (text: string): string => {
+        if (text.startsWith("(")) {
+            text = text.slice(1)
+            text = text.trim()
+            if (text.endsWith(")")) {
+                text = text.slice(0, text.length - 1)
+            }
+        }
+        return text;
+    }
+    let line_split_piece = (text: string): Array<string> => {
+        // 根据and或者or分割text
+        let pieces = []
+        if (text.indexOf(" and ") > -1) {
+            pieces = line.split(/\s+and\s+/)
+        }
+        else if (text.indexOf(" or ") > -1) {
+            pieces = line.split(/\s+or\s+/)
+        }
+        else {
+            pieces = [line];
+        }
+        return pieces
+    }
+    let local_split = (text: string, count: number = 1): Array<string> => {
+        let out: Array<string> = []
+        let tmp = '' + text;
+        while (tmp.length > 0) {
+            let index = tmp.indexOf(',')
+            if (index == -1) {
+                throw new Error("cannot find , in text " + tmp);
+            }
+            let piece = tmp.slice(0, index);
+            out.push(piece);
+            if (out.length == count) {
+                out.push(tmp.slice(index + 1))
+                break;
+            }
+        }
+        return out;
+    }
     for (let start_ele of start_array) {
         if (line.startsWith(start_ele)) {
             line = line.slice(start_ele.length);
@@ -44,30 +85,16 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 line = line.slice(0, line.length - 1)
             }
             line = line.trim()
-            if (line.startsWith("(")) {
-                line = line.slice(1)
-                line = line.trim()
-                if (line.endsWith(")")) {
-                    line = line.slice(0, line.length - 1)
-                }
-            }
+            line = trim_parenthes(line);
 
-            line = line.trim()
-            let pieces: Array<string> = []
-            if (line.indexOf(" and ") > -1) {
-                pieces = line.split(/\s+and\s+/)
-            } else {
-                pieces = [line];
-            }
+            line = line.trim();
+            let pieces = line_split_piece(line);
+
             let out = []
             for (let piece of pieces) {
                 piece = piece.trim()
-                if (piece.startsWith("(")) {
-                    piece = piece.slice(1);
-                    if (piece.endsWith(")")) {
-                        piece = piece.slice(0, line.length - 1);
-                    }
-                }
+                piece = trim_parenthes(piece);
+
 
                 piece = piece.trim()
                 if (piece.startsWith("not ")) {
@@ -98,7 +125,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 else if (piece.startsWith("isinstance(")) {
                     let content = piece.slice("isinstance(".length);
                     content = content.slice(0, content.length - 1);
-                    let elements = content.split(",")
+                    let elements = local_split(content)
                     for (let ele of elements) {
                         ele = ele.trim();
                         ele = trim_quote(ele)
@@ -108,7 +135,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 else if (piece.startsWith("getattr(")) {
                     let content = piece.slice("getattr(".length);
                     content = content.slice(0, content.length - 1);
-                    let elements = content.split(",")
+                    let elements = local_split(content, 1);
                     for (let ele of elements) {
                         ele = ele.trim();
                         ele = trim_quote(ele)
