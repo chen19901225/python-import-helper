@@ -10,6 +10,13 @@ import { try_get_if_var } from '../src/handler/handler_get_last_if_variable';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("try get if var", () => {
+
+    test("test with parenthes", () => {
+        let line = "if (a is not None):";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.equal(arr, ["a"]);
+    })
     test("test by comment", () => {
         let line = "# generated_by_dict_unpack: self"
         let [flag, arr] = try_get_if_var(line)

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 
 let _positions: vscode.Position[] = []
-let _position_max_count = 100
+let _position_max_count = 50
 
 export function service_position_history_add_position(pos: vscode.Position) {
     _positions.push(pos);

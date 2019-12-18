@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { error } from "util";
 import { get_variable_list } from "../util";
+import { isForOfStatement } from "typescript";
 
 function has_comment(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
     let cursor = textEditor.selection.active;
@@ -140,33 +141,41 @@ export function generate_insert_string(source: string,
     let is_first = false;
     let indent_string = ' '.repeat(indent);
     let handle_dict = (source_var, new_ele, is_first) => {
-        if (is_first) {
-            right_side_list.push(`["${new_ele}"]`);
-        } else {
-            right_side_list.push(`${source_var}["${new_ele}"]`)
-        }
-
+        right_side_list.push(`${source_var}["${new_ele}"]`)
         return false;
     }
     let handle_instance = (source_var, new_ele, is_first) => {
-        if (is_first) {
-            right_side_list.push(`${new_ele}`)
-        } else {
-            right_side_list.push(`${source_var}.${new_ele}`)
-        }
 
+        right_side_list.push(`${source_var}.${new_ele}`)
         return false;
 
     }
     let handle_remove_prefix = (source_var, new_ele, is_first) => {
-        if (is_first) {
-            right_side_list.push(`${new_ele}`)
-        } else {
-            right_side_list.push(`${source_var}${new_ele}`)
-        }
-
+        right_side_list.push(`${source_var}${new_ele}`)
         return false;
     }
+    let handle_func_call_with_double_quote = (source_var, new_ele, is_first) => {
+        let format_var = source_var.slice(0, source_var.length - 2);
+        right_side_list.push(`${format_var}("${new_ele}")`);
+        return false;
+    }
+    let handle_func_call_with_single_quote = (source_var, new_ele, is_first) => {
+        let format_var = source_var.slice(0, source_var.length - 2);
+        right_side_list.push(`${format_var}('${new_ele}')`);
+        return false;
+    }
+    let handle_func_call = (source_var, new_ele, is_first) => {
+        let format_var = source_var.slice(0, source_var.length - 1);
+        // if (is_first) {
+        //     right_side_list.push(`${new_ele})`)
+        // } else {
+
+        // }
+        right_side_list.push(`${format_var}(${new_ele})`);
+        return false;
+    }
+
+
     for (let ele of element_list) {
         // out.push(ele);
         if (ele === '=') {
@@ -192,6 +201,12 @@ export function generate_insert_string(source: string,
             current_handle = handle_instance
         } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {
             current_handle = handle_dict;
+        } else if (source_var.endsWith('("')) {
+            current_handle = handle_func_call_with_double_quote;
+        } else if (source_var.endsWith("('")) {
+            current_handle = handle_func_call_with_single_quote;
+        } else if (source_var.endsWith('(')) {
+            current_handle = handle_func_call;
         }
         is_first = current_handle(source_var, new_ele, is_first);
     }
@@ -200,7 +215,7 @@ export function generate_insert_string(source: string,
     if (!has_insert_comment) {
         out_list.push(`${indent_string}# generated_by_dict_unpack: ${source_var}`);
     }
-    let current_line = indent_string +  left_side_list.join(", ") + " = " + right_side_list.join(", ")
+    let current_line = indent_string + left_side_list.join(", ") + " = " + right_side_list.join(", ")
     out_list.push(current_line)
     // for (let i = 0; i < left_side_list.length; i++) {
     //     let left_part = left_side_list[i];
