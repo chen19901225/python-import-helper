@@ -185,6 +185,12 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     let currentIndent = line.firstNonWhitespaceCharacterIndex;
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
         new vscode.Position(cursor.line, line.range.end.character))
+
+    let left_pad = (text: string, length: number): string => {
+        let prefix = '0'.repeat(length);
+        let concat_str = prefix + text;
+        return concat_str.slice(concat_str.length - length);
+    }
     for (let i = cursor.line - 1; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         // if()
@@ -193,6 +199,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
 
             continue;
         }
+
         content = content.trim();
         let [flag, arr] = try_get_if_var(content);
         if (flag) {
@@ -201,19 +208,21 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                 _insert(edit, cursor, arr[0]);
             } else {
                 let quickItems: vscode.QuickPickItem[] = []
+                let i = 10;
                 for (let var_name of arr) {
                     quickItems.push({
-                        'label': var_name,
+                        'label': left_pad(i.toString(), 2) + var_name,
                         'description': var_name
                     })
+                    i++;
                 }
                 vscode.window.showQuickPick(quickItems).then((item) => {
                     if (item) {
-                        let { label } = item;
-                        update_last_used_variable(label);
+                        let { description } = item;
+                        update_last_used_variable(description);
                         let activeEditor = vscode.window.activeTextEditor;
 
-                        activeEditor.insertSnippet(new vscode.SnippetString(label), cursor);
+                        activeEditor.insertSnippet(new vscode.SnippetString(description), cursor);
 
                         // _insert(edit, cursor, _extraVar(vars[2]));    
                     }
