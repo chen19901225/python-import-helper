@@ -211,7 +211,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                 let i = 10;
                 for (let var_name of arr) {
                     quickItems.push({
-                        'label': left_pad(i.toString(), 2) + var_name,
+                        'label': left_pad(i.toString(), 2) + "." + var_name,
                         'description': var_name
                     })
                     i++;
