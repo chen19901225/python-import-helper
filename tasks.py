@@ -1,3 +1,4 @@
+import invoke
 import functools
 from invoke import task
 
@@ -17,22 +18,31 @@ def get_branch_name(c):
 
 
 @task
+def commit(c, msg='ci'):
+    # 如果没有提交的内容会触发
+    try:
+        from io import BytesIO
+        out_buffer = BytesIO()
+        c.run("git commit -m '{}'".format(msg), out_stream=out_buffer)
+    except invoke.exceptions.UnexpectedExit as e:
+        print(out_buffer)
+        pass
+        
+    
+
+
+@task
 def gd(c):
     branch_name = get_branch_name(c)
     print("branch_name:{}".format(branch_name))
     c.run("git add .")
     print("before commit")
-    try:
-        result = c.run("git commit -m 'test'")
-    except Exception as e:
-        import logging
-        logging.error("fail to run commit %r" % e, exc_info=True)
-        
-    
-    print("commit result:{}".format(result))
+    commit(c)
+
     print("after commit")
     # c.run("git push origin {}".format(branch_name))
     c_push(c)
+
 
 @task
 def c_push(c):
@@ -41,7 +51,7 @@ def c_push(c):
     print("result:{}".format(result))
 
 
-def get_version( v_str: str):
+def get_version(v_str: str):
     if not v_str.startswith("v"):
         return [-1]
     # if '--' in v_str:
@@ -68,4 +78,3 @@ def patch(c):
     gd(c)
     c.run("git fetch")
     c.run("vsce publish patch")
-    
