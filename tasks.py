@@ -28,3 +28,9 @@ def gd(c):
 def c_push(c):
     branch_name = get_branch_name(c)
     c.run("git push origin {}".format(branch_name))
+
+@task
+def patch(c):
+    gd(c)
+    c.run("vsce publish patch")
+    
