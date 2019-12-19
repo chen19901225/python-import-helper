@@ -23,9 +23,11 @@ def commit(c, msg='ci'):
     try:
         from io import StringIO
         out_buffer = StringIO()
-        c.run("git commit -m '{}'".format(msg), out_stream=out_buffer)
+        err_buffer = StringIO()
+        c.run("git commit -m '{}'".format(msg), out_stream=out_buffer, err_stream=err_buffer)
     except invoke.exceptions.UnexpectedExit as e:
         print(out_buffer.getvalue())
+        print(err_buffer.getvalue())
         pass
         
     
