@@ -21,6 +21,7 @@ def gd(c):
     branch_name = get_branch_name(c)
     print("branch_name:{}".format(branch_name))
     c.run("git add .")
+    print("before commit")
     c.run("git commit -m 'test'")
     print("after commit")
     # c.run("git push origin {}".format(branch_name))
