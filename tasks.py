@@ -27,8 +27,8 @@ def commit(c, msg='ci'):
         c.run("git commit -m '{}'".format(msg), out_stream=out_buffer, err_stream=err_buffer)
     except invoke.exceptions.UnexpectedExit as e:
         # 当没有提交的内容时
-        # out_buffer的内容为null
-        # err_buffer的内容为
+        # err_buffer的内容为null
+        # out_buffer的内容为
         #On branch master
         #Your branch is up to date with 'origin/master'.
         #nothing to commit, working tree clean
@@ -38,7 +38,7 @@ def commit(c, msg='ci'):
         print("err_out {}".format(err_out))
         out_out = out_buffer.getvalue()
         print("out_buffer {}".format(out_out))
-        if "nothing to commit, working tree clean" in err_out:
+        if "nothing to commit, working tree clean" in out_out:
             print("nothing to commit, working tree clean, so continue" )
         else:
             print("raise")
