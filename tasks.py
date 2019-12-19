@@ -21,8 +21,8 @@ def get_branch_name(c):
 def commit(c, msg='ci'):
     # 如果没有提交的内容会触发
     try:
-        from io import BytesIO
-        out_buffer = BytesIO()
+        from io import StringIO
+        out_buffer = StringIO()
         c.run("git commit -m '{}'".format(msg), out_stream=out_buffer)
     except invoke.exceptions.UnexpectedExit as e:
         print(out_buffer)
