@@ -36,7 +36,7 @@ def commit(c, msg='ci'):
         # print(out_buffer.getvalue())
         err_out = err_buffer.getvalue()
         if "nothing to commit, working tree clean" in err_out:
-            pass
+            print("nothing to commit, working tree clean, so continue" )
         else:
             raise
         
