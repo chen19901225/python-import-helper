@@ -22,7 +22,13 @@ def gd(c):
     print("branch_name:{}".format(branch_name))
     c.run("git add .")
     print("before commit")
-    result = c.run("git commit -m 'test'")
+    try:
+        result = c.run("git commit -m 'test'")
+    except Exception as e:
+        import logging
+        logging.error("fail to run commit %r" % e, exc_info=True)
+        
+    
     print("commit result:{}".format(result))
     print("after commit")
     # c.run("git push origin {}".format(branch_name))
