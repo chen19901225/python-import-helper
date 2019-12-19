@@ -60,7 +60,7 @@ def gd(c):
 def c_push(c):
     branch_name = get_branch_name(c)
     result = c.run("git push origin {}".format(branch_name))
-    print("result:{}".format(result))
+    # print("result:{}".format(result))
 
 
 def get_version(v_str: str):
