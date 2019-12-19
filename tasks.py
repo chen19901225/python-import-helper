@@ -28,7 +28,7 @@ def commit(c, msg='ci'):
     except invoke.exceptions.UnexpectedExit as e:
         print(out_buffer.getvalue())
         print(err_buffer.getvalue())
-        pass
+        raise
         
     
 
