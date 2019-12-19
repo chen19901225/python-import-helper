@@ -1,3 +1,4 @@
+import functools
 from invoke import task
 
 import re
@@ -29,8 +30,32 @@ def c_push(c):
     branch_name = get_branch_name(c)
     c.run("git push origin {}".format(branch_name))
 
+
+def get_version( v_str: str):
+    if not v_str.startswith("v"):
+        return [-1]
+    # if '--' in v_str:
+    #     v_str = v_str.split('--')[0]
+    v_str = v_str[1:]
+    try:
+        li = list(map(int, v_str.split('.')))
+    except ValueError:
+        # 遇到这种v0.0.0rc
+        li = [-1]
+    return li
+
+
+@task
+def new_tag_get(c, branch_name):
+    result = c.run("git tag -l")
+    lines = result.stdout.splitlines()
+    lines = sorted(lines, key=functools.partial(get_version), reverse=True)
+    return lines[0]
+
+
 @task
 def patch(c):
     gd(c)
+    c.run("git fetch")
     c.run("vsce publish patch")
     
