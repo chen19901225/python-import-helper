@@ -16,6 +16,32 @@ suite("try get if var", () => {
     //     let [flag, arr] = try_get_if_var(line);
 
     // })
+
+    test("test for for array", () => {
+        let line = "for ele in arr:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["ele", "arr"])
+    })
+    test("test for for tuple", () => {
+        let line = "for (key, value) in d:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
+    test("test for for kwargs", () => {
+        let line = "for (key, value) in d.items()";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
+    test("test for for attr kwargs", () => {
+        let line = "for (key, value) in self.d.items()";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "self.d"])
+    })
+
     test("test isinstance with tuple", () => {
         let line = "if isinstance(a, (list, tuple))"
         let [flag, arr] = try_get_if_var(line);
@@ -59,7 +85,7 @@ suite("try get if var", () => {
         assert.deepEqual(arr, ['content', '(None, 0)'])
     })
     test("test if not", () => {
-        let prefix_arr = ["if ", "elif", "for", "while"]
+        let prefix_arr = ["if ", "elif", "while"]
         let other = " not name:"
         for (let prefix of prefix_arr) {
             let line = prefix + other;
@@ -91,7 +117,7 @@ suite("try get if var", () => {
     })
 
     test("test if simple", () => {
-        let prefix_arr = ["if ", "elif", "for", "while"]
+        let prefix_arr = ["if ", "elif", "while"]
         let other = " name:"
         for (let prefix of prefix_arr) {
             let line = prefix + other;

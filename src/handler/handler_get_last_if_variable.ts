@@ -29,23 +29,58 @@ function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: s
     update_last_used_variable(context);
     edit.insert(cusor, context);
 }
+
+function get_var_from_for(line: string): Array<string> {
+    // 从for循环提取变量
+    var arr: Array<string> = []
+    let start_ele = "for ";
+    line = line.slice(start_ele.length);
+    line = line.trim();
+    if (line.endsWith(":")) {
+        line = line.slice(0, line.length - 1)
+    }
+    line = line.trim()
+    let pieces = line.split(/\s+in\s+/)
+    pieces[0] = pieces[0].trim()
+    if(pieces[0].startsWith("(") && pieces[0].endsWith(")")) {
+        // 第一个是一个tuple
+        pieces[0] = trim_parenthes(pieces[0])
+        arr.push(pieces[0])
+        let child_ele = pieces[0].split(/,\s*/);
+        arr.push(...child_ele);
+    } else {
+        arr.push(pieces[0])
+    }
+    // pieces[0] = trim_parenthes(pieces[0])
+    // 第二个是一个dict
+    if (pieces[1].endsWith("items()")) {
+        pieces[1] = pieces[1].slice(0, pieces[1].length - "items()".length - 1);
+        arr.push(pieces[1]);
+    } else {
+        arr.push(pieces[1]);
+    }
+    // return pieces;
+    return arr
+}
+function trim_parenthes(text: string): string {
+    if (text.startsWith("(")) {
+        text = text.slice(1)
+        text = text.trim()
+        if (text.endsWith(")")) {
+            text = text.slice(0, text.length - 1)
+        }
+    }
+    return text;
+}
+
 export function try_get_if_var(line: string): [boolean, Array<string>] {
-    let start_array = ["if ", "elif ", "for ", "while "]
+    let start_array = ["if ", "elif ", "while "]
     line = line.trim()
     if (line.startsWith("# generated_by_dict_unpack:")) {
         let ele = line.split(":").pop()
         return [true, [ele.trim()]];
     }
-    let trim_parenthes = (text: string): string => {
-        if (text.startsWith("(")) {
-            text = text.slice(1)
-            text = text.trim()
-            if (text.endsWith(")")) {
-                text = text.slice(0, text.length - 1)
-            }
-        }
-        return text;
-    }
+
     let line_split_piece = (text: string): Array<string> => {
         // 根据and或者or分割text
         let pieces = []
@@ -171,6 +206,18 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
 
 
         }
+    } // for if, elif , while
+
+    // for for
+    if (line.startsWith("for ")) {
+        // line = line.slice(start_ele.length);
+        // line = line.trim();
+        // if (line.endsWith(":")) {
+        //     line = line.slice(0, line.length - 1)
+        // }
+        // line = line.trim()
+        let array_arr = get_var_from_for(line);
+        return [true, array_arr];
     }
     return [false, []]
 }
