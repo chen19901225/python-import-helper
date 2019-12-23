@@ -101,6 +101,7 @@ def wait( predict, timeout=20):
         result = predict()
         if result:
             break
+        time.sleep(1)
 
 
 def check_is_ahead(c):
