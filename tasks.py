@@ -98,4 +98,4 @@ def patch(c):
     c.run("git fetch")
     c.run("vsce publish patch")
     print("complete after patch".center(80, '='))
-    gd(c, 'vsce publish patch')
+    gd(c)
