@@ -90,7 +90,10 @@ def new_tag_get(c, branch_name):
 
 @task
 def patch(c):
+
     gd(c)
+    print('commit and push before patch'.center(80, '='))
     c.run("git fetch")
     c.run("vsce publish patch")
+    print("complete after patch".center(80, '='))
     gd(c, 'vsce publish patch')
