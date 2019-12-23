@@ -99,6 +99,8 @@ def patch(c):
     print('commit and push before patch'.center(80, '='))
     c.run("git fetch")
     c.run("vsce publish patch")
+    
+    # 不sleep3秒的话，拿不到状态，有点郁闷 
     time.sleep(3)
     print("complete after patch".center(80, '='))
     version = json.loads(open("package.json",'r', encoding='utf-8').read())['version']
