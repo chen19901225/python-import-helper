@@ -24,7 +24,9 @@ def commit(c, msg='ci'):
         from io import StringIO
         out_buffer = StringIO()
         err_buffer = StringIO()
-        c.run("git commit -m '{}'".format(msg),
+        cmd = "git commit -m '{}'".format(msg)
+        print("commit cmd:{}".format(cmd))
+        c.run(cmd,
               out_stream=out_buffer, err_stream=err_buffer)
     except invoke.exceptions.UnexpectedExit as e:
         # 当没有提交的内容时
