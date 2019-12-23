@@ -24,14 +24,15 @@ def commit(c, msg='ci'):
         from io import StringIO
         out_buffer = StringIO()
         err_buffer = StringIO()
-        c.run("git commit -m '{}'".format(msg), out_stream=out_buffer, err_stream=err_buffer)
+        c.run("git commit -m '{}'".format(msg),
+              out_stream=out_buffer, err_stream=err_buffer)
     except invoke.exceptions.UnexpectedExit as e:
         # 当没有提交的内容时
         # err_buffer的内容为null
         # out_buffer的内容为
-        #On branch master
-        #Your branch is up to date with 'origin/master'.
-        #nothing to commit, working tree clean
+        # On branch master
+        # Your branch is up to date with 'origin/master'.
+        # nothing to commit, working tree clean
 
         # print(out_buffer.getvalue())
         err_out = err_buffer.getvalue()
@@ -39,21 +40,19 @@ def commit(c, msg='ci'):
         out_out = out_buffer.getvalue()
         print("out_buffer {}".format(out_out))
         if "nothing to commit, working tree clean" in out_out:
-            print("nothing to commit, working tree clean, so continue" )
+            print("nothing to commit, working tree clean, so continue")
         else:
             print("raise")
             raise
-        
-    
 
 
 @task
-def gd(c):
+def gd(c, msg='ci'):
     branch_name = get_branch_name(c)
     print("branch_name:{}".format(branch_name))
     c.run("git add .")
     print("before commit")
-    commit(c)
+    commit(c, msg)
 
     print("after commit")
     # c.run("git push origin {}".format(branch_name))
@@ -94,4 +93,4 @@ def patch(c):
     gd(c)
     c.run("git fetch")
     c.run("vsce publish patch")
-    gd(c)
+    gd(c, 'vsce publish patch')
