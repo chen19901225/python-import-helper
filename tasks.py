@@ -1,3 +1,4 @@
+import json
 import invoke
 import functools
 from invoke import task
@@ -98,4 +99,6 @@ def patch(c):
     c.run("git fetch")
     c.run("vsce publish patch")
     print("complete after patch".center(80, '='))
-    gd(c)
+    version = json.loads(open("package.json",'r', encoding='utf-8').read())['version']
+    
+    gd(c, 'deploy_with_version {}'.format(version))
