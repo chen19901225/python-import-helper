@@ -104,5 +104,4 @@ def patch(c):
     time.sleep(3)
     print("complete after patch".center(80, '='))
     version = json.loads(open("package.json",'r', encoding='utf-8').read())['version']
-    
     gd(c, 'deploy_with_version {}'.format(version))
