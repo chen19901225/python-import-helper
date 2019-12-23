@@ -193,9 +193,18 @@
                 "command": "cqh-python-import-helper.insert-last-import",
                 "key": "alt+k l",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python "
+            },
+            {
+                "command": "cqh-python-import-helper.update_if",
+                "key": "alt+k u",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python "
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.update_if",
+                "title": "cqh-python-import-helper update if"
+            },
             {
                 "command": "cqh-python-import-helper.insert-last-import",
                 "title": "cqh-python-import-helper insert last import"
