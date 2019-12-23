@@ -1,3 +1,4 @@
+from io import StringIO
 import time
 import json
 import invoke
@@ -23,7 +24,6 @@ def get_branch_name(c):
 def commit(c, msg='ci'):
     # 如果没有提交的内容会触发
     try:
-        from io import StringIO
         out_buffer = StringIO()
         err_buffer = StringIO()
         cmd = 'git commit -m "{}"'.format(msg)
@@ -91,6 +91,40 @@ def new_tag_get(c, branch_name):
     lines = sorted(lines, key=functools.partial(get_version), reverse=True)
     return lines[0]
 
+def wait( predict, timeout=20):
+    now = int(time.time())
+    end = now + timeout
+    while 1:
+        now = int(time.time())
+        if now >= end:
+            raise TimeoutError("Operation timeout after %f seconds" % timeout)
+        result = predict()
+        if result:
+            break
+
+
+def check_is_ahead(c):
+    """
+    预期的status:
+        On branch master
+        Your branch is ahead of 'origin/master' by 1 commit.
+          (use "git push" to publish your local commits)
+
+        nothing to commit, working tree clean
+    
+    """
+    out_buffer = StringIO()
+    err_buffer = StringIO()
+    cmd = 'git status'
+    print("commit cmd:{}".format(cmd))
+    c.run(cmd,
+            out_stream=out_buffer, err_stream=err_buffer)
+    print("check_is_ahead, out_buffer", out_buffer.getvalue())
+    print("check_is_ahead, err_buffer", err_buffer.getvalue())
+    if "Your branch is ahead of " in out_buffer.getvalue():
+        return True
+    return False
+    
 
 @task
 def patch(c):
