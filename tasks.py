@@ -135,7 +135,8 @@ def patch(c):
     c.run("vsce publish patch")
     
     # 不sleep3秒的话，拿不到状态，有点郁闷 
-    time.sleep(3)
+    predict = functools.partial(check_is_ahead, c)
+    wait(predict, timeout=30)
     print("complete after patch".center(80, '='))
     version = json.loads(open("package.json",'r', encoding='utf-8').read())['version']
     gd(c, 'deploy_with_version {}'.format(version))
