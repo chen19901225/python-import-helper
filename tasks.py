@@ -94,3 +94,4 @@ def patch(c):
     gd(c)
     c.run("git fetch")
     c.run("vsce publish patch")
+    gd(c)
