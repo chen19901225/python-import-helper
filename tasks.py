@@ -1,3 +1,4 @@
+import time
 import json
 import invoke
 import functools
@@ -98,6 +99,7 @@ def patch(c):
     print('commit and push before patch'.center(80, '='))
     c.run("git fetch")
     c.run("vsce publish patch")
+    time.sleep(3)
     print("complete after patch".center(80, '='))
     version = json.loads(open("package.json",'r', encoding='utf-8').read())['version']
     
