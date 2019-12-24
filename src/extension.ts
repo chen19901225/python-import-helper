@@ -30,6 +30,7 @@ import { handle_var } from "./handler/handler_handle_var"
 import { select_history_cusor } from './handler/handler_select_history_cusor';
 import { insert_last_import } from './handler/handler_insert_last_import';
 import { update_if } from './handler/handler_update_if';
+import { insert_import } from './handler/handler_insert_import';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -271,6 +272,11 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(updateIfDisposable);
 
+    let insertImportDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_import", 
+    (textEdit, edit) => {
+        insert_import(textEdit, edit);
+    })
+    context.subscriptions.push(insertImportDisposable);
 
 
 }
