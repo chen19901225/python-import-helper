@@ -88,11 +88,7 @@ export function handler_get_last_line_variable__find_last_vars(lines: Array<stri
 
         if (index > -1 ) {
             // 忽略 a== b 或者 a!=b 这种情况
-            let commonIndex = content.indexOf(',')
-            // 忽略 a.method(c, d='test')
-            if(commonIndex > -1 && commonIndex < indent) {
-                return [false, []];
-            }
+            
             let beforeCh = content[indent - 1];
             if (["-", '+'].indexOf(beforeCh) > -1) {
                 let varPart = content.slice(0, index - 1).trim();
