@@ -29,12 +29,94 @@ function _insert(edit: vscode.TextEditorEdit, cusor: vscode.Position, context: s
     update_last_used_variable(context);
     edit.insert(cusor, context);
 }
+
+function get_var_from_for(line: string): Array<string> {
+    // 从for循环提取变量
+    var arr: Array<string> = []
+    let start_ele = "for ";
+    line = line.slice(start_ele.length);
+    line = line.trim();
+    if (line.endsWith(":")) {
+        line = line.slice(0, line.length - 1)
+    }
+    line = line.trim()
+    let pieces = line.split(/\s+in\s+/)
+    pieces[0] = pieces[0].trim()
+    if (pieces[0].startsWith("(") && pieces[0].endsWith(")")) {
+        // 第一个是一个tuple
+        pieces[0] = trim_parenthes(pieces[0])
+        arr.push(pieces[0])
+        let child_ele = pieces[0].split(/,\s*/);
+        arr.push(...child_ele);
+    } else if (pieces[0].indexOf(",") > 0) {
+        pieces[0] = pieces[0].trim()
+        arr.push(pieces[0])
+        let child_ele = pieces[0].split(/,\s*/);
+        arr.push(...child_ele);
+    }
+    else {
+        arr.push(pieces[0])
+    }
+    // pieces[0] = trim_parenthes(pieces[0])
+    // 第二个是一个dict
+    if (pieces[1].endsWith("items()")) {
+        pieces[1] = pieces[1].slice(0, pieces[1].length - "items()".length - 1);
+        arr.push(pieces[1]);
+    } else {
+        arr.push(pieces[1]);
+    }
+    // return pieces;
+    return arr
+}
+function trim_parenthes(text: string): string {
+    if (text.startsWith("(")) {
+        text = text.slice(1)
+        text = text.trim()
+        if (text.endsWith(")")) {
+            text = text.slice(0, text.length - 1)
+        }
+    }
+    return text;
+}
+
 export function try_get_if_var(line: string): [boolean, Array<string>] {
-    let start_array = ["if ", "elif ", "for ", "while "]
+    let start_array = ["if ", "elif ", "while "]
     line = line.trim()
     if (line.startsWith("# generated_by_dict_unpack:")) {
         let ele = line.split(":").pop()
         return [true, [ele.trim()]];
+    }
+
+    let line_split_piece = (text: string): Array<string> => {
+        // 根据and或者or分割text
+        let pieces = []
+        if (text.indexOf(" and ") > -1) {
+            pieces = line.split(/\s+and\s+/)
+        }
+        else if (text.indexOf(" or ") > -1) {
+            pieces = line.split(/\s+or\s+/)
+        }
+        else {
+            pieces = [line];
+        }
+        return pieces
+    }
+    let local_split = (text: string, count: number = 1): Array<string> => {
+        let out: Array<string> = []
+        let tmp = '' + text;
+        while (tmp.length > 0) {
+            let index = tmp.indexOf(',')
+            if (index == -1) {
+                throw new Error("cannot find , in text " + tmp);
+            }
+            let piece = tmp.slice(0, index);
+            out.push(piece);
+            if (out.length == count) {
+                out.push(tmp.slice(index + 1))
+                break;
+            }
+        }
+        return out;
     }
     for (let start_ele of start_array) {
         if (line.startsWith(start_ele)) {
@@ -44,30 +126,16 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 line = line.slice(0, line.length - 1)
             }
             line = line.trim()
-            if (line.startsWith("(")) {
-                line = line.slice(1)
-                line = line.trim()
-                if (line.endsWith(")")) {
-                    line = line.slice(0, line.length - 1)
-                }
-            }
+            line = trim_parenthes(line);
 
-            line = line.trim()
-            let pieces: Array<string> = []
-            if (line.indexOf(" and ") > -1) {
-                pieces = line.split(/\s+and\s+/)
-            } else {
-                pieces = [line];
-            }
+            line = line.trim();
+            let pieces = line_split_piece(line);
+
             let out = []
             for (let piece of pieces) {
                 piece = piece.trim()
-                if (piece.startsWith("(")) {
-                    piece = piece.slice(1);
-                    if (piece.endsWith(")")) {
-                        piece = piece.slice(0, line.length - 1);
-                    }
-                }
+                piece = trim_parenthes(piece);
+
 
                 piece = piece.trim()
                 if (piece.startsWith("not ")) {
@@ -98,7 +166,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 else if (piece.startsWith("isinstance(")) {
                     let content = piece.slice("isinstance(".length);
                     content = content.slice(0, content.length - 1);
-                    let elements = content.split(",")
+                    let elements = local_split(content)
                     for (let ele of elements) {
                         ele = ele.trim();
                         ele = trim_quote(ele)
@@ -108,7 +176,7 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 else if (piece.startsWith("getattr(")) {
                     let content = piece.slice("getattr(".length);
                     content = content.slice(0, content.length - 1);
-                    let elements = content.split(",")
+                    let elements = local_split(content, 1);
                     for (let ele of elements) {
                         ele = ele.trim();
                         ele = trim_quote(ele)
@@ -144,6 +212,18 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
 
 
         }
+    } // for if, elif , while
+
+    // for for
+    if (line.startsWith("for ")) {
+        // line = line.slice(start_ele.length);
+        // line = line.trim();
+        // if (line.endsWith(":")) {
+        //     line = line.slice(0, line.length - 1)
+        // }
+        // line = line.trim()
+        let array_arr = get_var_from_for(line);
+        return [true, array_arr];
     }
     return [false, []]
 }
@@ -158,6 +238,12 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
     let currentIndent = line.firstNonWhitespaceCharacterIndex;
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
         new vscode.Position(cursor.line, line.range.end.character))
+
+    let left_pad = (text: string, length: number): string => {
+        let prefix = '0'.repeat(length);
+        let concat_str = prefix + text;
+        return concat_str.slice(concat_str.length - length);
+    }
     for (let i = cursor.line - 1; i >= beginLineNo; i--) {
         let content = document.lineAt(i).text;
         // if()
@@ -166,6 +252,7 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
 
             continue;
         }
+
         content = content.trim();
         let [flag, arr] = try_get_if_var(content);
         if (flag) {
@@ -174,19 +261,21 @@ export function get_last_if_variable(textEditor: vscode.TextEditor, edit: vscode
                 _insert(edit, cursor, arr[0]);
             } else {
                 let quickItems: vscode.QuickPickItem[] = []
+                let i = 10;
                 for (let var_name of arr) {
                     quickItems.push({
-                        'label': var_name,
+                        'label': left_pad(i.toString(), 2) + "." + var_name,
                         'description': var_name
                     })
+                    i++;
                 }
                 vscode.window.showQuickPick(quickItems).then((item) => {
                     if (item) {
-                        let { label } = item;
-                        update_last_used_variable(label);
+                        let { description } = item;
+                        update_last_used_variable(description);
                         let activeEditor = vscode.window.activeTextEditor;
 
-                        activeEditor.insertSnippet(new vscode.SnippetString(label), cursor);
+                        activeEditor.insertSnippet(new vscode.SnippetString(description), cursor);
 
                         // _insert(edit, cursor, _extraVar(vars[2]));    
                     }

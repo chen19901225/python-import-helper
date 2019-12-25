@@ -10,6 +10,74 @@ import { try_get_if_var } from '../src/handler/handler_get_last_if_variable';
 
 // Defines a Mocha test suite to group tests of similar kind together
 suite("try get if var", () => {
+
+    // test("test hasattr", () => {
+    //     let line = "if hasattr(a, 'name')";
+    //     let [flag, arr] = try_get_if_var(line);
+
+    // })
+
+    test("test for for array", () => {
+        let line = "for ele in arr:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["ele", "arr"])
+    })
+    test("test for for tuple", () => {
+        let line = "for (key, value) in d:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
+    test("test for for tuple but without pathres", () => {
+        let line = "for key, value in d:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
+    test("test for for kwargs", () => {
+        let line = "for (key, value) in d.items()";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
+    test("test for for attr kwargs", () => {
+        let line = "for (key, value) in self.d.items()";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "self.d"])
+    })
+
+    test("test isinstance with tuple", () => {
+        let line = "if isinstance(a, (list, tuple))"
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["a", "(list, tuple)"])
+    })
+    test("test isintance oneclass", () => {
+        let line = "if isinstance(a, int)"
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["a", "int"])
+    })
+    test("test with and", () => {
+        let line = "if (a is not None) and (b is not None)";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["a", "b"]);
+    })
+    test("test with or", () => {
+        let line = "if (a is not None) or (b is not None)";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["a", "b"]);
+    })
+    test("test with parenthes", () => {
+        let line = "if (a is not None):";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["a"]);
+    })
     test("test by comment", () => {
         let line = "# generated_by_dict_unpack: self"
         let [flag, arr] = try_get_if_var(line)
@@ -23,7 +91,7 @@ suite("try get if var", () => {
         assert.deepEqual(arr, ['content', '(None, 0)'])
     })
     test("test if not", () => {
-        let prefix_arr = ["if ", "elif", "for", "while"]
+        let prefix_arr = ["if ", "elif", "while"]
         let other = " not name:"
         for (let prefix of prefix_arr) {
             let line = prefix + other;
@@ -55,7 +123,7 @@ suite("try get if var", () => {
     })
 
     test("test if simple", () => {
-        let prefix_arr = ["if ", "elif", "for", "while"]
+        let prefix_arr = ["if ", "elif", "while"]
         let other = " name:"
         for (let prefix of prefix_arr) {
             let line = prefix + other;

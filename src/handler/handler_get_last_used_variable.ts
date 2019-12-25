@@ -23,7 +23,7 @@ export function get_last_used_variable(textEditor: vscode.TextEditor, edit: vsco
     for (let i = used_variables.length - 1; i >= 0; i--) {
         let current_var = used_variables[i];
         quickItems.push({
-            'label': leftPad(i.toString(), 2) + current_var,
+            'label': leftPad(i.toString(), 2) + "." + current_var,
             'description': current_var
         })
     }
