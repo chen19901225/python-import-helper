@@ -93,10 +93,12 @@ export function handler_get_last_line_variable__find_last_vars(lines: Array<stri
             let nextCh = content[index+1];
             // 忽略 a==b 这种情况
             if(nextCh === '=') {
-                return [false, []];
+                continue;
+                // return [false, []];
             }
             if(beforeCh == '!') {
-                return [false, []];
+                continue
+                // return [false, []];
             }
             if (["-", '+'].indexOf(beforeCh) > -1) {
                 let varPart = content.slice(0, index - 1).trim();
