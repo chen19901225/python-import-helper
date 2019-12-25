@@ -91,7 +91,11 @@ export function handler_get_last_line_variable__find_last_vars(lines: Array<stri
             
             let beforeCh = content[indent - 1];
             let nextCh = context[index+1];
+            // 忽略 a==b 这种情况
             if(nextCh === '=') {
+                return [false, []];
+            }
+            if(beforeCh == '!') {
                 return [false, []];
             }
             if (["-", '+'].indexOf(beforeCh) > -1) {
