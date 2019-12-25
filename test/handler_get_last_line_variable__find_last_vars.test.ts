@@ -9,9 +9,9 @@ import * as assert from 'assert';
 // You can import and use all API from the 'vscode' module
 // as well as import your extension to test it
 import { setFlagsFromString } from 'v8';
-import {find_last_vars} from '../src/handler/handler_get_last_line_variable'
+import {handler_get_last_line_variable__find_last_vars} from '../src/handler/handler_get_last_line_variable'
 // Defines a Mocha test suite to group tests of similar kind together
-suite("get last line var test", () => {
+suite("handler_get_last_line_variable__find_last_vars.test.ts", () => {
 
     // Defines a Mocha unit test
     
@@ -19,16 +19,16 @@ suite("get last line var test", () => {
         let lines = [
             "one, two=1, 2"
         ]
-        let [flag, vars] = find_last_vars(lines, 0)
+        let [flag, vars] = handler_get_last_line_variable__find_last_vars(lines, 0)
         assert.equal(flag, true)
-        assert.equal(vars, "one, two")
+        assert.deepEqual(vars, ["one, two", "one", "two"])
     })
 
     test("test fail with no =", () => {
         let lines = [
             "one, two-1, 2"
         ]
-        let [flag, vars] = find_last_vars(lines, 0)
+        let [flag, vars] = handler_get_last_line_variable__find_last_vars(lines, 0)
         assert.equal(flag, false)
         // assert.equal(vars, "one, two")
     })
@@ -37,7 +37,7 @@ suite("get last line var test", () => {
         let lines = [
             "    #one, two=1, 2"
         ]
-        let [flag, vars] = find_last_vars(lines, 8)
+        let [flag, vars] = handler_get_last_line_variable__find_last_vars(lines, 8)
         assert.equal(flag, false)
         // assert.equal(vars, "one, two")
     })
@@ -46,7 +46,7 @@ suite("get last line var test", () => {
         let lines = [
             "    one, two=1, 2"
         ]
-        let [flag, vars] = find_last_vars(lines, 0)
+        let [flag, vars] = handler_get_last_line_variable__find_last_vars(lines, 0)
         assert.equal(flag, false)
         // assert.equal(vars, "one, two")
     })

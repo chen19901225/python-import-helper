@@ -182,3 +182,9 @@ export function removeVarType(var_and_type: string): string {
         return var_and_type;
     }
 }
+
+export function leftPad(ele: number, count: number): string {
+    let prefix = '0'.repeat(count);
+    let final_ele = prefix + ele
+    return final_ele.slice(final_ele.length - count)
+}

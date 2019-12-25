@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { parse_function, FunctionDef } from '../parser';
-import {update_last_used_variable} from './handler_get_last_used_variable'
-import { get_variable_list, extraVariablePart, getLineIndent, removeVarType } from '../util'
+import { update_last_used_variable } from './handler_get_last_used_variable'
+import { get_variable_list, extraVariablePart, getLineIndent, removeVarType, leftPad } from '../util'
 import { service_position_history_add_position } from "../service/service_position_history";
 /**
  * 
@@ -27,9 +27,9 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
      * 我希望(one, two), 能有快捷键直接获取上一行的变量
      */
 
-     /**
-      * 改进2， 我希望添加缩进
-      */
+    /**
+     * 改进2， 我希望添加缩进
+     */
     let cursor = textEditor.selection.active;
     let document = textEditor.document;
     let line = document.lineAt(cursor.line);
@@ -38,47 +38,84 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let range = new vscode.Range(new vscode.Position(beginLineNo, 0),
         new vscode.Position(cursor.line, 0))
     let lines = document.getText(range).split(/\r?\n/);
-    let [found, vars] = find_last_vars(lines, currentIndent);
+    let [found, var_arr] = handler_get_last_line_variable__find_last_vars(lines, currentIndent);
     if (found) {
-        update_last_used_variable(vars)
-        service_position_history_add_position(cursor);
-        edit.insert(cursor, vars);
+        if (var_arr.length == 1) {
+            update_last_used_variable(var_arr[0])
+            service_position_history_add_position(cursor);
+            edit.insert(cursor, var_arr[0]);
+        } else {
+            // show 下拉框
+            let quickItems: vscode.QuickPickItem[] = []
+            let index = 10;
+            for (let ele of var_arr) {
+                quickItems.push({
+                    'label': leftPad(index, 2) + "." + ele,
+                    'description': ele
+                })
+                index++;
+            }
+
+            vscode.window.showQuickPick(quickItems).then((item) => {
+                if (item) {
+                    let current_var = item.description;
+                    let activeEditor = vscode.window.activeTextEditor;
+
+                    activeEditor.insertSnippet(new vscode.SnippetString(current_var), cursor);
+                    update_last_used_variable(current_var);
+                }
+            })
+        }
+
     }
-    
+
 
 }
 
-export function find_last_vars(lines: Array<string>, indent: number): [boolean, string] {
+export function handler_get_last_line_variable__find_last_vars(lines: Array<string>, indent: number): [boolean, Array<string>] {
     for (let i = lines.length - 1; i >= 0; i--) {
         let content = lines[i];
         let lineIndent = getLineIndent(content);
-        if(lineIndent> indent) {
+        if (lineIndent > indent) {
             continue;
         }
         content = content.trim();
-        if(content[0] === '#') { // 注释
+        if (content[0] === '#') { // 注释
             continue;
         }
         let index = content.indexOf("=")
+        
 
-        if (index > -1 && content[index + 1] !== '=' && content[index - 1] !== '!') {
+        if (index > -1 ) {
             // 忽略 a== b 或者 a!=b 这种情况
-            let beforeCh = content[indent-1];
-            if(["-", '+'].indexOf(beforeCh) > -1) {
-                let varPart = content.slice(0, index -1).trim();
+            let commonIndex = content.indexOf(',')
+            // 忽略 a.method(c, d='test')
+            if(commonIndex > -1 && commonIndex < indent) {
+                return [false, []];
+            }
+            let beforeCh = content[indent - 1];
+            if (["-", '+'].indexOf(beforeCh) > -1) {
+                let varPart = content.slice(0, index - 1).trim();
                 varPart = removeVarType(varPart);
                 // update_last_used_variable(varPart);
-                return [true, removeVarType(varPart)];
+                return [true, [removeVarType(varPart)]];
             } else {
                 let vars = content.split("=")[0].trim();
                 vars = removeVarType(vars);
                 // update_last_used_variable(vars);
-                return [true, removeVarType(vars)]
+                let out_arr: Array<string> = []
+                if(vars.indexOf(",")> -1) {
+                    out_arr.push(vars);
+                    out_arr.push(...vars.split(/,\s*/));
+                } else {
+                    out_arr = [vars];
+                }
+                return [true, out_arr];
             }
-           
+
         }
     }
 
-    return [false, ""]
+    return [false, []]
 
 }

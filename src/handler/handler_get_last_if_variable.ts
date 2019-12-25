@@ -42,13 +42,19 @@ function get_var_from_for(line: string): Array<string> {
     line = line.trim()
     let pieces = line.split(/\s+in\s+/)
     pieces[0] = pieces[0].trim()
-    if(pieces[0].startsWith("(") && pieces[0].endsWith(")")) {
+    if (pieces[0].startsWith("(") && pieces[0].endsWith(")")) {
         // 第一个是一个tuple
         pieces[0] = trim_parenthes(pieces[0])
         arr.push(pieces[0])
         let child_ele = pieces[0].split(/,\s*/);
         arr.push(...child_ele);
-    } else {
+    } else if (pieces[0].indexOf(",") > 0) {
+        pieces[0] = pieces[0].trim()
+        arr.push(pieces[0])
+        let child_ele = pieces[0].split(/,\s*/);
+        arr.push(...child_ele);
+    }
+    else {
         arr.push(pieces[0])
     }
     // pieces[0] = trim_parenthes(pieces[0])

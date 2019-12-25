@@ -29,6 +29,12 @@ suite("try get if var", () => {
         assert.equal(flag, true);
         assert.deepEqual(arr, ["key, value", "key", "value", "d"])
     })
+    test("test for for tuple but without pathres", () => {
+        let line = "for key, value in d:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "d"])
+    })
     test("test for for kwargs", () => {
         let line = "for (key, value) in d.items()";
         let [flag, arr] = try_get_if_var(line);
