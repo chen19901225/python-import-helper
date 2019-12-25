@@ -90,6 +90,10 @@ export function handler_get_last_line_variable__find_last_vars(lines: Array<stri
             // 忽略 a== b 或者 a!=b 这种情况
             
             let beforeCh = content[indent - 1];
+            let nextCh = context[index+1];
+            if(nextCh === '=') {
+                return [false, []];
+            }
             if (["-", '+'].indexOf(beforeCh) > -1) {
                 let varPart = content.slice(0, index - 1).trim();
                 varPart = removeVarType(varPart);
