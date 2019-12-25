@@ -85,10 +85,16 @@ export function handler_get_last_line_variable__find_last_vars(lines: Array<stri
         }
         // 忽略以下面开头的行
         let escaped_start_arr = ["if ", "elif ", "for ", "while ", "def "]
+        console.log("content_ele", content, content.startsWith("if "));
+        let should_continue = false;
         for(let start_ele of escaped_start_arr) {
             if(content.startsWith(start_ele)) {
+                should_continue = true;
                 continue;
             }
+        }
+        if(should_continue) {
+            continue;
         }
         let index = content.indexOf("=")
         
