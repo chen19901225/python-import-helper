@@ -17,6 +17,13 @@ suite("try get if var", () => {
 
     // })
 
+    test("test for  if in with tuple", () => {
+        let line = "if (key, value) in arr:";
+        let [flag, arr] = try_get_if_var(line);
+        assert.equal(flag, true);
+        assert.deepEqual(arr, ["key, value", "key", "value", "arr"])
+    })
+
     test("test for for array", () => {
         let line = "for ele in arr:";
         let [flag, arr] = try_get_if_var(line);
@@ -83,6 +90,13 @@ suite("try get if var", () => {
         let [flag, arr] = try_get_if_var(line)
         assert.equal(flag, true)
         assert.deepEqual(arr, ["self"])
+    })
+    test("test if with quote", () => {
+        let line = 'if headers and "Content-Encoding" in headers';
+        let [flag, arr] = try_get_if_var(line)
+        assert.equal(flag, true)
+        assert.deepEqual(arr, ['headers', 'Content-Encoding', 'headers']);
+
     })
     test("test if not in", () => {
         let line = "if content not in (None, 0) "

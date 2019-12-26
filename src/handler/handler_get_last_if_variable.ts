@@ -79,6 +79,16 @@ function trim_parenthes(text: string): string {
     return text;
 }
 
+function trim_quote(ele: string): string {
+    if (ele.startsWith("'") && ele.endsWith("'")) {
+        ele = ele.slice(1, ele.length - 1)
+    }
+    if (ele.startsWith('"') && ele.endsWith('"')) {
+        ele = ele.slice(1, ele.length - 1)
+    }
+    return ele
+}
+
 export function try_get_if_var(line: string): [boolean, Array<string>] {
     let start_array = ["if ", "elif ", "while "]
     line = line.trim()
@@ -142,15 +152,15 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                     piece = piece.slice(4)
                 }
 
-                let trim_quote = (ele: string): string => {
-                    if (ele.startsWith("'") && ele.endsWith("'")) {
-                        ele = ele.slice(1, ele.length - 1)
-                    }
-                    if (ele.startsWith('"') && ele.endsWith('"')) {
-                        ele = ele.slice(1, ele.length - 1)
-                    }
-                    return ele
-                }
+                // let trim_quote = (ele: string): string => {
+                //     if (ele.startsWith("'") && ele.endsWith("'")) {
+                //         ele = ele.slice(1, ele.length - 1)
+                //     }
+                //     if (ele.startsWith('"') && ele.endsWith('"')) {
+                //         ele = ele.slice(1, ele.length - 1)
+                //     }
+                //     return ele
+                // }
 
                 // test hasattr
                 if (piece.startsWith("hasattr(")) {
@@ -186,14 +196,30 @@ export function try_get_if_var(line: string): [boolean, Array<string>] {
                 else if (/.+\s+not\s+in\s+.+/.test(piece)) {
                     let _arr = piece.split(/\s+not\s+in\s+/)
                     for (let _ele of _arr) {
+                        _ele = trim_quote(_ele)
                         out.push(_ele)
                     }
                 } else {
-                    if (piece.indexOf(" in ") > 0) {
+                    if (piece.indexOf(" in ") > 0) {// 匹配 in的处理
                         let _arr = piece.split(/\s+in\s+/)
-                        for (let _ele of _arr) {
-                            out.push(_ele)
+                        let [first, second] = _arr;
+                        first = first.trim();
+                        second = second.trim();
+                        if(first.indexOf(",") > -1) {
+                            if(first.endsWith(")")) {
+                                first = first.slice(0, first.length -1);
+
+                            }
+                            out.push(first);
+                            out.push(...first.split(/,\s*/));
+                        } else {
+                            out.push(trim_quote(first.trim()));
                         }
+                        out.push(second.trim());
+                        // for (let _ele of _arr) {
+                        //     _ele = trim_quote(_ele)
+                        //     out.push(_ele)
+                        // }
                     }
                     else {
                         let firstIndex = piece.indexOf(" ")
