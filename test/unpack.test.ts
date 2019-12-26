@@ -15,7 +15,16 @@ import { setFlagsFromString } from 'v8';
 import { generate_insert_string, generate_replace_string } from '../src/handler/handler_dict_unpack'
 // Defines a Mocha test suite to group tests of similar kind together
 suite("unpack Tests alt + i", () => {
-
+    test("test with instance method", () => {
+        let line = 'one, two = .get()';
+        let out = generate_insert_string(line);
+        assert.deepEqual(
+            out, [
+            '# generated_by_dict_unpack: .get()',
+            'one, two = one.get(), two.get()'
+        ]
+        )
+    })
     test("test with call double quote, one var", () => {
         let line = 'one=data.get("';
         let out = generate_insert_string(line);

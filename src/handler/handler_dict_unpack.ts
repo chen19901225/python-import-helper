@@ -136,34 +136,41 @@ export function generate_insert_string(source: string,
 
     let out = [];
     let source_var: string = element_list.pop(); // 右边第一个变量
+    source_var = source_var.trim();
     let right_side_list = []
     let left_side_list = []
     let is_first = false;
     let indent_string = ' '.repeat(indent);
+    // a, d = d => a, b = d[a], d[b]
     let handle_dict = (source_var, new_ele, is_first) => {
         right_side_list.push(`${source_var}["${new_ele}"]`)
         return false;
     }
+    // a,b = c => a, b = c.a, c.b
     let handle_instance = (source_var, new_ele, is_first) => {
 
         right_side_list.push(`${source_var}.${new_ele}`)
         return false;
 
     }
+    // a, b = q_ => a, b = q_a, q_b
     let handle_remove_prefix = (source_var, new_ele, is_first) => {
         right_side_list.push(`${source_var}${new_ele}`)
         return false;
     }
+    // a, b = q(" => a, b = q("a"), q("n")
     let handle_func_call_with_double_quote = (source_var, new_ele, is_first) => {
         let format_var = source_var.slice(0, source_var.length - 2);
         right_side_list.push(`${format_var}("${new_ele}")`);
         return false;
     }
+    // a, b = q(' => a, b = q('a'), q('n')
     let handle_func_call_with_single_quote = (source_var, new_ele, is_first) => {
         let format_var = source_var.slice(0, source_var.length - 2);
         right_side_list.push(`${format_var}('${new_ele}')`);
         return false;
     }
+    // a, b = q( => a, b = q(a), q(b)
     let handle_func_call = (source_var, new_ele, is_first) => {
         let format_var = source_var.slice(0, source_var.length - 1);
         // if (is_first) {
@@ -172,6 +179,11 @@ export function generate_insert_string(source: string,
 
         // }
         right_side_list.push(`${format_var}(${new_ele})`);
+        return false;
+    }
+    // a, b = .c() => a, b = a.c(), b.c()
+    let handler_instance_method = (source_var, new_ele, is_first) => {
+        right_side_list.push(`${new_ele}${source_var}`);
         return false;
     }
 
@@ -195,6 +207,9 @@ export function generate_insert_string(source: string,
             // username = request.auth_username
             // password = request.auth_password
             current_handle = handle_remove_prefix
+        }
+        else if(source_var.startsWith(".")) {
+            current_handle = handler_instance_method;
         }
         else if (new_ele.includes(".")) {
             new_ele = new_ele.split(".").pop();
