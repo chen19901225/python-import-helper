@@ -20,7 +20,7 @@ export function file_name(textEditor: vscode.TextEditor, edit: vscode.TextEditor
     for (let [label, description] of options) {
         quickPickItem.push({
             label:""+index+"."+label,
-            description
+            description: label
         })
         index ++;
     }
