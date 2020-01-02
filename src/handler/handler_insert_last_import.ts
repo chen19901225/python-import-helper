@@ -21,7 +21,11 @@ export function get_last_import(text: string): [boolean, string] {
     text = text.trim();
     if (text.startsWith("from ")) {
         return [true, text.split(" ").pop()];
-    } else {
+    }
+    else if (text.startsWith("import ")) {
+        return [true, text.split(" ").pop()];;
+    }
+    else {
         return [false, ' not starts with from']
     }
     return [false, '']
