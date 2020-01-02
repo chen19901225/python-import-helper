@@ -16,17 +16,19 @@ export function file_name(textEditor: vscode.TextEditor, edit: vscode.TextEditor
         ["class_style", "ClassStyle"],
         ["class_style_without_prefix", "class_style_without_prefix"]
     ]
+    let index = 1;
     for (let [label, description] of options) {
         quickPickItem.push({
-            label,
+            label:""+index+"."+label,
             description
         })
+        index ++;
     }
 
     vscode.window.showQuickPick(quickPickItem).then(item => {
         if (item) {
             let activeEditor = vscode.window.activeTextEditor;
-            let convert_element = convert_filename(name, item.label);
+            let convert_element = convert_filename(name, item.description);
             activeEditor.insertSnippet(new vscode.SnippetString(convert_element), textEditor.selection.active)
             // edit.insert(currentPosition, item.description);
         }
