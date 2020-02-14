@@ -32,7 +32,7 @@ export function handler_dict_unpack(textEditor: vscode.TextEditor, edit: vscode.
     let line = document.lineAt(cursor.line);
     let indent = line.firstNonWhitespaceCharacterIndex;
     let has_insert_comment = has_comment(textEditor, edit);
-    let replace_list = generate_insert_string(line.text, indent, has_insert_comment);
+    let replace_list = generate_insert_string(line.text.slice(0, cursor.character), indent, has_insert_comment);
     let replaceContent = replace_list.join('\n');
     let endLine = cursor.line + replace_list.length - 1;
     let endCol = replace_list[replace_list.length - 1].length;
