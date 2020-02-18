@@ -31,6 +31,7 @@ import { select_history_cusor } from './handler/handler_select_history_cusor';
 import { insert_last_import } from './handler/handler_insert_last_import';
 import { update_if } from './handler/handler_update_if';
 import { insert_import } from './handler/handler_insert_import';
+import { var_last_part } from './handler/handler_var_last_part';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -266,17 +267,23 @@ export function activate(context: vscode.ExtensionContext) {
         });
     context.subscriptions.push(insertLastImportDiposable);
 
-    let updateIfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.update_if", 
-    (textEdit, edit) => {
-        update_if(textEdit, edit);
-    });
+    let updateIfDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.update_if",
+        (textEdit, edit) => {
+            update_if(textEdit, edit);
+        });
     context.subscriptions.push(updateIfDisposable);
 
-    let insertImportDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_import", 
-    (textEdit, edit) => {
-        insert_import(textEdit, edit);
-    })
+    let insertImportDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.insert_import",
+        (textEdit, edit) => {
+            insert_import(textEdit, edit);
+        })
     context.subscriptions.push(insertImportDisposable);
+
+    let handlerLastVarPartDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.handler-last-var-part",
+        (textEdit, edit) => {
+        var_last_part(textEdit, edit);
+    });
+    context.subscriptions.push(handlerLastVarPartDisposable);
 
 
 }

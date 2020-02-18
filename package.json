@@ -203,6 +203,11 @@
                 "command": "cqh-python-import-helper.insert_import",
                 "key": "alt+k i",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.handler-last-var-part",
+                "key": "alt+k a",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
@@ -233,6 +238,10 @@
             {
                 "command": "cqh-python-import-helper.select_node",
                 "title": "cqh python import helper select node"
+            },
+            {
+                "command": "cqh-python-import-helper.handler-last-var-part",
+                "title": "cqh python import helper handler last var part"
             },
             {
                 "command": "cqh-python-import-helper.wrap_node",
