@@ -1,5 +1,10 @@
 import * as vscode from "vscode";
 export function var_last_part(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+    /*
+    
+    这个的作用是什么？
+    
+    */
     let start, end
     let lineNO;
     if(textEditor.selection.isEmpty){

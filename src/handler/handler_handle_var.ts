@@ -152,16 +152,16 @@ export function handle_var(textEditor: vscode.TextEditor, edit: vscode.TextEdito
     }
     let routes:Array<[number, string, (text:string) => string, string]> = [
         [10, 'raw', handle_raw, "keep"],
-        [11, 'dict_get_var', handle_dict_get_var, "dict_var_get_var"],
-        [12, 'dict_get_key', handle_dict_get_key, "dict_var_get_key"],
-        [13, 'dict_key_unquote', handle_dict_key_unquote, "dict_var_key_unquote"],
-        [14, 'var_simple', handle_var_simple, 'var_simple'],
-        [15, 'var_last_part', handle_last_part, 'var_last_part'],
-        [16, 'var_remove_private', handle_remove_private, 'var_remove_private'],
-        [17, 'var_remove_prefix', handle_remove_prefix, 'var_remove_prefix'],
-        [18, 'var_remove_last_part', handle_var_remove_last_part, 'var_remove_last_part'],
-        [50, 'var_last_part_and_remove_private', handle_var_last_part_and_remove_private, "var_last_part_and_remove_private"],
-        [51, 'var_last_part_and_remove_prefix', handle_var_last_part_and_remove_prefix, 'var_last_part_and_remove_prefix']
+        [11, 'dict_get_var', handle_dict_get_var, "dict_var_get_var"], // a["d"] => a
+        [12, 'dict_get_key', handle_dict_get_key, "dict_var_get_key"], // a["d"] => "d"
+        [13, 'dict_key_unquote', handle_dict_key_unquote, "dict_var_key_unquote"], // a["d"] => d
+        [14, 'var_simple', handle_var_simple, 'var_simple'], // aes => a
+        [15, 'var_last_part', handle_last_part, 'var_last_part'], // a.b.c=> c
+        [16, 'var_remove_private', handle_remove_private, 'var_remove_private'], //__test => test
+        [17, 'var_remove_prefix', handle_remove_prefix, 'var_remove_prefix'], // test__other => other
+        [18, 'var_remove_last_part', handle_var_remove_last_part, 'var_remove_last_part'], // a.b.c => a.b
+        [50, 'var_last_part_and_remove_private', handle_var_last_part_and_remove_private, "var_last_part_and_remove_private"],// self._text => text
+        [51, 'var_last_part_and_remove_prefix', handle_var_last_part_and_remove_prefix, 'var_last_part_and_remove_prefix'] // self.name__attr => attr
     ]
 
     
