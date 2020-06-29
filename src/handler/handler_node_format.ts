@@ -142,7 +142,7 @@ export function format_apply_line(lineText: string, col: number): Array<string> 
     ]
 }
 
-function generate_dict_pair(text: string): Array<string> {
+export function generate_dict_pair(text: string): Array<string> {
     /**
      * 把 a, b, c  =>
      *  
@@ -157,7 +157,7 @@ function generate_dict_pair(text: string): Array<string> {
         text = text.trim();
     }
     while (text.endsWith(")")) {
-        text = text.slice(0, text.length);
+        text = text.slice(0, text.length-1);
         text = text.trim();
     }
     let pieces = text.split(/,\s*/);
