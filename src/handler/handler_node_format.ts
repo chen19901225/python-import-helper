@@ -11,15 +11,38 @@ import { start } from "repl";
  * 
  */
 
-function format_dict_line(lineText: string) {
+export function format_dict_line(lineText: string) {
     // dict(name=name, age=age)
-    let lines = ['#' + lineText, "dict("]
-    let stripped = lineText.slice("dict(".length)
-    if (lineText.endsWith(")")) {
-        stripped = lineText.slice("dict(".length, lineText.length - 1);
+    /**
+     * 吧 dict(name=name, age=age)
+     * => dict(
+     *  name=name, 
+     * age=age
+     * )
+     * 吧 name=name, age=age)
+     * 变成 
+     *  name=name, 
+     *  age=age
+     * )
+     */
+    let start_text = "dict("
+    let is_start_with_dict = lineText.startsWith(start_text)
+    let lines = ['#' + lineText]
+    if(is_start_with_dict){
+        lines.push(start_text)
+        lineText = lineText.slice(start_text.length)
     }
-    let prefix = " ".repeat("dict(".length)
-    for (let piece of stripped.split(/,\s*/)) {
+    let end_text = ")"
+    let is_end_with_text = lineText.endsWith(end_text);
+    if(is_end_with_text){
+        lineText = lineText.slice(0, lineText.length-end_text.length);
+    }
+    
+    let prefix = ""
+    if(is_start_with_dict){
+        prefix = " ".repeat(start_text.length);
+    }
+    for (let piece of lineText.split(/,\s*/)) {
         piece = piece.trim()
         if (piece.length === 0) {
             continue;
@@ -27,9 +50,9 @@ function format_dict_line(lineText: string) {
         lines.push(prefix + `${piece},`)
     }
     let last_line = lines[lines.length - 1]
-    lines[lines.length - 1] = last_line.slice(0, last_line.length - 1)
-    if (lineText.endsWith(")")) {
-        lines.push(")")
+    lines[lines.length - 1] = last_line.slice(0, last_line.length - 1) // 去掉最后一个的逗号
+    if(is_end_with_text){
+        lines.push(end_text);
     }
     return lines
 }
@@ -120,10 +143,22 @@ export function format_apply_line(lineText: string, col: number): Array<string> 
 }
 
 function generate_dict_pair(text: string): Array<string> {
+    /**
+     * 把 a, b, c  =>
+     *  
+     * a =a, b=b, c=c
+     *  把 a, b ,c) =>
+     * a = a, b=b, c=c
+     */
     let out = ['#' + text];
     let equal_index = text.indexOf('=');
     if (equal_index > -1) {
         text = text.slice(0, equal_index);
+        text = text.trim();
+    }
+    while (text.endsWith(")")) {
+        text = text.slice(0, text.length);
+        text = text.trim();
     }
     let pieces = text.split(/,\s*/);
     let tmp_line = []
@@ -197,14 +232,14 @@ export function node_format(textEditor: vscode.TextEditor, edit: vscode.TextEdit
         'description': 'apply_split_line'
     })
 
-    let indexLength=2;
+    let indexLength = 2;
     let formatIndex = (index: number): string => {
         let prefix = '0'.repeat(indexLength) + index.toString()
         return prefix.slice(prefix.length - indexLength);
     }
-    for(let i=0;i<items.length;i++){
+    for (let i = 0; i < items.length; i++) {
         let prefix = formatIndex(i);
-        items[i].label=prefix+'.'+items[i].label;
+        items[i].label = prefix + '.' + items[i].label;
     }
 
 

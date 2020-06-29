@@ -40,9 +40,10 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
     let lines = document.getText(range).split(/\r?\n/);
     let [found, var_arr] = handler_get_last_line_variable__find_last_vars(lines, currentIndent);
     if (found) {
+        service_position_history_add_position(cursor);
         if (var_arr.length == 1) {
             update_last_used_variable(var_arr[0])
-            service_position_history_add_position(cursor);
+            
             edit.insert(cursor, var_arr[0]);
         } else {
             // show 下拉框
