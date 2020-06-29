@@ -148,7 +148,7 @@ export function generate_dict_pair(text: string): Array<string> {
      *  
      * a =a, b=b, c=c
      *  把 a, b ,c) =>
-     * a = a, b=b, c=c
+     * a = a, b=b, c=c)
      */
     let out = ['#' + text];
     let equal_index = text.indexOf('=');
@@ -156,8 +156,10 @@ export function generate_dict_pair(text: string): Array<string> {
         text = text.slice(0, equal_index);
         text = text.trim();
     }
-    while (text.endsWith(")")) {
-        text = text.slice(0, text.length-1);
+    let end_text = ")"
+    let is_end_with_end_text = text.endsWith(end_text)
+    if(is_end_with_end_text){
+        text = text.slice(0, text.length-end_text.length);
         text = text.trim();
     }
     let pieces = text.split(/,\s*/);
@@ -167,6 +169,9 @@ export function generate_dict_pair(text: string): Array<string> {
         tmp_line.push(`${name} = ${name}`)
     }
     out.push(tmp_line.join(", "));
+    if (is_end_with_end_text){
+        out[out.length-1] = out[out.length-1]+end_text;
+    }
     return out;
 }
 

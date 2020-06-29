@@ -39,7 +39,8 @@ suite("node format test", () => {
                 "a, b)",
                 [
                     "#a, b)",
-                    "a = a, b = b"
+                    "a = a, b = b)",
+                    
                 ]
             ]
         ]
