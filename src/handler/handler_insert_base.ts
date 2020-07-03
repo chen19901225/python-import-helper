@@ -32,7 +32,7 @@ export function insert_base(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     }
     let position = textEditor.selection.active;
     const workspaceFolders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
-    const rootPath: string = workspaceFolders?.[0]?.uri.fsPath ?? "";
+    const rootPath: string = workspaceFolders[0].uri.fsPath;
 
     for (let name of names) {
         if (!name.endsWith(".py")) {
