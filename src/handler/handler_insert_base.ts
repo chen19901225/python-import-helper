@@ -31,17 +31,26 @@ export function insert_base(textEditor: vscode.TextEditor, edit: vscode.TextEdit
         return false;
     }
     let position = textEditor.selection.active;
+    const workspaceFolders: vscode.WorkspaceFolder[] | undefined = vscode.workspace.workspaceFolders;
+    const rootPath: string = workspaceFolders?.[0]?.uri.fsPath ?? "";
+
     for (let name of names) {
         if (!name.endsWith(".py")) {
             continue;
         }
+        let abs_path = path.join(dirName, name);
+        let relative_path = path.relative(rootPath, abs_path);
+        while (relative_path.startsWith(path.sep)) {
+            relative_path = relative_path.slice(1)
+        }
+        let package_name = relative_path.replace(new RegExp(path.sep, "g"), ".");
         if (match(name)) {
             let basename = path.basename(name).split(".")[0];
             let getClassName = convertClassName(basename);
             let comment = '# generated_by_dict_unpack:' + getClassName;
             let lines = [
                 comment,
-                `from .${basename} import ${getClassName}`
+                `from ${package_name}.${basename} import ${getClassName}`
             ]
             let content = lines.join('\r\n') + '\r\n';
             edit.insert(position, content);

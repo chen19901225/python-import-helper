@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { format_dict_line, generate_dict_pair } from '../src/handler/handler_node_format';
+import { format_dict_line, generate_dict_pair, format_func_line } from '../src/handler/handler_node_format';
 
 suite("node format test", () => {
     test("format_dict_line", () => {
@@ -50,4 +50,49 @@ suite("node format test", () => {
             assert.deepEqual(expected_arr, result_arr)
         }
     })
+
+    test("def ", () => {
+
+        let table:Array<[string, Array<string>]> = [
+            [
+                "def(a, b",
+                [
+
+                    "#def(a, b",
+                    "def(",
+                    "    a,",
+                    "    b"
+                ]
+            ],
+            [
+                "def(a, b)",
+                [
+                    "#def(a, b)",
+                    "def(",
+                    "    a,",
+                    "    b",
+                    ")"
+                    
+                ]
+            ],
+            [
+                "def(a, b,",
+                [
+                    "#def(a, b,",
+                    "def(",
+                    "    a,",
+                    "    b,",
+                    
+                ]
+            ],
+
+        ]
+
+        table.forEach((value) => {
+            let [input_str, expected_arr] = value;
+
+            let result_arr = format_func_line(input_str);
+            assert.deepEqual(result_arr, expected_arr)
+        })
+    });
 });

@@ -58,28 +58,33 @@ export function format_dict_line(lineText: string) {
 }
 
 export function format_func_line(lineText: string) {
+    lineText = lineText.trim();
+    let def_text = "def"
     let lines: Array<string> = ['#' + lineText];
-    let first_index = lineText.indexOf("(")
+    let is_start_with_def_text = lineText.startsWith(def_text);
+    let prefix = "";
+    if(is_start_with_def_text){
+        let begin_index = lineText.indexOf("(")
+        if(begin_index==-1){
+            throw new Error("not find ( in "+ lineText);
+            return;
+        }
+        prefix = " ".repeat(begin_index+1);
+        lines.push(lineText.slice(0, begin_index+1));
+        lineText = lineText.slice(begin_index+1 ).trim();
+    }
+    let parethes = ")", comma=",";
+    let is_end_with_parethes = lineText.endsWith(parethes);
+    let is_end_with_comma = false;
+    if(is_end_with_parethes){
+        lineText = lineText.slice(0, lineText.length-1).trim();
+    }
+    is_end_with_comma = lineText.endsWith(comma);
+    if(is_end_with_comma){
+        lineText = lineText.slice(0, lineText.length-1).trim();
+    }
 
-    if (first_index === -1) {
-        vscode.window.showErrorMessage("cannot find ( for format_func_line");
-        throw new error("cannot find (");
-    }
-    let prefix = " ".repeat(4)
-    lines.push(lineText.slice(0, first_index + 1));
-    let end_index = lineText.indexOf(")");
-    // if(first_index === -1) {
-    //     vscode.window.showErrorMessage("cannot find ) for format_func_line");
-    //     throw new error("cannot find ) for format_func_line");
-    // }
-    let content: string;
-    if (end_index > -1) {
-        // lines.push(lineText.slice(end_index))
-        content = lineText.slice(first_index + 1, end_index)
-    } else {
-        content = lineText.slice(first_index + 1)
-    }
-    let pieces = content.split(",")
+    let pieces = lineText.split(/,\s*/)
     for (let piece of pieces) {
         piece = piece.trim()
         if (piece.length === 0) {
@@ -90,10 +95,13 @@ export function format_func_line(lineText: string) {
     let lastLine = lines.pop()
     lastLine = lastLine.slice(0, lastLine.length - 1)
     lines.push(lastLine)
-
-    if (end_index > -1) {
-        lines.push(lineText.slice(end_index))
+    if(is_end_with_comma){
+        lines[lines.length-1] = lines[lines.length-1] + comma;
     }
+    if(is_end_with_parethes){
+        lines.push(parethes);
+    }
+    
     return lines
 
 }
