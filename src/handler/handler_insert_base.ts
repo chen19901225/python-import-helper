@@ -44,8 +44,8 @@ export function insert_base(textEditor: vscode.TextEditor, edit: vscode.TextEdit
             relative_path = relative_path.slice(1)
         }
         let package_name = relative_path.replace(new RegExp(path.sep, "g"), ".");
-        let last_dot_index = name.lastIndexOf(".");
-        package_name = package_name.slice(0, last_dot_index);
+        let elements = package_name.split(".")
+        package_name = elements.slice(0, elements.length-1).join(".");
         if (match(name)) {
             let basename = path.basename(name).split(".")[0];
             let getClassName = convertClassName(basename);
