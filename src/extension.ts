@@ -32,6 +32,7 @@ import { insert_last_import } from './handler/handler_insert_last_import';
 import { update_if } from './handler/handler_update_if';
 import { insert_import } from './handler/handler_insert_import';
 import { var_last_part } from './handler/handler_var_last_part';
+import { tornado_export_class_to_urls } from './handler/handler_tornado_export_class_to_urls';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -219,12 +220,20 @@ export function activate(context: vscode.ExtensionContext) {
         });
     context.subscriptions.push(exportClassToModuleDisposable);
 
+    let tornadoExportClassToUrlsDiposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.tornado_export_class_to_urls",
+        async (textEdit, edit) => {
+            await tornado_export_class_to_urls(textEdit, edit);
+        });
+    context.subscriptions.push(tornadoExportClassToUrlsDiposable);
+
 
     let getLastFuncDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_last_func",
         (textEdit, edit) => {
             get_last_func(textEdit, edit);
         })
     context.subscriptions.push(getLastFuncDisposable);
+
+
 
 
     let wrapNodeDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.wrap_node",
@@ -281,8 +290,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     let handlerLastVarPartDisposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.handler-last-var-part",
         (textEdit, edit) => {
-        var_last_part(textEdit, edit);
-    });
+            var_last_part(textEdit, edit);
+        });
     context.subscriptions.push(handlerLastVarPartDisposable);
 
 

@@ -28,6 +28,10 @@ function getCurrentName(textEditor: vscode.TextEditor) {
 }
 function search_init_or_create(textEditor: vscode.TextEditor,
     edit: vscode.TextEditorEdit): [string, string] {
+    /**
+     * 获取init_path的路劲和init文件的内容
+     * 如果__init__文件不存在，那么先创建，在获取
+     */    
     let fsPath = textEditor.document.uri.fsPath;
     let dirName = path.dirname(fsPath);
     // path.sep
@@ -39,6 +43,7 @@ function search_init_or_create(textEditor: vscode.TextEditor,
     return [initPath, read_content]
 
 }
+
 function _parse_content(text: string): Array<[string, string]> {
     let lines = text.split(/\r?\n/)
     let parsed_lines = []
@@ -69,7 +74,10 @@ function _parse_content(text: string): Array<[string, string]> {
 }
 
 function save_content_to_path(save_path: string, lines: Array<[string, string]>) {
-    let alls = []
+    /**
+     * 根据lines重新生成__init__文件
+     */
+    let alls = [] // __init__里面的__all__
     let content_lines = []
     for (let line of lines) {
         content_lines.push(startText + line[0]);
@@ -93,16 +101,26 @@ function save_content_to_path(save_path: string, lines: Array<[string, string]>)
 }
 
 export function export_class_to_module(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
+    /**
+     * 吧class导出到当前目录的__init__文件中
+     * 
+     */
+    
     let [initPath, read_content] = search_init_or_create(textEditor, edit);
+
+    // 获取选中的文本或者当前打开文件的class名字
     let exported_content = get_selected_content_or_class_name(textEditor, edit);
+    //当前打开的文件的basename
     let currentName = getCurrentName(textEditor);
+    // tag
     let key = `${currentName}||${exported_content}`;
     let import_statement = `from .${currentName} import ${exported_content}`
+    // List[tag, 真正的import语句]
     let parsed_lines = _parse_content(read_content);
     let is_inserted = false;
 
     for (let line of parsed_lines) {
-        if (line[0] === key) {
+        if (line[0] === key) { // 如果已经插入
             is_inserted = true;
             return;
         }
