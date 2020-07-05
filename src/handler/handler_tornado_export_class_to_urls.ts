@@ -2,8 +2,9 @@
 import * as vscode from "vscode";
 import * as path from "path";
 import * as fs from "fs";
+import *as os from "os";
 import { convert_filename } from "./handler_file_name";
-let line_sep = "\r\n"
+let line_sep = os.EOL;
 let name_re = /^name\s*=\s*(.+)$/
 export async function tornado_export_class_to_urls(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
 
