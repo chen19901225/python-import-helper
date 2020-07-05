@@ -94,7 +94,7 @@ export function generate_urls_content(content: string, name: string, baseName: s
         `#generated_import_start: ${className}`,
         `from .${baseName} import ${className}`,
         `#generated_import_end: ${className}`]);
-    let url_path = '/' + name.replace(/__/g, '/');
+    let url_path = '/' + name.replace(/__/g, '/').replace(/\-/g, '/');
     add_to_array(var_array, [
         `    #generate_route_start: ${name}`,
         `    ("${url_path}", ${className}, {}, "${name}"),`,
@@ -110,6 +110,7 @@ export function generate_urls_content(content: string, name: string, baseName: s
         lines.push(value);
     })
     lines.push("]");
+    lines.push("");
     return [true, lines.join(line_sep)];
 }
 
