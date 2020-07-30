@@ -72,7 +72,7 @@ export async function tornado_export_class_to_urls(textEditor: vscode.TextEditor
  * @param className 类名
  */
 export function generate_urls_content(content: string, name: string, baseName: string): [boolean, string] {
-    let [flag, error_msg, var_name, import_array, var_array] = _parse_urls_content(content);
+    let [flag, error_msg, var_name, import_array, var_array, left_array] = _parse_urls_content(content);
     if (!flag) {
         return [false, error_msg];
     }
@@ -110,16 +110,20 @@ export function generate_urls_content(content: string, name: string, baseName: s
         lines.push(value);
     })
     lines.push("]");
+    left_array.forEach((value) => {
+        lines.push(value);
+    })
     lines.push("");
     return [true, lines.join(line_sep)];
 }
 
 export function _parse_urls_content(content: string): [boolean, string, string, Array<string>,
-    Array<string>] {
+    Array<string>, Array<string>] {
 
     let var_name = null,
         import_lines: Array<string> = [],
-        var_lines: Array<string> = [];
+        var_lines: Array<string> = [],
+        left_lines: Array<string> = [];
     let var_regex = /^(.*)\s*=(.*)/
     let lines = content.split(line_sep);
     let var_index = 0;
@@ -134,19 +138,22 @@ export function _parse_urls_content(content: string): [boolean, string, string, 
                     false, "=这一样不能有(",
                     null,
                     import_lines,
-                    import_lines
+                    import_lines,
+                    left_lines
                 ]
             }
             break;
         }
     }
     if (!var_name) {
-        return [false, "var_name没有找到", null, import_lines, var_lines]
+        return [false, "var_name没有找到", null, import_lines, var_lines,
+            left_lines]
     }
 
     let end_text = "]";
     if (var_index > 0) {
-        import_lines = lines.slice(0, var_index );
+        // 导入的lines
+        import_lines = lines.slice(0, var_index);
     }
     let end_index = 0
     for (let i = var_index + 1; i < lines.length; i++) {
@@ -160,5 +167,9 @@ export function _parse_urls_content(content: string): [boolean, string, string, 
         var_lines = lines.slice(var_index + 1, end_index);
     }
 
-    return [true, "", var_name, import_lines, var_lines]
+    if (end_index < lines.length - 1) {
+        left_lines = lines.slice(end_index + 1)
+    }
+
+    return [true, "", var_name, import_lines, var_lines, left_lines]
 }
