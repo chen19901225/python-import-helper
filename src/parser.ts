@@ -62,7 +62,8 @@ export function parse_parse_params(definition: string) {
         '"': '"',
         '{': '}',
         '[': ']',
-        '(': ')'
+        '(': ')',
+        
     }
     let handle_position = (current_index: number, current_word: string, expected: string = "") => {
         if (params_length === current_index) {
@@ -84,6 +85,20 @@ export function parse_parse_params(definition: string) {
                 }
             }
         } else {
+            //
+            if (ch == "#") {
+                while (1) {
+                    ch =  params_str.charAt(current_index);
+                    if (ch === null ||ch == undefined){
+                        break
+                    }
+                    if (ch === "\n") {
+                        break
+                    }
+                    current_index ++
+                }
+
+            }   //忽略掉当前行的剩余内容
             // expected === ""
             if (ch in expected_map) {
                 let expected_ch = expected_map[ch];
