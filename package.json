@@ -146,12 +146,12 @@
             },
             {
                 "command": "cqh-python-import-helper.get_current_filename",
-                "key": "alt+f9",
+                "key": "alt+k f",
                 "when": "editorTextFocus && !editorHasSelection"
             },
             {
                 "command": "cqh-python-import-helper.get_current_classname",
-                "key": "alt+k f",
+                "key": "alt+k c",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
@@ -208,6 +208,11 @@
                 "command": "cqh-python-import-helper.handler-last-var-part",
                 "key": "alt+k a",
                 "when": "editorTextFocus && !editorHasSelection"
+            },
+            {
+                "command": "cqh-python-import-helper.import-upgrade",
+                "key": "alt+k u",
+                "when": "editorTextFocus && !editorHasSelection",
             }
         ],
         "commands": [
