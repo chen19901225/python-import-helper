@@ -212,7 +212,7 @@
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "key": "alt+k u",
-                "when": "editorTextFocus && !editorHasSelection",
+                "when": "editorTextFocus && !editorHasSelection"
             }
         ],
         "commands": [
