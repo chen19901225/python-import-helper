@@ -15,7 +15,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onLanguage:python",
+        "onLanguage:python"
     ],
     "main": "./out/src/extension",
     "contributes": {
