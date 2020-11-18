@@ -16,11 +16,6 @@
     ],
     "activationEvents": [
         "onLanguage:python",
-        "onCommand:cqh-python-import-helper.function_apply_self",
-        "onCommand:cqh-python-import-helper.get_parent_args_dict",
-        "onCommand:cqh-python-import-helper.get_parent_name",
-        "onCommand:cqh-python-import-helper.delegate_to_parent",
-        "onCommand:cqh-python-import-helper.get_parent_original_args"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -207,12 +202,12 @@
             {
                 "command": "cqh-python-import-helper.handler-last-var-part",
                 "key": "alt+k a",
-                "when": "editorTextFocus && !editorHasSelection"
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             },
             {
                 "command": "cqh-python-import-helper.import-upgrade",
                 "key": "alt+k u",
-                "when": "editorTextFocus && !editorHasSelection"
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
