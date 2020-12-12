@@ -21,6 +21,7 @@ function get_selected_content_or_class_name(textEditor: vscode.TextEditor, edit:
 }
 
 function getCurrentName(textEditor: vscode.TextEditor) {
+    // 获取当前的文件名
     let fsPath = textEditor.document.uri.fsPath;
     let baseName = path.basename(fsPath);
     let baseNameWithoutExt = baseName.split(".")[0]
@@ -31,7 +32,8 @@ function search_init_or_create(textEditor: vscode.TextEditor,
     /**
      * 获取init_path的路劲和init文件的内容
      * 如果__init__文件不存在，那么先创建，在获取
-     */    
+     * 返回 [init的路径, init的content]
+     */
     let fsPath = textEditor.document.uri.fsPath;
     let dirName = path.dirname(fsPath);
     // path.sep
@@ -43,6 +45,20 @@ function search_init_or_create(textEditor: vscode.TextEditor,
     return [initPath, read_content]
 
 }
+
+
+function _get_keep_lines(text: string): Array<string> {
+    let lines = text.split(/\r?\n/)
+    let out: Array<string> = []
+    for (let line of lines) {
+        if (line.startsWith("__version__")) {
+            out.push(line)
+        }
+    }
+
+    return out
+}
+
 
 function _parse_content(text: string): Array<[string, string]> {
     let lines = text.split(/\r?\n/)
@@ -73,12 +89,15 @@ function _parse_content(text: string): Array<[string, string]> {
     return parsed_lines;
 }
 
-function save_content_to_path(save_path: string, lines: Array<[string, string]>) {
+function save_content_to_path(save_path: string, lines: Array<[string, string]>, keep_lines: Array<string>) {
     /**
      * 根据lines重新生成__init__文件
      */
     let alls = [] // __init__里面的__all__
     let content_lines = []
+    for (let line of keep_lines) {
+        content_lines.push(line);
+    }
     for (let line of lines) {
         content_lines.push(startText + line[0]);
         content_lines.push(line[1]);
@@ -105,7 +124,7 @@ export function export_class_to_module(textEditor: vscode.TextEditor, edit: vsco
      * 吧class导出到当前目录的__init__文件中
      * 
      */
-    
+
     let [initPath, read_content] = search_init_or_create(textEditor, edit);
 
     // 获取选中的文本或者当前打开文件的class名字
@@ -117,6 +136,7 @@ export function export_class_to_module(textEditor: vscode.TextEditor, edit: vsco
     let import_statement = `from .${currentName} import ${exported_content}`
     // List[tag, 真正的import语句]
     let parsed_lines = _parse_content(read_content);
+    let keep_lines = _get_keep_lines(read_content);
     let is_inserted = false;
 
     for (let line of parsed_lines) {
@@ -126,7 +146,7 @@ export function export_class_to_module(textEditor: vscode.TextEditor, edit: vsco
         }
     }
     parsed_lines.push([key, import_statement]);
-    save_content_to_path(initPath, parsed_lines);
+    save_content_to_path(initPath, parsed_lines, keep_lines);
     vscode.window.showInformationMessage('success to export');
 
 
