@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.219",
+    "version": "0.0.220",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -378,6 +378,10 @@
             {
                 "command": "cqh-python-import-helper.tornado_export_class_to_urls",
                 "title": "cqh python tornado export class to urls"
+            },
+            {
+                "command": "cqh-python-import-helper.cqh_run_pytest_in_terminal",
+                "title": "cqh-python-import-helper.cqh_run_pytest_in_terminal"
             }
         ],
         "menus": {
@@ -396,6 +400,11 @@
                     "when": "!inOutput && editorTextFocus && editorLangId == python",
                     "command": "cqh-python-import-helper.export_class_to_module",
                     "group": "cqh-insert"
+                },
+                {
+                    "when": "!inOutput && editorTextFocus && editorLangId == python",
+                    "command": "cqh-python-import-helper.cqh_run_pytest_in_terminal",
+                    "group": "cqh"
                 },
                 {
                     "when": "!inOutput && editorTextFocus && editorLangId == python",

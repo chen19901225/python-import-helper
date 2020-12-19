@@ -33,6 +33,7 @@ import { update_if } from './handler/handler_update_if';
 import { insert_import } from './handler/handler_insert_import';
 import { var_last_part } from './handler/handler_var_last_part';
 import { tornado_export_class_to_urls } from './handler/handler_tornado_export_class_to_urls';
+import { cqh_run_pytest_in_terminal } from './handler/handler_cqh_run_pytest_in_terminal';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -293,6 +294,13 @@ export function activate(context: vscode.ExtensionContext) {
             var_last_part(textEdit, edit);
         });
     context.subscriptions.push(handlerLastVarPartDisposable);
+
+    let cqh_run_pytest_in_terminal_disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.cqh_run_pytest_in_terminal", 
+    (textEdit, edit) => {
+        cqh_run_pytest_in_terminal(textEdit, edit);
+    })
+
+    context.subscriptions.push(cqh_run_pytest_in_terminal_disposable);
 
 
 }
