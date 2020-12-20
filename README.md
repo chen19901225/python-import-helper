@@ -2,12 +2,13 @@
 
 ## text commands
 
-### `cqh-python-import-helper.import-upgrade`
-move the local import to global import
+### `cqh-python-import-helper.import-upgrade` (alt+k, u)
+使得当前行的import,跑到最前面
 
+<!-- 
 ### `cqh-python-import-help.select-current-line`:
 select the current line from the first non emtpy position to end position
-<strong>override `alt +L` key bind</strong>
+<strong>override `alt +L` key bind</strong> -->
 
 ### `cqh-python-import-helper.function_apply_self` : alt+-
 
@@ -17,28 +18,16 @@ select the current line from the first non emtpy position to end position
     self.name1 = name1
     self.name2 = name2
     ```
-#### note:
-    your cursor should be right indent
 
-### `cqh-python-import-helper.get_parent_args_dict`
+### `cqh-python-import-helper.get_parent_args_dict`: `alt+]`
 
-    get current function args, so dont should type it
-    ```
-    def show(self, name1, name2)
-        |
-    ```
-    generate name1=name1, name2=name2
-
-#### note:
-    your cursor should be right indent
+    对于 function `def show(self, name1, name2)`, 会插入 `name1=name1,name2=name2`
+   
 
 ### `cqh-python-import-helper.get_parent_name` alt+[
 
-    get current function name, and insert in current position
+    获取当前的代码所在的 function的名字
 
-
-#### note:
-    your cursor should be right indent
 
 ### `cqh-python-import-helper.get_parent_original_args` alt + 0
 
@@ -85,9 +74,10 @@ key: alt+b
 key: alt + \
 
 
-### insert self
-key alt + m
-insert `self`
+### `insert self`: `alt +m`
+
+插入 `self` 这个字符串
+
 
 ### move op end
 key: alt + .
