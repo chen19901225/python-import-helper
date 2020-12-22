@@ -43,13 +43,8 @@ export function convert_filename(name: string, kind: string) {
     }
     let elements = name.split("_");
     /// 处理handler__name__ext.py这种情况
-    let out_elements = []
-    for(let v of elements) {
-        if(v != '') {
-            out_elements.push(v)
-        }
-    }
-    
+    elements = elements.filter((v) => {return v != ""})
+
     if (kind === 'raw_without_prefix') {
         return elements.slice(1).join('_');
     }
