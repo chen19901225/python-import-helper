@@ -78,6 +78,9 @@ key: alt + \
 
 插入 `self` 这个字符串
 
+## `获取当前的文件名字`: `alt+k f`
+
+[//]: cqh_goto:  __proj__/src/handler/handler_file_name.ts
 
 ### move op end
 key: alt + .

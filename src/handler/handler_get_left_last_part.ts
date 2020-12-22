@@ -1,4 +1,6 @@
 import * as vscode from "vscode";
+
+// cqh_goto: __proj__/src/handler/handler_get_left_pattern.ts
 import { removeVarType } from "../util"
 import { service_position_history_add_position } from "../service/service_position_history";
 export function get_left_last_part(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) {
@@ -31,9 +33,9 @@ export function get_left_last_part(textEditor: vscode.TextEditor, edit: vscode.T
             if (item) {
                 let { label } = item;
                 if (label.startsWith("1.")) {
-                    
+
                 } else {
-                    if(pattern.startsWith("_")) {
+                    if (pattern.startsWith("_")) {
                         pattern = pattern.slice(1)
                     }
                 }
