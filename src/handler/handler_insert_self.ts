@@ -18,7 +18,7 @@ export function insert_self(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     let index = 1;
     for(let value of insert_list) {
         quickPickItem.push({
-            "label": `${i}.${value}`,
+            "label": `${index}.${value}`,
             "description": value
         })
         index = index +1
