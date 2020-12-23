@@ -3,7 +3,7 @@ import { getConfig } from "../config";
 let last_word: string = "";
 export function insert_self(textEditor: vscode.TextEditor, edit: vscode.TextEditorEdit) { 
     let position = textEditor.selection.active;
-    edit.insert(position, "self");
+    // edit.insert(position, "self");
 
     // let final_list = [];
     let quickPickItem: vscode.QuickPickItem[] = [];
