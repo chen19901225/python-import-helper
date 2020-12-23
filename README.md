@@ -76,7 +76,11 @@ key: alt + \
 
 ### `insert self`: `alt +m`
 
+现在变成插入字符串列表
+
+[//]: cqh_goto: __proj__/src/handler/handler_insert_self.ts
 插入 `self` 这个字符串
+
 
 ## `获取当前的文件名字`: `alt+k f`
 
