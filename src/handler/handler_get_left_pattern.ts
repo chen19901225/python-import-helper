@@ -33,6 +33,10 @@ export function get_insert_context(text: string): [boolean, string] {
     if (match) {
         // 获取 "a":
         let pattern = match[1];
+        if(pattern.startsWith("if ") && pattern.endsWith("!")) {
+            // 处理 if name !=
+            pattern = pattern.slice(2, pattern.length-1)
+        }
         // edit.insert(position, pattern.trim());
         return [true, _format(pattern)];
         // return;
