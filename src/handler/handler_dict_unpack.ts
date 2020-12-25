@@ -187,6 +187,12 @@ export function generate_insert_string(source: string,
         return false;
     }
 
+    // a, b = 10* => 10*a, 10*b
+    let handle_multi = (source_var, new_ele, is_first) => {
+        right_side_list.push(`${source_var}${new_ele}`)
+        return false;
+    }
+
 
     for (let ele of element_list) {
         // out.push(ele);
@@ -208,20 +214,29 @@ export function generate_insert_string(source: string,
             // password = request.auth_password
             current_handle = handle_remove_prefix
         }
-        else if(source_var.startsWith(".")) {
+        else if (source_var.startsWith(".")) {
+            // a, b = .c() => a, b = a.c(), b.c()
             current_handle = handler_instance_method;
         }
         else if (new_ele.includes(".")) {
+            // a,b = c => a, b = c.a, c.b
             new_ele = new_ele.split(".").pop();
             current_handle = handle_instance
         } else if (source_var.endsWith("_d") || source_var.endsWith("_dict") || source_var.startsWith("d_") || source_var === 'd') {
+            //a, d = d => a, b = d[a], d[b]
             current_handle = handle_dict;
         } else if (source_var.endsWith('("')) {
+            //a, b = q(" => a, b = q("a"), q("n")
             current_handle = handle_func_call_with_double_quote;
         } else if (source_var.endsWith("('")) {
+            //a, b = q(' => a, b = q('a'), q('n')
             current_handle = handle_func_call_with_single_quote;
         } else if (source_var.endsWith('(')) {
+            //a, b = q( => a, b = q(a), q(b)
             current_handle = handle_func_call;
+        } else if (source_var.endsWith("*")) {
+            // a, b = 10* => a, b = 10*a, 10*b
+            current_handle = handle_multi;
         }
         is_first = current_handle(source_var, new_ele, is_first);
     }

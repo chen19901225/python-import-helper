@@ -1,5 +1,7 @@
 # cqh-python-import-helper README
 
+
+
 ## text commands
 
 ### `cqh-python-import-helper.import-upgrade` (alt+k, u)
@@ -38,24 +40,42 @@ select the current line from the first non emtpy position to end position
     ```
     generate `name1, name2`
 
-#### note:
-    your cursor should be right indent
+
 
 ### "cqh-python-import-helper.dict_unpack",
                 
 - "key": "alt+i"
 
-convert `name1, name2=obj` -> `name1, name2 = obj1.name1, obj.name2`
+[//]: cqh_goto: __proj__/src/handler/handler_dict_unpack.ts||handler_dict_unpack
 
-convert `name1, name2=obj_d` -> `name1, name2 = obj_d['name1'], obj_d['name2']`
+examples:
+
+*  `name1, name2=obj` -> `name1, name2 = obj1.name1, obj.name2`
+
+*  `name1, name2=obj_d` -> `name1, name2 = obj_d['name1'], obj_d['name2']`
+
+* a, b = q_ => a, b = q_a, q_b
+
+* a, b = q(" => a, b = q("a"), q("n")
+
+* a, b = q(' => a, b = q('a'), q('n')
+
+* a, b = q( => a, b = q(a), q(b)
+
+* a, b = .c() => a, b = a.c(), b.c()
+
 
 ###  cqh-python-import-helper.dict_get_unpack
 "key": "alt+o",
+
+[//]: cqh_goto: __proj__/src/handler/handler_dict_get_unpack.ts||handler_dict_get_unpack
 
 convert `name1, name2=obj_d` -> `name1, name2 = obj_d。。.get('name1'), obj_d.get('name2')`
 
 ### cqh-python-import-helper.dict_prepend
 "key": "alt+u"
+
+[//]: cqh_goto: __proj__/src/handler/handler_dict_unpack.ts||handler_dict_prepend
 
 convert `name1, name2=source_` => `source_name1, source_name2 = name1, name2`
 
@@ -63,6 +83,16 @@ convert `name1, name2=source_` => `source_name1, source_name2 = name1, name2`
 key: alt+h
 
 insert left pattern before "="
+
+[//]: cqh_goto: __proj__/src/handler/handler_get_left_pattern.ts||insert_left_pattern
+
+examples:
+
+* `a = ` => `a`
+
+* `'a:'` => `a`
+
+*  `"a:"` => `a`
 
 
 ### cqh-python-import-helper.get_left_last_pattern

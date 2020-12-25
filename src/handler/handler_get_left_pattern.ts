@@ -12,6 +12,7 @@ function _format(text: string): string {
 export function get_insert_context(text: string): [boolean, string] {
     let match = /^\s*([^=]+)=.*$/.exec(text);
     if (match) {
+        // 获取=左边的内容
         let pattern = match[1];
         // edit.insert(position, pattern.trim());
         return [true, _format(pattern)];
@@ -19,6 +20,9 @@ export function get_insert_context(text: string): [boolean, string] {
     }
     match = /^\s*'([^']+)'\:.*$/.exec(text);
     if (match) {
+        // {
+        //  'a':
+        // }
         let pattern = match[1];
         // edit.insert(position, pattern.trim());
         return [true, _format(pattern)];
@@ -27,6 +31,7 @@ export function get_insert_context(text: string): [boolean, string] {
 
     match = /^\s*"([^"]+)"\:.*$/.exec(text);
     if (match) {
+        // 获取 "a":
         let pattern = match[1];
         // edit.insert(position, pattern.trim());
         return [true, _format(pattern)];
