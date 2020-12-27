@@ -98,17 +98,47 @@ examples:
 
 * `dict(name=` => `name`
 
+* `name__d =` => `["name_d", "name", "d"]`
+
+* `data["show"]` => `['data["show"]', "data", "show"]`
+
+* `data["show__eq"]` => `['data["show__eq"]', "data", "show__eq", "show", "eq"]`
+
+* `this.name__alias =` => `['this.name__alias', 'this', 'name__alias', 'name', 'alias']`
 
 
 
 ### cqh-python-import-helper.get_left_last_pattern
 key: alt+b
+
+这个基本没有用到过吧
+
 `self.name=` insert `name`
 
 
 ### cqh-python-import-helper.get_last_if_varaible
 key: alt + \
 
+获取最近的if 所在行的 变量
+
+[//]: cqh_goto: __proj__/src/handler/handler_get_last_if_variable.ts||get_last_if_variable
+
+
+[//]: cqh_goto: __proj__/test/try_get_if_var.test.ts
+
+* `if (key, value) in arr:` => ['key, value', 'key', 'value', 'arr']
+
+* `for ele in arr:` =>  ["ele", "arr"]
+
+* `for (key, value) in d:` => ["key, value", "key", "value", "d"]
+
+* `for key, value in d:` => ["key, value", "key", "value", "d"]
+
+* `for (key, value) in d.items()` => ["key, value", "key", "value", "d"]
+
+* `for (key, value) in self.d.items()` => ["key, value", "key", "value", "self.d"]
+
+* `if isinstance(a, (list, tuple))` => ["a", "(list, tuple)"]
 
 ### `insert self`: `alt +m`
 
