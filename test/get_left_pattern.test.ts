@@ -12,12 +12,13 @@ import * as vscode from 'vscode';
 import * as myExtension from '../src/extension';
 // import * as parser from '../src/parser';
 import { setFlagsFromString } from 'v8';
-import {removeVarType} from '../src/util'
+import { removeVarType } from '../src/util'
+import { left_parttern_split_text_by_underline, left_pattern_convert_list } from '../src/handler/handler_get_left_pattern';
 // Defines a Mocha test suite to group tests of similar kind together
 suite("get left pattern test", () => {
 
     // Defines a Mocha unit test
-    
+
     test("test no type", () => {
         let line = "show, me";
         let out = removeVarType(line);
@@ -34,7 +35,7 @@ suite("get left pattern test", () => {
         let out = removeVarType(line);
         assert.equal(out, "name")
     })
-    
+
     test("test one type with dict", () => {
         let line = "name: dict[str, str]";
         let out = removeVarType(line);
@@ -47,5 +48,41 @@ suite("get left pattern test", () => {
         assert.equal(out, "name")
     })
 
-    
+
+
+
+
+
 });
+
+
+suite("get left pattern split_array_by_underline", () => {
+    test("test simple", () => {
+        let tables: Array<[string, Array<string>]> = [
+            ["name__d", ["name__d","name", "d"]],
+            ["name", ["name"]],
+            
+            ["admin__bank_code", ["admin__bank_code","admin", "bank_code"]],
+            ["__user__name", ["__user__name", "user", "name"]],
+        ]
+        for (let [param, expected] of tables) {
+            let out = left_parttern_split_text_by_underline(param);
+            assert.deepEqual(out, expected);
+        }
+    })
+
+    test("convert_list", () => {
+        let tables: Array<[string, Array<string>]> = [
+            ["this.data['__bank_code__name']", ["this.data['__bank_code__name']", "this.data", "__bank_code__name", "bank_code", "name"]],
+            ["data['__bank_code__name']", ["data['__bank_code__name']", "data", "__bank_code__name", "bank_code", "name"]],
+            ["name", ["name"]],
+            ["this.name", ["this.name", "this", "name"]],
+            ["this.name__d", ["this.name__d","this", "name__d", "name", "d"]],
+
+        ]
+        for (let [param, expected] of tables) {
+            let out = left_pattern_convert_list(param);
+            assert.deepEqual(out, expected)
+        }
+    })
+}); // suite("get left pattern split_array_by_underline")

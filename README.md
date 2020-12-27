@@ -96,6 +96,10 @@ examples:
 
 *  `"a:"` => `a`
 
+* `dict(name=` => `name`
+
+
+
 
 ### cqh-python-import-helper.get_left_last_pattern
 key: alt+b
