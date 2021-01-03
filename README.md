@@ -12,7 +12,10 @@
 select the current line from the first non emtpy position to end position
 <strong>override `alt +L` key bind</strong> -->
 
-### `cqh-python-import-helper.function_apply_self` : alt+-
+### `cqh-python-import-helper.function_apply_self` : `alt+-`
+
+
+[//]: cqh_goto: __proj__/src/handler/function_apply_self.ts||function_apply_self
 
     generate code for `def func(self,name1, name2)` into
 
@@ -33,12 +36,19 @@ select the current line from the first non emtpy position to end position
 
 ### `cqh-python-import-helper.get_parent_original_args` alt + 0
 
+
+[//]: cqh_goto: __proj__/src/handler/handler_get_original_parent_args.ts||get_original_parent_args
+
     get current function args, so dont should type it
     ```
     def show(self, name1, name2)
         |
     ```
     generate `name1, name2`
+
+* `def show(self, name1, name2)` => `name1, name2`
+
+* `def show(self, name1, name2=0)` => `name1, name2=0`
 
 
 
@@ -162,6 +172,41 @@ show function params list
 
 
 
+### `cqh-python-import-help.select-current-line` : 
 
+
+
+### 获取上一行的变量 `cqh-python-import-helper.get_last_line_variable`: `alt+~`
+
+
+[//]: cqh_goto: __proj__/src/handler/handler_get_last_line_variable.ts||get_last_line_variable
+
+
+### 格式化 `node-format`: `alt + k n`
+
+[//]: cqh_goto: __proj__/src/handler/handler_node_format.ts||node_format
+
+#### generate_dict_pair
+
+* `a, b, c` => `a=a, b=b,c=c`
+
+#### def_arg_split_line
+
+* `def fun(a, b, c` => `def fun(a,\nb,\nc`
+
+#### dict_split_line
+
+* `a=0,b=1,c=2` => `a=0,\nb=1\n,c=2\n`
+
+#### apply_split_line
+
+
+* `dict(a=a,b=b,c=c)` => `dict(a=a,\nb=b,\nc=c\n)`
+
+### string list
+
+一般用于sign的时候
+
+* `a, b, c` => `["{a}", "{b}", "{c}"]`
 
 ## Features

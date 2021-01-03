@@ -149,6 +149,18 @@ export function format_apply_line(lineText: string, col: number): Array<string> 
         lineText,
     ]
 }
+export function generate_string_list(text:string): Array<string> {
+    // let out = []
+    let pieces = text.split(/,\s*/);
+    let tmp_line = []
+    for (let i = 0; i < pieces.length; i++) {
+        let name = pieces[i].trim();
+        tmp_line.push(`"{${name}}"`)
+    }
+    
+    let tmp_text = '['+tmp_line.join(", ")+"]"
+    return [tmp_text]
+}
 
 export function generate_dict_pair(text: string): Array<string> {
     /**
@@ -209,6 +221,9 @@ function _handle_var_with_label(text: string, description: string): Array<string
         return generate_dict_pair(text);
     }
 
+    if (description === 'generate_string_list') {
+        return generate_string_list(text);
+    }
 }
 
 
@@ -243,6 +258,10 @@ export function node_format(textEditor: vscode.TextEditor, edit: vscode.TextEdit
     items.push({
         'label': 'apply_split_line',
         'description': 'apply_split_line'
+    })
+    items.push({
+        'label': 'generate_string_list',
+        'description': 'generate_string_list'
     })
 
     let indexLength = 2;

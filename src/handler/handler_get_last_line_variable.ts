@@ -46,6 +46,8 @@ export function get_last_line_variable(textEditor: vscode.TextEditor, edit: vsco
             
             edit.insert(cursor, var_arr[0]);
         } else {
+            // 添加 {}这种格式的东西
+            // 不一定是 {a}{b}{c}的呀，可能是{a}|{b}|{c}的呀
             // show 下拉框
             let quickItems: vscode.QuickPickItem[] = []
             let index = 10;

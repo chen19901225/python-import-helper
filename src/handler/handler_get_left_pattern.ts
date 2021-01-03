@@ -61,6 +61,7 @@ export function insert_left_pattern(textEditor: vscode.TextEditor, edit: vscode.
         let convert_list = left_pattern_convert_list(inserted_text)
         if (convert_list.length == 1) {
             edit.insert(position, inserted_text);
+            return;
         }
         let quickPickItem: vscode.QuickPickItem[] = [];
         for (let word of convert_list) {

@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { format_dict_line, generate_dict_pair, format_func_line } from '../src/handler/handler_node_format';
+import { format_dict_line, generate_dict_pair, format_func_line, generate_string_list } from '../src/handler/handler_node_format';
 
 suite("node format test", () => {
     test("format_dict_line", () => {
@@ -23,6 +23,24 @@ suite("node format test", () => {
         }
 
     });
+
+    test("generate_string_list", () => {
+        let table:Array<[string, Array<string>]> = [
+            [
+                "a, b",
+                [
+
+                    '["{a}", "{b}"]'
+                ]
+            ],
+           
+        ]
+        for (let i = 0; i < table.length; i++) {
+            let [input_str, expected_arr] = table[i];
+            let result_arr = generate_string_list(input_str);
+            assert.deepEqual(expected_arr, result_arr)
+        }
+    })
 
     test("generate_dict", () => {
 
