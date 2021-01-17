@@ -34,6 +34,7 @@ import { insert_import } from './handler/handler_insert_import';
 import { var_last_part } from './handler/handler_var_last_part';
 import { tornado_export_class_to_urls } from './handler/handler_tornado_export_class_to_urls';
 import { cqh_run_pytest_in_terminal } from './handler/handler_cqh_run_pytest_in_terminal';
+import { get_var_from_comment_runner } from './handler/handler_get_var_from_comment';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -301,6 +302,12 @@ export function activate(context: vscode.ExtensionContext) {
     })
 
     context.subscriptions.push(cqh_run_pytest_in_terminal_disposable);
+
+    let get_var_from_comment_disposable = vscode.commands.registerTextEditorCommand("cqh-python-import-helper.get_var_from_comment", (textEdit, edit) => {
+        get_var_from_comment_runner(textEdit, edit);
+    })
+
+    context.subscriptions.push(get_var_from_comment_disposable);
 
 
 }

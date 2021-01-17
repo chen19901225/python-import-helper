@@ -2,7 +2,7 @@
     "name": "cqh-python-import-helper",
     "displayName": "cqh-python-import-helper",
     "description": "",
-    "version": "0.0.230",
+    "version": "0.0.231",
     "publisher": "cqh",
     "engines": {
         "vscode": "^1.34.0"
@@ -130,11 +130,6 @@
                 "key": "alt+m"
             },
             {
-                "command": "cqh-python-import-helper.get_left_last_part",
-                "key": "alt+b",
-                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
-            },
-            {
                 "command": "cqh-python-import-helper.show_var_list",
                 "key": "alt+n",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
@@ -208,9 +203,18 @@
                 "command": "cqh-python-import-helper.import-upgrade",
                 "key": "alt+k u",
                 "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
+            },
+            {
+                "command": "cqh-python-import-helper.get_var_from_comment",
+                "key": "alt+b c",
+                "when": "editorTextFocus && !editorHasSelection && editorLangId==python"
             }
         ],
         "commands": [
+            {
+                "command": "cqh-python-import-helper.get_var_from_comment",
+                "title": "cqh python  import helper get var from comment"
+            },
             {
                 "command": "cqh-python-import-helper.insert_import",
                 "title": "cqh-python-import-helper.insert_import"
