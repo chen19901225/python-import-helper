@@ -90,6 +90,11 @@ export function generate_urls_content(content: string, name: string, baseName: s
         }
     }
     let className = convert_filename(baseName, 'class_style');
+    let fixed_name = name
+    if(fixed_name.indexOf("(") > -1) {
+        // api/callback__test__(.*) => api/callback__test__
+        fixed_name = fixed_name.slice(0, fixed_name.indexOf("("))
+    }
     add_to_array(import_array, [
         `#generated_import_start: ${className}`,
         `from .${baseName} import ${className}`,
@@ -97,7 +102,7 @@ export function generate_urls_content(content: string, name: string, baseName: s
     let url_path = '/' + name.replace(/__/g, '/').replace(/\-/g, '/');
     add_to_array(var_array, [
         `    #generate_route_start: ${name}`,
-        `    ("${url_path}", ${className}, {}, "${name}"),`,
+        `    ("${url_path}", ${className}, {}, "${fixed_name}"),`,
         `    #generate_route_end: ${name}`])
 
     let lines = [];
