@@ -9,6 +9,7 @@ function _format(text: string): string {
 }
 
 
+
 export function get_insert_context(text: string): [boolean, string] {
     let match = /^\s*([^=]+)=.*$/.exec(text);
     if (match) {
@@ -89,7 +90,7 @@ export function left_parttern_split_text_by_underline(text: string): Array<strin
     let out: Array<string> = []
     out.push(text);
     let split_arr: Array<string> = text.split("__");
-    if(split_arr.length > 1) {
+    if (split_arr.length > 1) {
         // 如果是1的话，会两次添加text
         for (let i = 0; i < split_arr.length; i++) {
             // let arr_piece = split_arr.slice(i);
@@ -100,7 +101,7 @@ export function left_parttern_split_text_by_underline(text: string): Array<strin
             }
         }
     }
-    
+
 
     return out
 }
@@ -126,6 +127,47 @@ export function left_pattern_convert_list(param: string): Array<string> {
         }
         return num;
     }
+    if (count_ch(param, ".") > 1) {
+        // 只处理这种 this.name.test, 不处理this.name__test.d 中的name__test
+        let slice = param.split(".")
+        let out = []
+        for (let i = slice.length; i >= 1; i--) {
+            out.push(slice.slice(0, i).join("."))
+        }
+        out.push(...slice);
+        return out;
+        // return [param, ]
+    }
+
+    if (count_ch(param, '[') > 1) {
+        // 只提取多个里面的[]
+        let trim_part = (param_text: string) => {
+            if (param_text.endsWith("]")) {
+                param_text = param_text.slice(0, param_text.length - 1);
+            }
+            if (param_text.startsWith("'") && param_text.endsWith("'")) {
+                param_text = param_text.slice(1, param_text.length - 1);
+            }
+            if (param_text.startsWith('"') && param_text.endsWith('"')) {
+                param_text = param_text.slice(1, param_text.length - 1);
+            }
+            return param_text;
+        }
+        let out: Array<string> = []
+        // out.push(param)
+        let piece_list = param.split("[")
+        for (let i = piece_list.length; i >= 1; i--) {
+            out.push(piece_list.slice(0, i).join("["))
+        }
+        for (let piece of piece_list) {
+            out.push(trim_part(piece));
+        }
+
+
+        return out
+
+    }
+
     if (count_ch(param, ".") > 1 || count_ch(param, "[") > 1) {
         // 不处理太过于复杂的东西
         return [param]
