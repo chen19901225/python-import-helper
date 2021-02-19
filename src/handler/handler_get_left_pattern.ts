@@ -131,7 +131,7 @@ export function left_pattern_convert_list(param: string): Array<string> {
         // 只处理这种 this.name.test, 不处理this.name__test.d 中的name__test
         let slice = param.split(".")
         let out = []
-        for (let i = slice.length; i >= 1; i--) {
+        for (let i = slice.length; i >= 2; i--) {
             out.push(slice.slice(0, i).join("."))
         }
         out.push(...slice);
@@ -156,7 +156,7 @@ export function left_pattern_convert_list(param: string): Array<string> {
         let out: Array<string> = []
         // out.push(param)
         let piece_list = param.split("[")
-        for (let i = piece_list.length; i >= 1; i--) {
+        for (let i = piece_list.length; i >= 2; i--) {
             out.push(piece_list.slice(0, i).join("["))
         }
         for (let piece of piece_list) {
