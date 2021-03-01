@@ -167,7 +167,25 @@ key: alt + .
 move to ", ', ], ), }
 
 ### show var list
-key: alt + m
+插入变量
+
+
+[//]: cqh_goto:__proj__/src/handler/handler_insert_self.ts||__insert_self__@@@2
+
+key: `alt + m`
+
+配置例子
+
+```
+[
+    {"name": "from", "list": ["from"]},
+    {"name": "import", "list": ["import"]},
+    {"name": "self", "list": ["self"]},
+    {"name": "typingList", "list": ["from typing import List"]}
+
+]
+```
+
 show function params list
 
 

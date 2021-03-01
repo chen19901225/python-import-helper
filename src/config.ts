@@ -2,9 +2,15 @@ import * as vscode from "vscode"
 import { extname } from "path";
 
 
+export interface IInsertItem {
+    name:string;
+    list:Array<String>;
+
+}
+
 
 export interface IConfig extends vscode.WorkspaceConfiguration {
-    insert_list: Array<string>
+    insert_list: Array<IInsertItem>
 }
 
 export function getConfig(): IConfig {
