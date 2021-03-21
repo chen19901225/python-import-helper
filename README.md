@@ -227,4 +227,27 @@ show function params list
 
 * `a, b, c` => `["{a}", "{b}", "{c}"]`
 
+### get_var_from_comment (alt+b, c)
+
+
+[//]: cqh_goto: __proj__/src/handler/handler_get_var_from_comment.ts||get_var_from_comment_runner
+
+字符串
+
+```
+# cqh_comment?
+name 名字
+nick 昵称
+
+```
+
+
+用这一行来表示 `# cqh_comment?`  下来的是需要读的
+
+
+
+
+
 ## Features
+
+

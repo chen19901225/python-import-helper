@@ -36,6 +36,7 @@ function handle_with_comment(comment_line: string, document_line: Array<string>,
             "label": `${index}.${element}`,
             "description": element
         })
+        index +=1;
 
     }
 
