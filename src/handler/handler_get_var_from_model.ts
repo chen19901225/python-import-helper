@@ -15,11 +15,25 @@ export function get_var_from_model(textEditor: vscode.TextEditor, edit: vscode.T
     let currentLine = textEditor.selection.active.line;
     let lines = text.split(/\r?\n/);
     let [flag, comment_line, document_line] = search_previous_model_lines(lines, currentLine);
-    let [found_dict, dict_line_list] = search_previous_dict_lines(lines, currentLine);
-    if (flag && found_dict) {
-        // textEditor.in
-        handle_with_model(dict_line_list, document_line, textEditor.selection.active, textEditor);
+    let currentLineText = text[currentLine]
+    if (currentLineText.startsWith("def ")) { // 匹配的是function
+        // def method(self or cls, ***)
+        if (flag) {
+            
+            handle_with_model([], document_line, textEditor.selection.active, textEditor);
+        }
+
+    } else {
+        let [found_dict, dict_line_list] = search_previous_dict_lines(lines, currentLine);
+        /**
+         * 如果found_dict是true的话，就是匹配
+         */
+        if (flag) {
+            // textEditor.in
+            handle_with_model(dict_line_list, document_line, textEditor.selection.active, textEditor);
+        }
     }
+
 
 }
 
