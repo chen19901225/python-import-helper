@@ -40,7 +40,7 @@ export function get_var_from_model(textEditor: vscode.TextEditor, edit: vscode.T
 function replaceTArray(arr: Array<string>): Array<string> {
     let out = []
     for (let line of arr) {
-        line = line.replace("\t", "    ").replace("\s", "");
+        line = line.replace("\t", "    ")
         out.push(line)
     }
     return out;
