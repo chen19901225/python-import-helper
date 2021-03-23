@@ -5,7 +5,7 @@ let comment_start = "# cqh_comment?"
 
 /**
  *如何确定开始行呢， 开始行以`class ` 开头，并且没有空格
- * 
+ *
  * 
  *
  */
@@ -13,8 +13,9 @@ export function get_var_from_model(textEditor: vscode.TextEditor, edit: vscode.T
     let document = textEditor.document;
     let text = document.getText(new vscode.Range(new vscode.Position(0, 0), new vscode.Position(document.lineCount + 1, 0)));
     let currentLine = textEditor.selection.active.line;
-    let [flag, comment_line, document_line] = search_previous_model_lines(text, currentLine);
-    let [found_dict, dict_line_list] = search_previous_dict_lines(text, currentLine);
+    let lines = text.split(/\r?\n/);
+    let [flag, comment_line, document_line] = search_previous_model_lines(lines, currentLine);
+    let [found_dict, dict_line_list] = search_previous_dict_lines(lines, currentLine);
     if (flag && found_dict) {
         // textEditor.in
         handle_with_model(dict_line_list, document_line, textEditor.selection.active, textEditor);
@@ -97,13 +98,13 @@ function handle_with_model(dict_line_list: Array<string>, document_line: Array<s
             }
         }
         document = document.trim();
-        if(document.startsWith("#")) {
+        if (document.startsWith("#")) {
             // 忽略注释
             continue
         }
         let pieces = document.split("=")
         let element = pieces[0].trim();
-        if(dict_name_array.indexOf(element) > -1) {
+        if (dict_name_array.indexOf(element) > -1) {
             continue;
         }
         quick_pick_item_list.push({
@@ -123,9 +124,9 @@ function handle_with_model(dict_line_list: Array<string>, document_line: Array<s
     })
 }
 
-function search_previous_dict_lines(text: string, currentLineNo: number): [boolean, Array<string>] {
+function search_previous_dict_lines(lines: Array<string>, currentLineNo: number): [boolean, Array<string>] {
     // 找到 dict()
-    let lines = text.split(/\r?\n/);
+
     let dict_line_list: Array<string> = []
     let is_match = false;
     for (let i = currentLineNo; i >= Math.max(0, currentLineNo - 100); i--) {
@@ -146,9 +147,9 @@ function search_previous_dict_lines(text: string, currentLineNo: number): [boole
 
 
 
-function search_previous_model_lines(text: string, currentLineNo: number): [boolean, string, Array<string>] {
+function search_previous_model_lines(lines: Array<string>, currentLineNo: number): [boolean, string, Array<string>] {
 
-    let lines = text.split(/\r?\n/);
+
     let comment_line: string;
     let document_line_list: Array<string> = []
     let is_match = false;
